@@ -168,13 +168,13 @@ body {
   transform: rotate(36deg);
 }
 
-/* Fast energetic sweeping during wheel spin */
+/* Fast energetic sweeping during wheel spin - brisk, natural concert spotlight sweep */
 @keyframes spotlight-spin-left {
   0% {
-    transform: rotate(-16deg);
+    transform: rotate(-18deg);
   }
   50% {
-    transform: rotate(-36deg);
+    transform: rotate(-32deg);
   }
   100% {
     transform: rotate(-42deg);
@@ -183,10 +183,10 @@ body {
 
 @keyframes spotlight-spin-right {
   0% {
-    transform: rotate(16deg);
+    transform: rotate(18deg);
   }
   50% {
-    transform: rotate(36deg);
+    transform: rotate(32deg);
   }
   100% {
     transform: rotate(42deg);
@@ -195,13 +195,13 @@ body {
 
 .spotlight-left-spin {
   transform-origin: 0 0;
-  animation: spotlight-spin-left 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  animation: spotlight-spin-left 0.85s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
 }
 
 .spotlight-right-spin {
   transform-origin: 0 0;
-  animation: spotlight-spin-right 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
-  animation-delay: -0.5s;
+  animation: spotlight-spin-right 0.85s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  animation-delay: -0.32s;
 }
 
 /* Victory lock */
