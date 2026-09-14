@@ -50,4 +50,6 @@ export interface SpotlightConfig {
   customColor: string;
   style: SpotlightStyle;
   brightness: number; // 0.2 to 1.0
+  showDust?: boolean; // Hạt bụi ánh sáng thể tích 3D
+  beamReach?: 'deep' | 'standard'; // Tầm rọi sâu xuống sàn hoặc vừa vặn
 }

@@ -10,7 +10,9 @@ export const DEFAULT_SPOTLIGHT_CONFIG: SpotlightConfig = {
   colorMode: 'amber',
   customColor: '#FFA04D',
   style: 'rim', // Default: Rim Grazing (chỉ chạm nhẹ viền ngoài xung quanh bánh xe)
-  brightness: 0.65,
+  brightness: 0.70,
+  showDust: true,
+  beamReach: 'deep',
 };
 
 export function useSpotlightStore() {
@@ -21,7 +23,12 @@ export function useSpotlightStore() {
         if (stored) {
           const parsed = JSON.parse(stored);
           if (parsed && typeof parsed.enabled === 'boolean') {
-            return { ...DEFAULT_SPOTLIGHT_CONFIG, ...parsed };
+            return {
+              ...DEFAULT_SPOTLIGHT_CONFIG,
+              ...parsed,
+              showDust: parsed.showDust ?? true,
+              beamReach: parsed.beamReach ?? 'deep',
+            };
           }
         }
       } catch {

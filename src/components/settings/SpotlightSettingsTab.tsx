@@ -276,6 +276,43 @@ export function SpotlightSettingsTab({
               className="w-full accent-[#FF6B00] cursor-pointer"
             />
           </div>
+
+          {/* 5. Natural Atmospheric Effects (Hiệu ứng tự nhiên & Hạt bụi 3D) */}
+          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-800/80 border border-stone-200/80 dark:border-stone-700/80 shadow-xs">
+            <div className="flex items-center gap-3">
+              <div
+                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
+                  config.showDust ?? true
+                    ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/30'
+                    : 'bg-stone-200 dark:bg-stone-700 text-stone-400'
+                }`}
+              >
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <div>
+                <h5 className="text-xs sm:text-sm font-bold">Hạt Bụi Thể Tích (Light Dust)</h5>
+                <p className="text-[11px] text-stone-400">
+                  Hạt bụi li ti lơ lửng phản xạ ánh sáng tạo chiều sâu 3D chân thực
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              role="switch"
+              aria-checked={config.showDust ?? true}
+              onClick={() => onChange({ showDust: !(config.showDust ?? true) })}
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                (config.showDust ?? true) ? 'bg-[#FF6B00]' : 'bg-stone-300 dark:bg-stone-600'
+              }`}
+            >
+              <span
+                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                  (config.showDust ?? true) ? 'translate-x-5' : 'translate-x-0'
+                }`}
+              />
+            </button>
+          </div>
         </>
       )}
     </div>
