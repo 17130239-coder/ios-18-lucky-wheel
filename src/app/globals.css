@@ -64,21 +64,73 @@ body {
   background: rgba(255, 255, 255, 0.15);
 }
 
-/* Stage Spotlight Keyframe Swivels */
-@keyframes spotlight-swivel-left {
-  0%, 100% {
-    transform: rotate(24deg);
+/* ================= STAGE SPOTLIGHT SWEEP ANIMATIONS ================= */
+@keyframes spotlight-sweep-left {
+  0% {
+    transform: rotate(36deg);
   }
-  50% {
-    transform: rotate(34deg);
+  100% {
+    transform: rotate(56deg);
   }
 }
 
-@keyframes spotlight-swivel-right {
-  0%, 100% {
-    transform: rotate(-24deg);
+@keyframes spotlight-sweep-right {
+  0% {
+    transform: rotate(-36deg);
   }
-  50% {
-    transform: rotate(-34deg);
+  100% {
+    transform: rotate(-56deg);
   }
+}
+
+@keyframes spotlight-sweep-left-fast {
+  0% {
+    transform: rotate(32deg);
+  }
+  100% {
+    transform: rotate(60deg);
+  }
+}
+
+@keyframes spotlight-sweep-right-fast {
+  0% {
+    transform: rotate(-32deg);
+  }
+  100% {
+    transform: rotate(-60deg);
+  }
+}
+
+.spotlight-left-idle {
+  transform-origin: 0 0;
+  animation: spotlight-sweep-left 4.2s ease-in-out infinite alternate;
+}
+
+.spotlight-right-idle {
+  transform-origin: 0 0;
+  animation: spotlight-sweep-right 4.2s ease-in-out infinite alternate;
+  animation-delay: -1.4s;
+}
+
+.spotlight-left-spin {
+  transform-origin: 0 0;
+  animation: spotlight-sweep-left-fast 1.5s ease-in-out infinite alternate;
+}
+
+.spotlight-right-spin {
+  transform-origin: 0 0;
+  animation: spotlight-sweep-right-fast 1.5s ease-in-out infinite alternate;
+  animation-delay: -0.5s;
+}
+
+.spotlight-left-won {
+  transform-origin: 0 0;
+  transform: rotate(46deg);
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.spotlight-right-won {
+  transform-origin: 0 0;
+  transform: rotate(-46deg);
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
