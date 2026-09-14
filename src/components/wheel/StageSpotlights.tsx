@@ -12,159 +12,401 @@ export function StageSpotlights({ spinState }: StageSpotlightsProps) {
   const isWon = spinState === 'won';
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-15 overflow-hidden">
-      {/* ================= LEFT SPOTLIGHT ================= */}
-      <div
-        className={`absolute top-0 left-2 sm:left-8 md:left-16 lg:left-24 transition-all duration-700 ${
-          isSpinning ? 'scale-105' : isWon ? 'scale-110' : 'scale-100'
-        }`}
+    <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-15 overflow-visible">
+      {/* SVG Stage Spotlight Projection Engine (Centered on the Wheel at 500, 500) */}
+      <svg
+        viewBox="0 0 1000 1000"
+        className="w-[680px] h-[680px] xs:w-[800px] xs:h-[800px] sm:w-[1080px] sm:h-[1080px] md:w-[1200px] md:h-[1200px] pointer-events-none overflow-visible select-none shrink-0"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Lamp Fixture Hardware */}
-        <div className="relative flex flex-col items-center z-20">
-          {/* Ceiling Mount / Rigging Bracket */}
-          <div className="w-6 h-3 sm:w-8 sm:h-4 bg-gradient-to-b from-stone-400 to-stone-600 dark:from-stone-700 dark:to-stone-900 rounded-b shadow-md border-t border-white/40" />
-          <div className="w-1.5 h-4 sm:w-2 sm:h-6 bg-stone-500 dark:bg-stone-700 shadow-inner" />
+        <defs>
+          {/* ================= BLURS & OPTICAL FILTERS ================= */}
+          {/* Soft blur for outer atmospheric haze */}
+          <filter id="spot-feather-wide" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+          </filter>
 
-          {/* Swiveling Lamp Projector Housing */}
-          <div
-            className={`relative flex items-center justify-center transition-transform duration-700 origin-top ${
-              isSpinning
-                ? 'animate-[spotlight-swivel-left_2.5s_ease-in-out_infinite]'
-                : isWon
-                ? 'rotate-[32deg]'
-                : 'rotate-[28deg]'
-            }`}
+          {/* Medium blur for inner volumetric light cone */}
+          <filter id="spot-feather-core" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="7" />
+          </filter>
+
+          {/* Sharp glow for lamp lenses */}
+          <filter id="lens-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+
+          {/* ================= LIGHT MODE GRADIENTS ================= */}
+          {/* Left Lamp Beam Gradient (Light mode: Warm Golden Amber) */}
+          <linearGradient
+            id="left-beam-grad-light"
+            x1="160"
+            y1="100"
+            x2="500"
+            y2="500"
+            gradientUnits="userSpaceOnUse"
           >
-            {/* Lamp Cylinder Barrel */}
-            <div className="relative w-12 h-16 sm:w-16 sm:h-22 rounded-b-2xl bg-gradient-to-r from-stone-800 via-stone-700 to-stone-900 dark:from-stone-900 dark:via-stone-800 dark:to-black shadow-[0_10px_25px_rgba(0,0,0,0.5)] border border-stone-600/50 p-1 flex flex-col items-center justify-end overflow-hidden">
-              {/* Cooling ribs / heat sink ridges */}
-              <div className="absolute top-2 inset-x-2 h-0.5 bg-stone-600/60 rounded-full" />
-              <div className="absolute top-4 inset-x-2 h-0.5 bg-stone-600/60 rounded-full" />
-              <div className="absolute top-6 inset-x-2 h-0.5 bg-stone-600/60 rounded-full" />
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
+            <stop offset="12%" stopColor="#FFAA44" stopOpacity="0.55" />
+            <stop offset="35%" stopColor="#FF8800" stopOpacity="0.30" />
+            <stop offset="68%" stopColor="#FF6B00" stopOpacity="0.14" />
+            <stop offset="92%" stopColor="#FFA04D" stopOpacity="0.04" />
+            <stop offset="100%" stopColor="#FFA04D" stopOpacity="0" />
+          </linearGradient>
 
-              {/* Lens rim */}
-              <div className="w-full h-4 sm:h-5 rounded-full bg-gradient-to-r from-amber-200 via-white to-amber-300 dark:from-cyan-200 dark:via-white dark:to-violet-300 shadow-[0_0_20px_#FFA04D] flex items-center justify-center border border-white">
-                {/* Intense Central Bulb Filament */}
-                <div className="w-5 h-2 sm:w-7 sm:h-2.5 rounded-full bg-white shadow-[0_0_15px_#FFFFFF] animate-pulse" />
-              </div>
-            </div>
-
-            {/* Glowing Lens Flare Halo */}
-            <div className="absolute -bottom-4 w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-amber-400/40 dark:bg-violet-400/40 blur-md pointer-events-none" />
-
-            {/* Volumetric Light Beam Cone (Shooting diagonally toward center wheel) */}
-            <div
-              className={`absolute top-12 sm:top-16 left-1/2 -translate-x-1/2 w-[280px] sm:w-[460px] md:w-[620px] lg:w-[780px] h-[550px] sm:h-[750px] md:h-[950px] pointer-events-none origin-top transition-opacity duration-500 ${
-                isSpinning
-                  ? 'opacity-85 dark:opacity-75'
-                  : isWon
-                  ? 'opacity-95 dark:opacity-90'
-                  : 'opacity-55 dark:opacity-45'
-              }`}
-              style={{
-                clipPath: 'polygon(48% 0%, 52% 0%, 100% 100%, 0% 100%)',
-                background:
-                  'linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 170, 60, 0.45) 15%, rgba(255, 130, 0, 0.22) 45%, rgba(255, 107, 0, 0.06) 80%, transparent 100%)',
-              }}
-            />
-            {/* Dark Mode Overlay Beam (Electric Violet / Cryo Cyan tone) */}
-            <div
-              className={`dark:block hidden absolute top-12 sm:top-16 left-1/2 -translate-x-1/2 w-[280px] sm:w-[460px] md:w-[620px] lg:w-[780px] h-[550px] sm:h-[750px] md:h-[950px] pointer-events-none origin-top transition-opacity duration-500 ${
-                isSpinning ? 'opacity-85' : isWon ? 'opacity-100' : 'opacity-60'
-              }`}
-              style={{
-                clipPath: 'polygon(48% 0%, 52% 0%, 100% 100%, 0% 100%)',
-                background:
-                  'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(112, 83, 255, 0.5) 18%, rgba(0, 242, 254, 0.25) 50%, rgba(112, 83, 255, 0.05) 85%, transparent 100%)',
-              }}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* ================= RIGHT SPOTLIGHT ================= */}
-      <div
-        className={`absolute top-0 right-2 sm:right-8 md:right-16 lg:right-24 transition-all duration-700 ${
-          isSpinning ? 'scale-105' : isWon ? 'scale-110' : 'scale-100'
-        }`}
-      >
-        {/* Lamp Fixture Hardware */}
-        <div className="relative flex flex-col items-center z-20">
-          {/* Ceiling Mount / Rigging Bracket */}
-          <div className="w-6 h-3 sm:w-8 sm:h-4 bg-gradient-to-b from-stone-400 to-stone-600 dark:from-stone-700 dark:to-stone-900 rounded-b shadow-md border-t border-white/40" />
-          <div className="w-1.5 h-4 sm:w-2 sm:h-6 bg-stone-500 dark:bg-stone-700 shadow-inner" />
-
-          {/* Swiveling Lamp Projector Housing */}
-          <div
-            className={`relative flex items-center justify-center transition-transform duration-700 origin-top ${
-              isSpinning
-                ? 'animate-[spotlight-swivel-right_2.5s_ease-in-out_infinite]'
-                : isWon
-                ? 'rotate-[-32deg]'
-                : 'rotate-[-28deg]'
-            }`}
+          {/* Right Lamp Beam Gradient (Light mode: Luminous Solar Amber) */}
+          <linearGradient
+            id="right-beam-grad-light"
+            x1="840"
+            y1="100"
+            x2="500"
+            y2="500"
+            gradientUnits="userSpaceOnUse"
           >
-            {/* Lamp Cylinder Barrel */}
-            <div className="relative w-12 h-16 sm:w-16 sm:h-22 rounded-b-2xl bg-gradient-to-r from-stone-800 via-stone-700 to-stone-900 dark:from-stone-900 dark:via-stone-800 dark:to-black shadow-[0_10px_25px_rgba(0,0,0,0.5)] border border-stone-600/50 p-1 flex flex-col items-center justify-end overflow-hidden">
-              {/* Cooling ribs */}
-              <div className="absolute top-2 inset-x-2 h-0.5 bg-stone-600/60 rounded-full" />
-              <div className="absolute top-4 inset-x-2 h-0.5 bg-stone-600/60 rounded-full" />
-              <div className="absolute top-6 inset-x-2 h-0.5 bg-stone-600/60 rounded-full" />
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
+            <stop offset="12%" stopColor="#FFBA55" stopOpacity="0.55" />
+            <stop offset="35%" stopColor="#FF9010" stopOpacity="0.30" />
+            <stop offset="68%" stopColor="#FF6B00" stopOpacity="0.14" />
+            <stop offset="92%" stopColor="#FFA04D" stopOpacity="0.04" />
+            <stop offset="100%" stopColor="#FFA04D" stopOpacity="0" />
+          </linearGradient>
 
-              {/* Lens rim */}
-              <div className="w-full h-4 sm:h-5 rounded-full bg-gradient-to-r from-amber-300 via-white to-amber-200 dark:from-violet-300 dark:via-white dark:to-cyan-200 shadow-[0_0_20px_#FFA04D] flex items-center justify-center border border-white">
-                {/* Intense Central Bulb Filament */}
-                <div className="w-5 h-2 sm:w-7 sm:h-2.5 rounded-full bg-white shadow-[0_0_15px_#FFFFFF] animate-pulse" />
-              </div>
-            </div>
+          {/* ================= DARK MODE GRADIENTS ================= */}
+          {/* Left Lamp Beam Gradient (Dark mode: Electric Violet into Cyan) */}
+          <linearGradient
+            id="left-beam-grad-dark"
+            x1="160"
+            y1="100"
+            x2="500"
+            y2="500"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.98" />
+            <stop offset="14%" stopColor="#C8BFFF" stopOpacity="0.65" />
+            <stop offset="38%" stopColor="#7053FF" stopOpacity="0.35" />
+            <stop offset="72%" stopColor="#00F2FE" stopOpacity="0.15" />
+            <stop offset="95%" stopColor="#00F2FE" stopOpacity="0.03" />
+            <stop offset="100%" stopColor="#00F2FE" stopOpacity="0" />
+          </linearGradient>
 
-            {/* Glowing Lens Flare Halo */}
-            <div className="absolute -bottom-4 w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-amber-400/40 dark:bg-cyan-400/40 blur-md pointer-events-none" />
+          {/* Right Lamp Beam Gradient (Dark mode: Cryo Cyan into Electric Violet) */}
+          <linearGradient
+            id="right-beam-grad-dark"
+            x1="840"
+            y1="100"
+            x2="500"
+            y2="500"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.98" />
+            <stop offset="14%" stopColor="#D4FCFF" stopOpacity="0.65" />
+            <stop offset="38%" stopColor="#00F2FE" stopOpacity="0.35" />
+            <stop offset="72%" stopColor="#7053FF" stopOpacity="0.15" />
+            <stop offset="95%" stopColor="#7053FF" stopOpacity="0.03" />
+            <stop offset="100%" stopColor="#7053FF" stopOpacity="0" />
+          </linearGradient>
 
-            {/* Volumetric Light Beam Cone (Shooting diagonally toward center wheel) */}
-            <div
-              className={`absolute top-12 sm:top-16 left-1/2 -translate-x-1/2 w-[280px] sm:w-[460px] md:w-[620px] lg:w-[780px] h-[550px] sm:h-[750px] md:h-[950px] pointer-events-none origin-top transition-opacity duration-500 ${
-                isSpinning
-                  ? 'opacity-85 dark:opacity-75'
-                  : isWon
-                  ? 'opacity-95 dark:opacity-90'
-                  : 'opacity-55 dark:opacity-45'
-              }`}
-              style={{
-                clipPath: 'polygon(48% 0%, 52% 0%, 100% 100%, 0% 100%)',
-                background:
-                  'linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 170, 60, 0.45) 15%, rgba(255, 130, 0, 0.22) 45%, rgba(255, 107, 0, 0.06) 80%, transparent 100%)',
-              }}
-            />
-            {/* Dark Mode Overlay Beam */}
-            <div
-              className={`dark:block hidden absolute top-12 sm:top-16 left-1/2 -translate-x-1/2 w-[280px] sm:w-[460px] md:w-[620px] lg:w-[780px] h-[550px] sm:h-[750px] md:h-[950px] pointer-events-none origin-top transition-opacity duration-500 ${
-                isSpinning ? 'opacity-85' : isWon ? 'opacity-100' : 'opacity-60'
-              }`}
-              style={{
-                clipPath: 'polygon(48% 0%, 52% 0%, 100% 100%, 0% 100%)',
-                background:
-                  'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(0, 242, 254, 0.5) 18%, rgba(112, 83, 255, 0.25) 50%, rgba(0, 242, 254, 0.05) 85%, transparent 100%)',
-              }}
-            />
-          </div>
-        </div>
-      </div>
+          {/* Wheel Surface Illuminated Hotspot Pool */}
+          <radialGradient id="wheel-focal-pool" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.35" />
+            <stop offset="45%" stopColor="#FFA459" stopOpacity="0.18" />
+            <stop offset="85%" stopColor="#FF6B00" stopOpacity="0.05" />
+            <stop offset="100%" stopColor="#FF6B00" stopOpacity="0" />
+          </radialGradient>
 
-      {/* ================= CENTER STAGE ILLUMINATION POOL ================= */}
-      {/* Dynamic stage floor focal spot where both beams converge */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center">
-        {/* Warm Stage Floor Pool */}
-        <div
-          className={`w-[450px] h-[450px] sm:w-[680px] sm:h-[680px] md:w-[760px] md:h-[760px] rounded-full transition-all duration-700 ${
+          <radialGradient id="wheel-focal-pool-dark" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.45" />
+            <stop offset="40%" stopColor="#7053FF" stopOpacity="0.22" />
+            <stop offset="80%" stopColor="#00F2FE" stopOpacity="0.08" />
+            <stop offset="100%" stopColor="#00F2FE" stopOpacity="0" />
+          </radialGradient>
+
+          {/* Metal Housing Gradients for Lamp Bodies */}
+          <linearGradient id="lamp-body-left" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#4A4E57" />
+            <stop offset="50%" stopColor="#2D3037" />
+            <stop offset="100%" stopColor="#1A1C20" />
+          </linearGradient>
+
+          <linearGradient id="lamp-body-right" x1="1" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#4A4E57" />
+            <stop offset="50%" stopColor="#2D3037" />
+            <stop offset="100%" stopColor="#1A1C20" />
+          </linearGradient>
+
+          <linearGradient id="lamp-bracket" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#686D76" />
+            <stop offset="100%" stopColor="#373A40" />
+          </linearGradient>
+        </defs>
+
+        {/* =========================================================================
+            LAYER 1: VOLUMETRIC LIGHT BEAMS (TANGENT TO WHEEL AT CX=500, CY=500, R=260)
+            ========================================================================= */}
+        {/* Breathing / Pulsing Volumetric Container */}
+        <g
+          className={`transition-all duration-700 ${
             isSpinning
-              ? 'scale-110 opacity-70 bg-radial from-amber-300/35 via-orange-300/20 to-transparent blur-3xl'
+              ? 'opacity-100 scale-[1.03]'
               : isWon
-              ? 'scale-125 opacity-90 bg-radial from-amber-300/50 via-orange-400/30 to-transparent blur-2xl animate-pulse'
-              : 'scale-100 opacity-45 bg-radial from-amber-200/25 via-orange-200/15 to-transparent blur-3xl'
-          } dark:from-cyan-400/25 dark:via-purple-600/20 dark:to-transparent`}
+              ? 'opacity-100 scale-[1.05]'
+              : 'opacity-85'
+          }`}
+          style={{ transformOrigin: '500px 500px' }}
+        >
+          {/* --- LEFT LIGHT BEAM (Shining from 160, 100 onto Wheel) --- */}
+          {/* Outer Atmospheric Haze Cone */}
+          <path
+            d="M 160 100 L 980 370 L 290 950 Z"
+            fill="url(#left-beam-grad-light)"
+            className="dark:hidden"
+            filter="url(#spot-feather-wide)"
+            opacity={isSpinning ? '0.75' : isWon ? '0.90' : '0.55'}
+          />
+          <path
+            d="M 160 100 L 980 370 L 290 950 Z"
+            fill="url(#left-beam-grad-dark)"
+            className="hidden dark:block"
+            filter="url(#spot-feather-wide)"
+            opacity={isSpinning ? '0.70' : isWon ? '0.85' : '0.50'}
+          />
+
+          {/* Inner Precise Luminous Core Cone */}
+          <path
+            d="M 154 94 L 166 106 L 950 395 L 320 925 Z"
+            fill="url(#left-beam-grad-light)"
+            className="dark:hidden"
+            filter="url(#spot-feather-core)"
+            opacity={isSpinning ? '0.90' : isWon ? '1.0' : '0.70'}
+          />
+          <path
+            d="M 154 94 L 166 106 L 950 395 L 320 925 Z"
+            fill="url(#left-beam-grad-dark)"
+            className="hidden dark:block"
+            filter="url(#spot-feather-core)"
+            opacity={isSpinning ? '0.85' : isWon ? '0.95' : '0.65'}
+          />
+
+          {/* --- RIGHT LIGHT BEAM (Shining from 840, 100 onto Wheel) --- */}
+          {/* Outer Atmospheric Haze Cone */}
+          <path
+            d="M 840 100 L 710 950 L 20 370 Z"
+            fill="url(#right-beam-grad-light)"
+            className="dark:hidden"
+            filter="url(#spot-feather-wide)"
+            opacity={isSpinning ? '0.75' : isWon ? '0.90' : '0.55'}
+          />
+          <path
+            d="M 840 100 L 710 950 L 20 370 Z"
+            fill="url(#right-beam-grad-dark)"
+            className="hidden dark:block"
+            filter="url(#spot-feather-wide)"
+            opacity={isSpinning ? '0.70' : isWon ? '0.85' : '0.50'}
+          />
+
+          {/* Inner Precise Luminous Core Cone */}
+          <path
+            d="M 846 94 L 834 106 L 680 925 L 50 395 Z"
+            fill="url(#right-beam-grad-light)"
+            className="dark:hidden"
+            filter="url(#spot-feather-core)"
+            opacity={isSpinning ? '0.90' : isWon ? '1.0' : '0.70'}
+          />
+          <path
+            d="M 846 94 L 834 106 L 680 925 L 50 395 Z"
+            fill="url(#right-beam-grad-dark)"
+            className="hidden dark:block"
+            filter="url(#spot-feather-core)"
+            opacity={isSpinning ? '0.85' : isWon ? '0.95' : '0.65'}
+          />
+        </g>
+
+        {/* =========================================================================
+            LAYER 2: FOCAL ILLUMINATION OVERLAY DIRECTLY ON THE WHEEL CIRCLE
+            ========================================================================= */}
+        {/* Soft luminous wash directly bathing the wheel */}
+        <circle
+          cx="500"
+          cy="500"
+          r="265"
+          fill="url(#wheel-focal-pool)"
+          className="dark:hidden pointer-events-none transition-opacity duration-500"
+          opacity={isSpinning ? '0.85' : isWon ? '1.0' : '0.60'}
         />
-      </div>
+        <circle
+          cx="500"
+          cy="500"
+          r="265"
+          fill="url(#wheel-focal-pool-dark)"
+          className="hidden dark:block pointer-events-none transition-opacity duration-500"
+          opacity={isSpinning ? '0.85' : isWon ? '1.0' : '0.60'}
+        />
+
+        {/* Specular rim glints where the 2 spotlights graze the top edges of the wheel */}
+        {/* Left beam grazing highlight on upper-left rim */}
+        <path
+          d="M 320 320 A 260 260 0 0 1 450 242"
+          fill="none"
+          stroke="#FFFFFF"
+          strokeWidth="3.5"
+          strokeLinecap="round"
+          opacity={isSpinning ? '0.85' : isWon ? '0.95' : '0.60'}
+          filter="url(#lens-glow)"
+          className="transition-opacity duration-300"
+        />
+        {/* Right beam grazing highlight on upper-right rim */}
+        <path
+          d="M 550 242 A 260 260 0 0 1 680 320"
+          fill="none"
+          stroke="#FFFFFF"
+          strokeWidth="3.5"
+          strokeLinecap="round"
+          opacity={isSpinning ? '0.85' : isWon ? '0.95' : '0.60'}
+          filter="url(#lens-glow)"
+          className="transition-opacity duration-300"
+        />
+
+        {/* =========================================================================
+            LAYER 3: PHYSICAL PROJECTOR LAMP FIXTURES (LEFT & RIGHT)
+            ========================================================================= */}
+        {/* ---------- LEFT PROJECTOR LAMP (Centered at 160, 100, Angled 49.6deg) ---------- */}
+        <g transform="translate(160, 100) rotate(49.6)">
+          {/* Ceiling Drop Rod & Swivel Mount */}
+          <rect x="-3" y="-60" width="6" height="40" fill="url(#lamp-bracket)" rx="2" />
+          <circle cx="0" cy="-20" r="7" fill="#2D3037" stroke="#686D76" strokeWidth="2" />
+
+          {/* U-Yoke Mounting Fork */}
+          <path
+            d="M -18 -20 L -18 0 A 18 18 0 0 0 18 0 L 18 -20"
+            fill="none"
+            stroke="url(#lamp-bracket)"
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
+
+          {/* Lamp Cylinder Barrel (Apple Studio Anodized Titanium) */}
+          <rect
+            x="-16"
+            y="-14"
+            width="32"
+            height="36"
+            rx="5"
+            fill="url(#lamp-body-left)"
+            stroke="rgba(255,255,255,0.2)"
+            strokeWidth="1.2"
+          />
+
+          {/* Rear Heatsink Fins */}
+          <line x1="-13" y1="-10" x2="13" y2="-10" stroke="#1A1C20" strokeWidth="2" />
+          <line x1="-13" y1="-6" x2="13" y2="-6" stroke="#1A1C20" strokeWidth="2" />
+          <line x1="-13" y1="-2" x2="13" y2="-2" stroke="#1A1C20" strokeWidth="2" />
+
+          {/* Front Beveled Lens Snout */}
+          <polygon
+            points="-18,22 18,22 15,28 -15,28"
+            fill="#1E2024"
+            stroke="rgba(255,255,255,0.25)"
+            strokeWidth="1"
+          />
+
+          {/* Optical Glass Fresnel Lens Rim */}
+          <ellipse
+            cx="0"
+            cy="27"
+            rx="15"
+            ry="4"
+            fill="#FFFFFF"
+            stroke="#FFA04D"
+            strokeWidth="1.5"
+            className="dark:stroke-[#00F2FE]"
+          />
+
+          {/* Intense Center White-Hot Emitter */}
+          <ellipse cx="0" cy="27" rx="9" ry="2.5" fill="#FFFFFF" filter="url(#lens-glow)" />
+
+          {/* Lens Flare Aura */}
+          <circle
+            cx="0"
+            cy="27"
+            r="16"
+            fill="#FFB03A"
+            className="dark:fill-[#7053FF]"
+            opacity="0.5"
+            filter="url(#lens-glow)"
+          />
+        </g>
+
+        {/* ---------- RIGHT PROJECTOR LAMP (Centered at 840, 100, Angled -49.6deg) ---------- */}
+        <g transform="translate(840, 100) rotate(-49.6)">
+          {/* Ceiling Drop Rod & Swivel Mount */}
+          <rect x="-3" y="-60" width="6" height="40" fill="url(#lamp-bracket)" rx="2" />
+          <circle cx="0" cy="-20" r="7" fill="#2D3037" stroke="#686D76" strokeWidth="2" />
+
+          {/* U-Yoke Mounting Fork */}
+          <path
+            d="M -18 -20 L -18 0 A 18 18 0 0 0 18 0 L 18 -20"
+            fill="none"
+            stroke="url(#lamp-bracket)"
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
+
+          {/* Lamp Cylinder Barrel */}
+          <rect
+            x="-16"
+            y="-14"
+            width="32"
+            height="36"
+            rx="5"
+            fill="url(#lamp-body-right)"
+            stroke="rgba(255,255,255,0.2)"
+            strokeWidth="1.2"
+          />
+
+          {/* Rear Heatsink Fins */}
+          <line x1="-13" y1="-10" x2="13" y2="-10" stroke="#1A1C20" strokeWidth="2" />
+          <line x1="-13" y1="-6" x2="13" y2="-6" stroke="#1A1C20" strokeWidth="2" />
+          <line x1="-13" y1="-2" x2="13" y2="-2" stroke="#1A1C20" strokeWidth="2" />
+
+          {/* Front Beveled Lens Snout */}
+          <polygon
+            points="-18,22 18,22 15,28 -15,28"
+            fill="#1E2024"
+            stroke="rgba(255,255,255,0.25)"
+            strokeWidth="1"
+          />
+
+          {/* Optical Glass Fresnel Lens Rim */}
+          <ellipse
+            cx="0"
+            cy="27"
+            rx="15"
+            ry="4"
+            fill="#FFFFFF"
+            stroke="#FFA04D"
+            strokeWidth="1.5"
+            className="dark:stroke-[#00F2FE]"
+          />
+
+          {/* Intense Center White-Hot Emitter */}
+          <ellipse cx="0" cy="27" rx="9" ry="2.5" fill="#FFFFFF" filter="url(#lens-glow)" />
+
+          {/* Lens Flare Aura */}
+          <circle
+            cx="0"
+            cy="27"
+            r="16"
+            fill="#FFB03A"
+            className="dark:fill-[#00F2FE]"
+            opacity="0.5"
+            filter="url(#lens-glow)"
+          />
+        </g>
+      </svg>
     </div>
   );
 }

@@ -31,10 +31,10 @@ export function LuckyWheel({
 }: LuckyWheelProps) {
   return (
     <main className="relative z-10 flex flex-col items-center justify-center w-full h-full p-4">
-      {/* Dual Stage Spotlights at the Top Corners */}
-      <StageSpotlights spinState={spinState} />
-
       <div className="relative flex flex-col items-center justify-center">
+        {/* Dual Stage Spotlights precisely aligned and focused on the Wheel */}
+        <StageSpotlights spinState={spinState} />
+
         {/* Warm Ambient Glow Backlight */}
         <AmbientGlow spinState={spinState} />
 
