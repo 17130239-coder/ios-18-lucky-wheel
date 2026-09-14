@@ -3,6 +3,7 @@
 import React from 'react';
 import { SpotlightConfig, SpotlightColorMode, SpotlightStyle, BackgroundTheme } from '@/types/wheel';
 import { Sparkles, SunMedium, Lightbulb, Palette, Compass, Film, Play, Check, Mountain, Waves, Fish, Layers } from 'lucide-react';
+import { AnimatedRadioCheck } from './AnimatedRadioCheck';
 
 interface SpotlightSettingsTabProps {
   config: SpotlightConfig;
@@ -14,6 +15,32 @@ interface SpotlightSettingsTabProps {
   bgTheme?: BackgroundTheme;
   onSelectBgTheme?: (theme: BackgroundTheme) => void;
 }
+
+const SPOTLIGHT_STYLES: {
+  key: SpotlightStyle;
+  title: string;
+  desc: string;
+  dotColor: string;
+}[] = [
+  {
+    key: 'rim',
+    title: 'Chạm Nhẹ Viền Ngoài (Khuyên dùng)',
+    desc: 'Đèn chỉ lướt quanh viền ngoài, chạm nhẹ làm bừng sáng khung bánh xe và giữ các ô quà bên trong sáng rõ.',
+    dotColor: 'bg-[#FF6B00]',
+  },
+  {
+    key: 'sweep',
+    title: 'Quét Toàn Sân Khấu (Stage Sweep)',
+    desc: 'Đèn quét qua lại góc rộng đan chéo toàn bộ sân khấu và mặt đĩa.',
+    dotColor: 'bg-amber-400',
+  },
+  {
+    key: 'center',
+    title: 'Tập Trung Trung Tâm (Center Focus)',
+    desc: 'Đèn cố định hướng vào nút QUAY ở tâm bánh xe.',
+    dotColor: 'bg-cyan-400',
+  },
+];
 
 const BG_THEMES: {
   key: BackgroundTheme;
@@ -115,98 +142,36 @@ export function SpotlightSettingsTab({
             </div>
 
             <div className="grid grid-cols-1 gap-2">
-              {/* Option: Rim Grazing */}
-              <button
-                type="button"
-                onClick={() => onChange({ style: 'rim' as SpotlightStyle })}
-                className={`flex flex-col text-left p-3 rounded-2xl border transition-colors duration-150 cursor-pointer ${
-                  config.style === 'rim'
-                    ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/40 ring-1 ring-[#FF6B00]/30 shadow-xs'
-                    : 'bg-stone-100/60 dark:bg-stone-800/30 border-stone-200/60 dark:border-white/5 hover:bg-stone-100/90 dark:hover:bg-stone-800/50'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#FF6B00] shrink-0" />
-                    Chạm Nhẹ Viền Ngoài (Khuyên dùng)
-                  </span>
-                  {/* Stable fixed-size check indicator - NEVER causes height shifts */}
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0">
-                    {config.style === 'rim' ? (
-                      <div className="w-5 h-5 rounded-full bg-[#FF6B00] text-white flex items-center justify-center shadow-xs">
-                        <Check className="w-3 h-3 stroke-[3]" />
-                      </div>
-                    ) : (
-                      <div className="w-4 h-4 rounded-full border border-stone-300 dark:border-stone-600" />
-                    )}
-                  </div>
-                </div>
-                <p className="text-xs text-stone-500 dark:text-stone-400 mt-1 leading-relaxed">
-                  Đèn chỉ lướt quanh viền ngoài, chạm nhẹ làm bừng sáng khung bánh xe và giữ các ô quà bên trong sáng rõ.
-                </p>
-              </button>
-
-              {/* Option: Full Stage Sweep */}
-              <button
-                type="button"
-                onClick={() => onChange({ style: 'sweep' as SpotlightStyle })}
-                className={`flex flex-col text-left p-3 rounded-2xl border transition-colors duration-150 cursor-pointer ${
-                  config.style === 'sweep'
-                    ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/40 ring-1 ring-[#FF6B00]/30 shadow-xs'
-                    : 'bg-stone-100/60 dark:bg-stone-800/30 border-stone-200/60 dark:border-white/5 hover:bg-stone-100/90 dark:hover:bg-stone-800/50'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
-                    Quét Toàn Sân Khấu (Stage Sweep)
-                  </span>
-                  {/* Stable fixed-size check indicator */}
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0">
-                    {config.style === 'sweep' ? (
-                      <div className="w-5 h-5 rounded-full bg-[#FF6B00] text-white flex items-center justify-center shadow-xs">
-                        <Check className="w-3 h-3 stroke-[3]" />
-                      </div>
-                    ) : (
-                      <div className="w-4 h-4 rounded-full border border-stone-300 dark:border-stone-600" />
-                    )}
-                  </div>
-                </div>
-                <p className="text-xs text-stone-500 dark:text-stone-400 mt-1 leading-relaxed">
-                  Đèn quét qua lại góc rộng đan chéo toàn bộ sân khấu và mặt đĩa.
-                </p>
-              </button>
-
-              {/* Option: Center Focus */}
-              <button
-                type="button"
-                onClick={() => onChange({ style: 'center' as SpotlightStyle })}
-                className={`flex flex-col text-left p-3 rounded-2xl border transition-colors duration-150 cursor-pointer ${
-                  config.style === 'center'
-                    ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/40 ring-1 ring-[#FF6B00]/30 shadow-xs'
-                    : 'bg-stone-100/60 dark:bg-stone-800/30 border-stone-200/60 dark:border-white/5 hover:bg-stone-100/90 dark:hover:bg-stone-800/50'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-cyan-400 shrink-0" />
-                    Tập Trung Trung Tâm (Center Focus)
-                  </span>
-                  {/* Stable fixed-size check indicator */}
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0">
-                    {config.style === 'center' ? (
-                      <div className="w-5 h-5 rounded-full bg-[#FF6B00] text-white flex items-center justify-center shadow-xs">
-                        <Check className="w-3 h-3 stroke-[3]" />
-                      </div>
-                    ) : (
-                      <div className="w-4 h-4 rounded-full border border-stone-300 dark:border-stone-600" />
-                    )}
-                  </div>
-                </div>
-                <p className="text-xs text-stone-500 dark:text-stone-400 mt-1 leading-relaxed">
-                  Đèn cố định hướng vào nút QUAY ở tâm bánh xe.
-                </p>
-              </button>
+              {SPOTLIGHT_STYLES.map((st) => {
+                const isSelected = config.style === st.key;
+                return (
+                  <button
+                    key={st.key}
+                    type="button"
+                    onClick={() => onChange({ style: st.key })}
+                    className={`group flex flex-col text-left p-3 rounded-2xl border transition-all duration-200 ease-out cursor-pointer active:scale-[0.985] transform-gpu will-change-transform ${
+                      isSelected
+                        ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/45 ring-1.5 ring-[#FF6B00]/30 shadow-[0_4px_16px_-4px_rgba(255,107,0,0.18)]'
+                        : 'bg-stone-100/60 dark:bg-stone-800/30 border-stone-200/60 dark:border-white/5 hover:bg-stone-100/90 dark:hover:bg-stone-800/50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2">
+                        <span
+                          className={`w-2 h-2 rounded-full shrink-0 transition-transform duration-200 ${st.dotColor} ${
+                            isSelected ? 'scale-125 ring-2 ring-current/20' : 'scale-100 opacity-80'
+                          }`}
+                        />
+                        {st.title}
+                      </span>
+                      <AnimatedRadioCheck isSelected={isSelected} />
+                    </div>
+                    <p className="text-xs text-stone-500 dark:text-stone-400 mt-1 leading-relaxed">
+                      {st.desc}
+                    </p>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -221,14 +186,18 @@ export function SpotlightSettingsTab({
             <button
               type="button"
               onClick={() => onChange({ colorMode: 'rgb' as SpotlightColorMode })}
-              className={`p-3 rounded-2xl border flex items-center justify-between transition-colors duration-150 cursor-pointer relative overflow-hidden ${
+              className={`p-3 rounded-2xl border flex items-center justify-between transition-all duration-200 ease-out cursor-pointer active:scale-[0.985] transform-gpu will-change-transform relative overflow-hidden ${
                 config.colorMode === 'rgb'
-                  ? 'bg-violet-500/10 dark:bg-violet-500/15 border-violet-500/40 ring-1 ring-violet-500/30 shadow-xs'
+                  ? 'bg-violet-500/10 dark:bg-violet-500/15 border-violet-500/45 ring-1.5 ring-violet-500/30 shadow-[0_4px_16px_-4px_rgba(139,92,246,0.2)]'
                   : 'bg-stone-100/60 dark:bg-stone-800/30 border-stone-200/60 dark:border-white/5 hover:bg-stone-100/90 dark:hover:bg-stone-800/50'
               }`}
             >
               <div className="flex items-center gap-3 relative z-10">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-pink-500 via-amber-400 to-cyan-400 flex items-center justify-center text-white shadow-xs shrink-0">
+                <div
+                  className={`w-9 h-9 rounded-xl bg-gradient-to-tr from-pink-500 via-amber-400 to-cyan-400 flex items-center justify-center text-white shadow-xs shrink-0 transition-transform duration-200 ${
+                    config.colorMode === 'rgb' ? 'scale-105' : 'scale-100'
+                  }`}
+                >
                   <Sparkles className="w-4 h-4" />
                 </div>
                 <div className="text-left min-w-0">
@@ -241,15 +210,8 @@ export function SpotlightSettingsTab({
                 </div>
               </div>
 
-              {/* Stable fixed-size check indicator */}
-              <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 relative z-10 ml-2">
-                {config.colorMode === 'rgb' ? (
-                  <div className="w-5 h-5 rounded-full bg-gradient-to-r from-violet-600 to-cyan-500 text-white flex items-center justify-center shadow-xs">
-                    <Check className="w-3 h-3 stroke-[3]" />
-                  </div>
-                ) : (
-                  <div className="w-4 h-4 rounded-full border border-stone-300 dark:border-stone-600" />
-                )}
+              <div className="relative z-10 ml-2">
+                <AnimatedRadioCheck isSelected={config.colorMode === 'rgb'} />
               </div>
             </button>
 
@@ -260,20 +222,24 @@ export function SpotlightSettingsTab({
                   key={preset.key}
                   type="button"
                   onClick={() => onChange({ colorMode: preset.key })}
-                  className={`flex items-center justify-between p-2.5 rounded-2xl border transition-colors duration-150 cursor-pointer text-left ${
+                  className={`flex items-center justify-between p-2.5 rounded-2xl border transition-all duration-200 ease-out cursor-pointer active:scale-[0.98] transform-gpu text-left ${
                     config.colorMode === preset.key
-                      ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/50 ring-1 ring-[#FF6B00]/30 shadow-xs'
+                      ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/50 ring-1.5 ring-[#FF6B00]/30 shadow-xs'
                       : 'bg-stone-100/60 dark:bg-stone-800/30 border-stone-200/60 dark:border-white/5 hover:bg-stone-100/90 dark:hover:bg-stone-800/50'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
                     <span
-                      className="w-5 h-5 rounded-full shrink-0 shadow-2xs border border-white/40 flex items-center justify-center text-white"
+                      className={`w-5 h-5 rounded-full shrink-0 shadow-2xs border border-white/40 flex items-center justify-center text-white transition-all duration-200 ease-out ${
+                        config.colorMode === preset.key ? 'scale-110 shadow-xs' : 'scale-100'
+                      }`}
                       style={{ backgroundColor: preset.color }}
                     >
-                      {config.colorMode === preset.key && (
-                        <Check className="w-3 h-3 stroke-[3]" />
-                      )}
+                      <Check
+                        className={`w-3 h-3 stroke-[3] transition-all duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+                          config.colorMode === preset.key ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
+                        }`}
+                      />
                     </span>
                     <p className="text-xs font-semibold text-stone-900 dark:text-stone-100 truncate">
                       {preset.label}
@@ -433,7 +399,7 @@ export function SpotlightSettingsTab({
             <button
               type="button"
               onClick={onReplayCurtain}
-              className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-orange-500/10 hover:bg-orange-500/15 text-[#FF6B00] border border-orange-500/20 text-xs font-bold transition-colors duration-150 cursor-pointer active:opacity-85"
+              className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-orange-500/10 hover:bg-orange-500/15 text-[#FF6B00] border border-orange-500/20 text-xs font-bold transition-all duration-150 cursor-pointer active:scale-[0.98] transform-gpu"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               <span>Xem Lại Hiệu Ứng Mở Rèm Sân Khấu 🎭</span>
@@ -458,18 +424,18 @@ export function SpotlightSettingsTab({
                 key={t.key}
                 type="button"
                 onClick={() => onSelectBgTheme?.(t.key)}
-                className={`flex items-center justify-between p-3 rounded-2xl border transition-colors duration-150 cursor-pointer text-left ${
+                className={`group flex items-center justify-between p-3 rounded-2xl border transition-all duration-200 ease-out cursor-pointer active:scale-[0.985] transform-gpu will-change-transform text-left ${
                   isSelected
-                    ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/40 ring-1 ring-[#FF6B00]/30 shadow-xs'
+                    ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/45 ring-1.5 ring-[#FF6B00]/30 shadow-[0_4px_16px_-4px_rgba(255,107,0,0.18)]'
                     : 'bg-stone-100/60 dark:bg-stone-800/30 border-stone-200/60 dark:border-white/5 hover:bg-stone-100/90 dark:hover:bg-stone-800/50'
                 }`}
               >
                 <div className="flex items-center gap-3 min-w-0 pr-2">
                   <div
-                    className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors duration-150 ${
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200 ease-out ${
                       isSelected
-                        ? 'bg-[#FF6B00] text-white shadow-xs'
-                        : 'bg-stone-200/70 dark:bg-stone-700/60 text-stone-600 dark:text-stone-300'
+                        ? 'bg-[#FF6B00] text-white shadow-xs shadow-orange-500/30 scale-105'
+                        : 'bg-stone-200/70 dark:bg-stone-700/60 text-stone-600 dark:text-stone-300 scale-100'
                     }`}
                   >
                     <IconComp className="w-4 h-4" />
@@ -484,16 +450,7 @@ export function SpotlightSettingsTab({
                   </div>
                 </div>
 
-                {/* Stable fixed-size radio indicator (Zero-Jitter UX) */}
-                <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0">
-                  {isSelected ? (
-                    <div className="w-5 h-5 rounded-full bg-[#FF6B00] text-white flex items-center justify-center shadow-xs">
-                      <Check className="w-3 h-3 stroke-[3]" />
-                    </div>
-                  ) : (
-                    <div className="w-5 h-5 rounded-full border border-stone-300 dark:border-stone-600" />
-                  )}
-                </div>
+                <AnimatedRadioCheck isSelected={isSelected} />
               </button>
             );
           })}

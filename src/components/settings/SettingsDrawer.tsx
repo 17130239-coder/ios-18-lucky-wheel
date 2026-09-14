@@ -67,6 +67,8 @@ function SettingsDrawerContent({
     JSON.parse(JSON.stringify(prizes))
   );
 
+  const activeTabIndex = activeTab === 'spotlight' ? 0 : activeTab === 'audio' ? 1 : 2;
+
   const handleRowChange = (index: number, updated: Partial<PrizeItem>) => {
     setDraftPrizes((prev) => {
       const next = [...prev];
@@ -102,22 +104,22 @@ function SettingsDrawerContent({
         {/* Header */}
         <div className="flex items-center justify-between p-4 sm:p-5 pb-3 bg-white/50 dark:bg-stone-900/50 backdrop-blur-md border-b border-stone-200/40 dark:border-white/5">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-orange-500/10 dark:bg-orange-500/15 border border-[#FF6B00]/20 flex items-center justify-center text-[#FF6B00]">
+            <div className="w-8 h-8 rounded-xl bg-orange-500/10 dark:bg-orange-500/15 border border-[#FF6B00]/20 flex items-center justify-center text-[#FF6B00] transition-transform duration-200">
               <SlidersHorizontal className="w-4 h-4" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-stone-900 dark:text-stone-100">
+              <h4 className="text-sm font-bold text-stone-900 dark:text-stone-100 transition-all duration-200">
                 {activeTab === 'prizes'
                   ? 'Tùy Chỉnh Phần Quà'
                   : activeTab === 'audio'
                   ? 'Nhạc Nền Chill & Âm Thanh'
                   : 'Sân Khấu & Không Gian'}
               </h4>
-              <p className="text-xs text-stone-500 dark:text-stone-400">
+              <p className="text-xs text-stone-500 dark:text-stone-400 transition-all duration-200">
                 {activeTab === 'prizes'
                   ? 'Chỉnh sửa tên danh mục, icon & màu sắc'
                   : activeTab === 'audio'
-                  ? 'Giai điệu lo-fi, ambient, jazz & âm lượng'
+                  ? 'Giai điệu lo-fi, pixel 8-bit, island beach & âm lượng'
                   : 'Chủ đề vector cảnh quan, rèm mở màn & đèn rọi'}
               </p>
             </div>
@@ -126,25 +128,34 @@ function SettingsDrawerContent({
             type="button"
             onClick={onClose}
             aria-label="Đóng bảng cài đặt"
-            className="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 flex items-center justify-center text-stone-500 dark:text-stone-400 transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 active:scale-90 flex items-center justify-center text-stone-500 dark:text-stone-400 transition-all duration-150 cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* iOS 3-Segment Navigation Bar */}
+        {/* iOS 3-Segment Navigation Bar with Fluid Sliding Pill Indicator */}
         <div className="px-4 sm:px-5 pt-3 pb-2.5 bg-white/50 dark:bg-stone-900/50 border-b border-stone-200/40 dark:border-white/5 shrink-0">
-          <div className="flex p-1 bg-stone-100 dark:bg-stone-800/80 rounded-2xl border border-stone-200/50 dark:border-white/5">
+          <div className="relative flex p-1 bg-stone-100 dark:bg-stone-800/80 rounded-2xl border border-stone-200/50 dark:border-white/5 isolate">
+            {/* Sliding Active Pill Indicator */}
+            <div
+              className="absolute top-1 bottom-1 left-1 rounded-xl bg-white dark:bg-stone-700 shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-none will-change-transform z-0"
+              style={{
+                width: 'calc((100% - 8px) / 3)',
+                transform: `translate3d(${activeTabIndex * 100}%, 0, 0)`,
+              }}
+            />
+
             <button
               type="button"
               onClick={() => setActiveTab('spotlight')}
-              className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-semibold transition-colors duration-150 flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`relative z-10 flex-1 py-1.5 px-2 rounded-xl text-xs font-semibold transition-colors duration-200 flex items-center justify-center gap-1.5 cursor-pointer select-none active:scale-[0.97] transform-gpu ${
                 activeTab === 'spotlight'
-                  ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-white shadow-xs'
-                  : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+                  ? 'text-stone-900 dark:text-white font-bold'
+                  : 'text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200'
               }`}
             >
-              <Lightbulb className="w-3.5 h-3.5 text-[#FF6B00]" />
+              <Lightbulb className={`w-3.5 h-3.5 text-[#FF6B00] transition-transform duration-200 ${activeTab === 'spotlight' ? 'scale-110' : 'scale-100'}`} />
               <span>Sân Khấu</span>
               {spotlightConfig.enabled && (
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-xs shadow-emerald-500/50" />
@@ -154,13 +165,13 @@ function SettingsDrawerContent({
             <button
               type="button"
               onClick={() => setActiveTab('audio')}
-              className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-semibold transition-colors duration-150 flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`relative z-10 flex-1 py-1.5 px-2 rounded-xl text-xs font-semibold transition-colors duration-200 flex items-center justify-center gap-1.5 cursor-pointer select-none active:scale-[0.97] transform-gpu ${
                 activeTab === 'audio'
-                  ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-white shadow-xs'
-                  : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+                  ? 'text-stone-900 dark:text-white font-bold'
+                  : 'text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200'
               }`}
             >
-              <Music className="w-3.5 h-3.5 text-[#FF6B00]" />
+              <Music className={`w-3.5 h-3.5 text-[#FF6B00] transition-transform duration-200 ${activeTab === 'audio' ? 'scale-110' : 'scale-100'}`} />
               <span>Nhạc Chill</span>
               {bgmEnabled && (
                 <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B00] shadow-xs shadow-orange-500/50" />
@@ -170,10 +181,10 @@ function SettingsDrawerContent({
             <button
               type="button"
               onClick={() => setActiveTab('prizes')}
-              className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-semibold transition-colors duration-150 flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`relative z-10 flex-1 py-1.5 px-2 rounded-xl text-xs font-semibold transition-colors duration-200 flex items-center justify-center gap-1.5 cursor-pointer select-none active:scale-[0.97] transform-gpu ${
                 activeTab === 'prizes'
-                  ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-white shadow-xs'
-                  : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+                  ? 'text-stone-900 dark:text-white font-bold'
+                  : 'text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200'
               }`}
             >
               <span>Quà ({draftPrizes.length})</span>
@@ -181,32 +192,33 @@ function SettingsDrawerContent({
           </div>
         </div>
 
-        {/* Tab Content with stable scrollbar gutter */}
+        {/* Tab Content with stable scrollbar gutter and silky entrance animation */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-5 [scrollbar-gutter:stable]">
-          {activeTab === 'spotlight' ? (
-            <SpotlightSettingsTab
-              config={spotlightConfig}
-              onChange={onUpdateSpotlightConfig}
-              onReset={onResetSpotlightConfig}
-              curtainEnabled={curtainEnabled}
-              onToggleCurtain={onToggleCurtain}
-              onReplayCurtain={onReplayCurtain}
-              bgTheme={bgTheme}
-              onSelectBgTheme={onSelectBgTheme}
-            />
-          ) : activeTab === 'audio' ? (
-            <AudioSettingsTab
-              bgmEnabled={bgmEnabled}
-              bgmStyle={bgmStyle}
-              bgmVolume={bgmVolume}
-              autoDuck={autoDuck}
-              isPlaying={isBgmPlaying}
-              onToggleBgm={onToggleBgm ?? (() => {})}
-              onSelectStyle={onSelectBgmStyle ?? (() => {})}
-              onChangeVolume={onChangeBgmVolume ?? (() => {})}
-              onToggleAutoDuck={onToggleAutoDuck ?? (() => {})}
-            />
-          ) : (
+          <div key={activeTab} className="animate-tab-content-in will-change-transform">
+            {activeTab === 'spotlight' ? (
+              <SpotlightSettingsTab
+                config={spotlightConfig}
+                onChange={onUpdateSpotlightConfig}
+                onReset={onResetSpotlightConfig}
+                curtainEnabled={curtainEnabled}
+                onToggleCurtain={onToggleCurtain}
+                onReplayCurtain={onReplayCurtain}
+                bgTheme={bgTheme}
+                onSelectBgTheme={onSelectBgTheme}
+              />
+            ) : activeTab === 'audio' ? (
+              <AudioSettingsTab
+                bgmEnabled={bgmEnabled}
+                bgmStyle={bgmStyle}
+                bgmVolume={bgmVolume}
+                autoDuck={autoDuck}
+                isPlaying={isBgmPlaying}
+                onToggleBgm={onToggleBgm ?? (() => {})}
+                onSelectStyle={onSelectBgmStyle ?? (() => {})}
+                onChangeVolume={onChangeBgmVolume ?? (() => {})}
+                onToggleAutoDuck={onToggleAutoDuck ?? (() => {})}
+              />
+            ) : (
             <div className="flex flex-col gap-3">
               {/* Auto-eliminate won prize toggle card */}
               <div className="flex items-center justify-between p-3.5 rounded-2xl bg-stone-100/70 dark:bg-stone-800/40 border border-stone-200/60 dark:border-white/5 shadow-xs">
@@ -278,6 +290,7 @@ function SettingsDrawerContent({
               </div>
             </div>
           )}
+          </div>
         </div>
 
         {/* Footer actions */}
@@ -287,7 +300,7 @@ function SettingsDrawerContent({
               <button
                 type="button"
                 onClick={handleResetPrizes}
-                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200/70 dark:border-stone-700/60 text-stone-700 dark:text-stone-300 text-xs font-semibold hover:bg-stone-200/80 dark:hover:bg-stone-700/80 active:opacity-85 transition-colors duration-150 cursor-pointer"
+                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200/70 dark:border-stone-700/60 text-stone-700 dark:text-stone-300 text-xs font-semibold hover:bg-stone-200/80 dark:hover:bg-stone-700/80 active:scale-[0.98] transition-all duration-150 cursor-pointer transform-gpu"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Mặc Định</span>
@@ -295,7 +308,7 @@ function SettingsDrawerContent({
               <button
                 type="button"
                 onClick={handleSavePrizes}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] text-white text-xs font-bold shadow-sm shadow-orange-500/25 active:opacity-85 transition-colors duration-150 cursor-pointer"
+                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] text-white text-xs font-bold shadow-sm shadow-orange-500/25 active:scale-[0.98] transition-all duration-150 cursor-pointer transform-gpu"
               >
                 <Check className="w-3.5 h-3.5" />
                 <span>Lưu & Áp Dụng</span>
@@ -306,7 +319,7 @@ function SettingsDrawerContent({
               <button
                 type="button"
                 onClick={() => onChangeBgmVolume?.(0.35)}
-                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200/70 dark:border-stone-700/60 text-stone-700 dark:text-stone-300 text-xs font-semibold hover:bg-stone-200/80 dark:hover:bg-stone-700/80 active:opacity-85 transition-colors duration-150 cursor-pointer"
+                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200/70 dark:border-stone-700/60 text-stone-700 dark:text-stone-300 text-xs font-semibold hover:bg-stone-200/80 dark:hover:bg-stone-700/80 active:scale-[0.98] transition-all duration-150 cursor-pointer transform-gpu"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Âm Lượng 35%</span>
@@ -314,7 +327,7 @@ function SettingsDrawerContent({
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] text-white text-xs font-bold shadow-sm shadow-orange-500/25 active:opacity-85 transition-colors duration-150 cursor-pointer"
+                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] text-white text-xs font-bold shadow-sm shadow-orange-500/25 active:scale-[0.98] transition-all duration-150 cursor-pointer transform-gpu"
               >
                 <Check className="w-3.5 h-3.5" />
                 <span>Hoàn Tất</span>
@@ -325,7 +338,7 @@ function SettingsDrawerContent({
               <button
                 type="button"
                 onClick={onResetSpotlightConfig}
-                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200/70 dark:border-stone-700/60 text-stone-700 dark:text-stone-300 text-xs font-semibold hover:bg-stone-200/80 dark:hover:bg-stone-700/80 active:opacity-85 transition-colors duration-150 cursor-pointer"
+                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200/70 dark:border-stone-700/60 text-stone-700 dark:text-stone-300 text-xs font-semibold hover:bg-stone-200/80 dark:hover:bg-stone-700/80 active:scale-[0.98] transition-all duration-150 cursor-pointer transform-gpu"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Đặt Lại Đèn</span>
@@ -333,7 +346,7 @@ function SettingsDrawerContent({
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] text-white text-xs font-bold shadow-sm shadow-orange-500/25 active:opacity-85 transition-colors duration-150 cursor-pointer"
+                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] text-white text-xs font-bold shadow-sm shadow-orange-500/25 active:scale-[0.98] transition-all duration-150 cursor-pointer transform-gpu"
               >
                 <Check className="w-3.5 h-3.5" />
                 <span>Hoàn Tất</span>

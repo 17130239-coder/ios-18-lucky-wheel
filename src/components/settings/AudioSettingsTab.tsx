@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { BgmStyle } from '@/utils/bgm';
-import { Music, Volume2, Coffee, Disc3, Check, Play, Pause, Waves, Gamepad2, Palmtree } from 'lucide-react';
+import { Music, Volume2, Coffee, Disc3, Play, Pause, Waves, Gamepad2, Palmtree } from 'lucide-react';
+import { AnimatedRadioCheck } from './AnimatedRadioCheck';
 
 interface AudioSettingsTabProps {
   bgmEnabled: boolean;
@@ -161,14 +162,14 @@ export function AudioSettingsTab({
                 type="button"
                 onClick={onToggleBgm}
                 aria-label={isPlaying ? 'Tạm dừng nhạc' : 'Phát nhạc'}
-                className="w-8 h-8 rounded-full bg-[#FF6B00] text-white flex items-center justify-center shadow-xs hover:bg-[#FF7A1A] transition-colors duration-150 cursor-pointer"
+                className="w-8 h-8 rounded-full bg-[#FF6B00] text-white flex items-center justify-center shadow-xs hover:bg-[#FF7A1A] active:scale-90 transition-all duration-150 cursor-pointer"
               >
                 {isPlaying ? <Pause className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current ml-0.5" />}
               </button>
             </div>
           </div>
 
-          {/* 3. Chill Mood Selector (Zero-Jitter fixed indicators) */}
+          {/* 3. Chill Mood Selector (Zero-Jitter fluid micro-interactions) */}
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-1.5 px-0.5 text-[11px] font-bold tracking-wider text-stone-400 dark:text-stone-500 uppercase">
               <Waves className="w-3.5 h-3.5 text-[#FF6B00]" />
@@ -184,16 +185,18 @@ export function AudioSettingsTab({
                     key={style.key}
                     type="button"
                     onClick={() => onSelectStyle(style.key)}
-                    className={`flex flex-col text-left p-3 rounded-2xl border transition-colors duration-150 cursor-pointer ${
+                    className={`group flex flex-col text-left p-3 rounded-2xl border transition-all duration-200 ease-out cursor-pointer active:scale-[0.985] transform-gpu will-change-transform ${
                       isSelected
-                        ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/40 ring-1 ring-[#FF6B00]/30 shadow-xs'
+                        ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/45 ring-1.5 ring-[#FF6B00]/30 shadow-[0_4px_16px_-4px_rgba(255,107,0,0.18)]'
                         : 'bg-stone-100/60 dark:bg-stone-800/30 border-stone-200/60 dark:border-white/5 hover:bg-stone-100/90 dark:hover:bg-stone-800/50'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5 min-w-0">
                         <div
-                          className="w-7 h-7 rounded-lg flex items-center justify-center text-white shrink-0 shadow-2xs"
+                          className={`w-7 h-7 rounded-lg flex items-center justify-center text-white shrink-0 shadow-2xs transition-all duration-200 ${
+                            isSelected ? 'scale-105 shadow-xs' : 'scale-100'
+                          }`}
                           style={{ backgroundColor: style.color }}
                         >
                           <IconComponent className="w-3.5 h-3.5" />
@@ -206,16 +209,7 @@ export function AudioSettingsTab({
                         </span>
                       </div>
 
-                      {/* Stable fixed-size check indicator - Zero Layout Shift */}
-                      <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0">
-                        {isSelected ? (
-                          <div className="w-5 h-5 rounded-full bg-[#FF6B00] text-white flex items-center justify-center shadow-xs">
-                            <Check className="w-3 h-3 stroke-[3]" />
-                          </div>
-                        ) : (
-                          <div className="w-4 h-4 rounded-full border border-stone-300 dark:border-stone-600" />
-                        )}
-                      </div>
+                      <AnimatedRadioCheck isSelected={isSelected} />
                     </div>
                     <p className="text-xs text-stone-500 dark:text-stone-400 mt-1.5 leading-relaxed pl-9.5">
                       {style.desc}

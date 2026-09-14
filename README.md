@@ -173,6 +173,15 @@
 - **Ghi Nhớ Component (`React.memo`) Toàn Diện**:
   - Bọc `React.memo` cho tất cả các component tĩnh (`Header`, `VectorBackground`, `LuckyWheel`, `WheelSvg`, `CenterHub`, `StatusPill`, `StageCurtain`, `StageSpotlights`, `AmbientGlow`), ngăn chặn mọi re-render thừa.
 
+### 2.7. Trải Nghiệm Chuyển Động & Phản Hồi Xúc Giác Cài Đặt (iOS Fluid Settings Animations & Zero-Jitter Micro-interactions)
+- **Thanh Phân Đoạn Trượt Viên Nang Nổi (iOS Sliding Pill Segmented Indicator)**:
+  - Nâng cấp thanh chuyển đổi 3 tab ("Sân Khấu" | "Nhạc Chill" | "Quà") với viên nang nổi (floating pill indicator) trượt ngang tức thì sử dụng GPU `translate3d(index * 100%, 0, 0)` kết hợp đường cong giảm tốc quán tính Apple `cubic-bezier(0.16, 1, 0.3, 1)`.
+  - Toàn bộ nội dung mỗi tab khi chuyển đổi được trang bị hiệu ứng vào cảnh mượt mà `animate-tab-content-in` (fading & subtle slide up 6px), loại bỏ hoàn toàn cảm giác giật hoặc cắt cảnh đột ngột.
+- **Thẻ Tùy Chọn Đa Chiều & Nút Kiểm Nảy Lò Xo (Animated Selection Cards & Spring Radio Checkmarks)**:
+  - Thành phần `<AnimatedRadioCheck />` chuẩn hóa kích thước cố định $20\text{px} \times 20\text{px}$ tuyệt đối, loại trừ hoàn toàn việc ngắt/thêm phần tử DOM làm giật hoặc rung lắc khung hình (**Zero Layout Shift**).
+  - Khi một lựa chọn được chọn (ví dụ: Chế độ chiếu sáng Rim / Sweep / Center, Chủ đề cảnh quan vector, Giai điệu BGM), biểu tượng dấu kiểm $\checkmark$ bật nảy đàn hồi theo đường cong lò xo đặc trưng `cubic-bezier(0.34, 1.56, 0.64, 1)` với góc xoay mượt mà từ $-45^\circ$ về $0^\circ$.
+  - Khung thẻ sở hữu vòng hào quang phát sáng êm dịu (`ring-1.5 ring-[#FF6B00]/30`) và phản hồi lực nhấn cơ học (`active:scale-[0.985]`), tạo cảm giác xúc giác chân thực như đang thao tác trên thiết bị iOS 18 nguyên bản.
+
 ---
 
 ## 3. Quy Tắc & Nguyên Tắc Thiết Kế (Rules & Guidelines)
