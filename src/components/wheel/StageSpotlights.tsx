@@ -181,6 +181,7 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
               fill="url(#cfg-fog-gradient)"
               filter="url(#cfg-fog-blur)"
               opacity={isSpinning ? 0.65 : isWon ? 0.75 : 0.40}
+              className="transition-opacity duration-700 ease-out"
             />
 
             {/* 2. Main Soft Flared Volumetric Ray Cone */}
@@ -189,6 +190,7 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
               fill="url(#cfg-beam-gradient)"
               filter="url(#cfg-beam-blur)"
               opacity={isSpinning ? 0.75 : isWon ? 0.85 : 0.50}
+              className="transition-opacity duration-700 ease-out"
             />
 
             {/* 3. Soft Velvety Core Glow */}
@@ -197,6 +199,7 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
               fill="url(#cfg-core-gradient)"
               filter="url(#cfg-core-blur)"
               opacity={isSpinning ? 0.65 : isWon ? 0.75 : 0.45}
+              className="transition-opacity duration-700 ease-out"
             />
 
             {/* 4. Rim Grazing Tangential Touch on Wheel Frame (At y = 440) */}
@@ -208,6 +211,7 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
               fill="url(#cfg-rim-graze)"
               filter="url(#cfg-rim-blur)"
               opacity={isSpinning ? 0.55 : isWon ? 0.70 : 0.35}
+              className="transition-opacity duration-700 ease-out"
             />
 
             {/* 5. Delicate Floating Stage Dust Motes across the Flared Cone */}
@@ -293,6 +297,7 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
               fill="url(#cfg-fog-gradient)"
               filter="url(#cfg-fog-blur)"
               opacity={isSpinning ? 0.65 : isWon ? 0.75 : 0.40}
+              className="transition-opacity duration-700 ease-out"
             />
 
             {/* 2. Main Soft Flared Volumetric Ray Cone */}
@@ -301,6 +306,7 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
               fill="url(#cfg-beam-gradient)"
               filter="url(#cfg-beam-blur)"
               opacity={isSpinning ? 0.75 : isWon ? 0.85 : 0.50}
+              className="transition-opacity duration-700 ease-out"
             />
 
             {/* 3. Soft Velvety Core Glow */}
@@ -309,6 +315,7 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
               fill="url(#cfg-core-gradient)"
               filter="url(#cfg-core-blur)"
               opacity={isSpinning ? 0.65 : isWon ? 0.75 : 0.45}
+              className="transition-opacity duration-700 ease-out"
             />
 
             {/* 4. Rim Grazing Tangential Touch on Wheel Frame (At y = 440) */}
@@ -320,6 +327,7 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
               fill="url(#cfg-rim-graze)"
               filter="url(#cfg-rim-blur)"
               opacity={isSpinning ? 0.55 : isWon ? 0.70 : 0.35}
+              className="transition-opacity duration-700 ease-out"
             />
 
             {/* 5. Delicate Floating Stage Dust Motes across the Flared Cone */}

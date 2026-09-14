@@ -79,55 +79,42 @@ body {
   animation: rgb-cycle 8s linear infinite;
 }
 
-/* 2. Rim Grazing - Natural Organic Sweep */
+/* 2. Rim Grazing - Natural Organic Harmonic Sweep */
 @keyframes spotlight-rim-left {
   0% {
-    transform: rotate(-15deg);
-  }
-  30% {
-    transform: rotate(-23deg);
-  }
-  60% {
-    transform: rotate(-18deg);
+    transform: rotate(-16deg);
   }
   100% {
-    transform: rotate(-26deg);
+    transform: rotate(-28deg);
   }
 }
 
 @keyframes spotlight-rim-right {
   0% {
-    transform: rotate(15deg);
-  }
-  35% {
-    transform: rotate(24deg);
-  }
-  65% {
-    transform: rotate(19deg);
+    transform: rotate(16deg);
   }
   100% {
-    transform: rotate(26deg);
+    transform: rotate(28deg);
   }
 }
 
 .spotlight-left-rim {
   transform-origin: 0 0;
-  animation: spotlight-rim-left 5.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+  animation: spotlight-rim-left 5.0s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+  will-change: transform;
 }
 
 .spotlight-right-rim {
   transform-origin: 0 0;
-  animation: spotlight-rim-right 6.1s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
-  animation-delay: -2.3s;
+  animation: spotlight-rim-right 5.6s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+  animation-delay: -2.4s;
+  will-change: transform;
 }
 
 /* 3. Full Sweep Mode (Quét toàn sân khấu) */
 @keyframes spotlight-sweep-left {
   0% {
-    transform: rotate(-22deg);
-  }
-  50% {
-    transform: rotate(-38deg);
+    transform: rotate(-18deg);
   }
   100% {
     transform: rotate(-44deg);
@@ -136,10 +123,7 @@ body {
 
 @keyframes spotlight-sweep-right {
   0% {
-    transform: rotate(22deg);
-  }
-  50% {
-    transform: rotate(38deg);
+    transform: rotate(18deg);
   }
   100% {
     transform: rotate(44deg);
@@ -148,73 +132,75 @@ body {
 
 .spotlight-left-sweep {
   transform-origin: 0 0;
-  animation: spotlight-sweep-left 4.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+  animation: spotlight-sweep-left 4.0s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+  will-change: transform;
 }
 
 .spotlight-right-sweep {
   transform-origin: 0 0;
-  animation: spotlight-sweep-right 5.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
-  animation-delay: -1.9s;
+  animation: spotlight-sweep-right 4.5s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+  animation-delay: -2.0s;
+  will-change: transform;
 }
 
 /* 4. Center Fixed Mode */
 .spotlight-left-center {
   transform-origin: 0 0;
   transform: rotate(-36deg);
+  will-change: transform;
 }
 
 .spotlight-right-center {
   transform-origin: 0 0;
   transform: rotate(36deg);
+  will-change: transform;
 }
 
-/* Fast energetic sweeping during wheel spin - brisk, natural concert spotlight sweep */
+/* Fast energetic sweeping during wheel spin - Continuous harmonic sweep */
 @keyframes spotlight-spin-left {
   0% {
-    transform: rotate(-18deg);
-  }
-  50% {
-    transform: rotate(-32deg);
+    transform: rotate(-16deg);
   }
   100% {
-    transform: rotate(-42deg);
+    transform: rotate(-40deg);
   }
 }
 
 @keyframes spotlight-spin-right {
   0% {
-    transform: rotate(18deg);
-  }
-  50% {
-    transform: rotate(32deg);
+    transform: rotate(16deg);
   }
   100% {
-    transform: rotate(42deg);
+    transform: rotate(40deg);
   }
 }
 
 .spotlight-left-spin {
   transform-origin: 0 0;
-  animation: spotlight-spin-left 0.85s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  animation: spotlight-spin-left 1.0s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+  will-change: transform;
 }
 
 .spotlight-right-spin {
   transform-origin: 0 0;
-  animation: spotlight-spin-right 0.85s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
-  animation-delay: -0.32s;
+  animation: spotlight-spin-right 1.0s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+  animation-delay: -0.5s;
+  will-change: transform;
 }
 
-/* Victory lock */
+/* Victory lock - Smooth fluid spring ease */
 .spotlight-left-won {
   transform-origin: 0 0;
   transform: rotate(-30deg);
-  transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
 }
 
 .spotlight-right-won {
   transform-origin: 0 0;
   transform: rotate(30deg);
-  transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
 }
 
 /* 5. Atmospheric Volumetric Dust Floating Animations */
