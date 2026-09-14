@@ -98,7 +98,6 @@ export function WheelSvg({ prizes, rotation }: WheelSvgProps) {
             const badgeY = cy - 180;
             const textY = cy - 120;
             const iconColor = item.color.toLowerCase() === '#ffffff' ? '#1E293B' : item.color;
-            const textColor = item.textColor || '#FFDF00';
             return (
               <g>
                 <circle cx={cx} cy={cy} r={radius} fill={item.color} stroke="#FFFFFF" strokeWidth="2" />
@@ -110,27 +109,11 @@ export function WheelSvg({ prizes, rotation }: WheelSvgProps) {
                 >
                   {TECH_ICONS[item.icon] || TECH_ICONS.gift}
                 </g>
-                {/* Contrast Label Plate */}
-                <rect
-                  x={cx - 75}
-                  y={textY - 18}
-                  width={150}
-                  height={44}
-                  rx={12}
-                  ry={12}
-                  fill="rgba(15, 23, 42, 0.45)"
-                  stroke="rgba(255, 255, 255, 0.22)"
-                  strokeWidth="1"
-                />
                 <text
                   x={cx}
                   y={textY}
                   textAnchor="middle"
-                  fill={textColor}
-                  stroke="rgba(0, 0, 0, 0.85)"
-                  strokeWidth="2.5"
-                  strokeLinejoin="round"
-                  style={{ paintOrder: 'stroke fill' }}
+                  fill="#FFFFFF"
                   className="font-sans select-none"
                   fontSize="15"
                   fontWeight="800"
@@ -158,7 +141,6 @@ export function WheelSvg({ prizes, rotation }: WheelSvgProps) {
 
             const iconColor =
               item.color.toLowerCase() === '#ffffff' ? '#1E293B' : item.color;
-            const textColor = item.textColor || '#FFDF00';
 
             return (
               <React.Fragment key={item.id || index}>
@@ -200,39 +182,22 @@ export function WheelSvg({ prizes, rotation }: WheelSvgProps) {
                     {TECH_ICONS[item.icon] || TECH_ICONS.gift}
                   </g>
 
-                  {/* Frosted Contrast Label Plate for 100% Text Standout */}
-                  <rect
-                    x={cx - 56}
-                    y={textY - 14}
-                    width={112}
-                    height={35}
-                    rx={8}
-                    ry={8}
-                    fill="rgba(15, 23, 42, 0.42)"
-                    stroke="rgba(255, 255, 255, 0.18)"
-                    strokeWidth="0.8"
-                  />
-
-                  {/* 2-line clean, punchy typography */}
+                  {/* 2-line clean typography */}
                   <text
                     x={cx}
                     y={textY}
                     textAnchor="middle"
-                    fill={textColor}
-                    stroke="rgba(0, 0, 0, 0.85)"
-                    strokeWidth="2"
-                    strokeLinejoin="round"
-                    style={{ paintOrder: 'stroke fill' }}
+                    fill="#FFFFFF"
                     className="font-sans select-none"
                     fontSize="11"
-                    fontWeight="800"
+                    fontWeight="700"
                     letterSpacing="0.3"
                     filter="url(#label-shadow)"
                   >
                     <tspan x={cx} dy="-2">
                       {item.line1}
                     </tspan>
-                    <tspan x={cx} dy="14" fontWeight="900">
+                    <tspan x={cx} dy="14" fontWeight="800">
                       {item.line2}
                     </tspan>
                   </text>

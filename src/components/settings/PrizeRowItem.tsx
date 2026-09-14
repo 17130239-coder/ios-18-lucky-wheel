@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { PrizeItem } from '@/types/wheel';
 import { TECH_ICONS, ICON_METADATA } from '@/constants/techIcons';
 import { IconPickerModal } from './IconPickerModal';
-import { Sparkles, Type } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 interface PrizeRowItemProps {
   item: PrizeItem;
@@ -12,21 +12,11 @@ interface PrizeRowItemProps {
   onChange: (index: number, updated: Partial<PrizeItem>) => void;
 }
 
-const TEXT_COLOR_PRESETS = [
-  { label: 'Vàng Gold', color: '#FFDF00' },
-  { label: 'Trắng', color: '#FFFFFF' },
-  { label: 'Đen', color: '#0F172A' },
-  { label: 'Vàng Chanh', color: '#FACC15' },
-  { label: 'Đỏ Cam', color: '#FF4500' },
-];
-
 export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
 
   const iconMeta = ICON_METADATA.find((m) => m.key === item.icon);
   const iconLabel = iconMeta?.label || item.icon;
-
-  const currentTextColor = item.textColor || '#FFDF00';
 
   const iconColor =
     item.color.toLowerCase() === '#ffffff' ? '#1E293B' : '#FFFFFF';
@@ -97,60 +87,23 @@ export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
         </label>
       </div>
 
-      {/* Middle Row: Visual Icon Selector Pill */}
+      {/* Bottom Row: Visual Icon Selector Pill */}
       <div className="flex items-center justify-between gap-2 pt-0.5">
         <button
           type="button"
           onClick={() => setIsPickerOpen(true)}
-          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 text-[11px] font-semibold hover:border-[#FF6B00] transition-colors cursor-pointer"
+          className="flex-1 flex items-center justify-between px-3 py-1.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 text-[11px] font-semibold hover:border-[#FF6B00] transition-colors cursor-pointer"
         >
-          <span className="w-4 h-4 text-[#FF6B00] flex items-center justify-center">
-            {TECH_ICONS[item.icon] || TECH_ICONS.gift}
-          </span>
-          <span className="font-bold truncate max-w-[120px]">{iconLabel}</span>
-          <span className="text-[10px] text-[#FF6B00] font-bold underline ml-0.5">
-            (Đổi icon)
+          <div className="flex items-center gap-2">
+            <span className="w-4 h-4 text-[#FF6B00] flex items-center justify-center">
+              {TECH_ICONS[item.icon] || TECH_ICONS.gift}
+            </span>
+            <span className="font-bold truncate">{iconLabel}</span>
+          </div>
+          <span className="text-[10px] text-[#FF6B00] font-bold underline">
+            Đổi icon trực quan
           </span>
         </button>
-
-        {/* Text Color Controls */}
-        <div className="flex items-center gap-1.5">
-          <span title="Màu chữ">
-            <Type className="w-3.5 h-3.5 text-stone-400" />
-          </span>
-          <div className="flex items-center gap-1">
-            {TEXT_COLOR_PRESETS.map((preset) => (
-              <button
-                key={preset.color}
-                type="button"
-                onClick={() => onChange(index, { textColor: preset.color })}
-                title={`Chữ ${preset.label}`}
-                className={`w-5 h-5 rounded-full border shadow-2xs transition-transform cursor-pointer ${
-                  currentTextColor.toLowerCase() === preset.color.toLowerCase()
-                    ? 'ring-2 ring-[#FF6B00] scale-110 border-white'
-                    : 'border-stone-300 dark:border-stone-600 hover:scale-105'
-                }`}
-                style={{ backgroundColor: preset.color }}
-              />
-            ))}
-            {/* Custom Text Color Picker */}
-            <label
-              className="relative w-5 h-5 rounded-full overflow-hidden border border-stone-300 dark:border-stone-600 cursor-pointer shadow-2xs shrink-0"
-              title="Màu chữ tùy ý"
-            >
-              <input
-                type="color"
-                value={currentTextColor}
-                onChange={(e) => onChange(index, { textColor: e.target.value })}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              />
-              <div
-                className="w-full h-full"
-                style={{ backgroundColor: currentTextColor }}
-              />
-            </label>
-          </div>
-        </div>
       </div>
 
       {/* Visual Icon Picker Modal */}

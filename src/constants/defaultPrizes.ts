@@ -9,7 +9,6 @@ export const DEFAULT_PRIZES: PrizeItem[] = [
     color: '#FF6B00',
     icon: 'smartphone',
     weight: 1,
-    textColor: '#FFDF00',
   },
   {
     id: 'prize-2',
@@ -19,7 +18,6 @@ export const DEFAULT_PRIZES: PrizeItem[] = [
     color: '#1E293B',
     icon: 'laptop',
     weight: 1,
-    textColor: '#FFDF00',
   },
   {
     id: 'prize-3',
@@ -29,7 +27,6 @@ export const DEFAULT_PRIZES: PrizeItem[] = [
     color: '#0EA5E9',
     icon: 'tablet',
     weight: 1,
-    textColor: '#FFDF00',
   },
   {
     id: 'prize-4',
@@ -39,7 +36,6 @@ export const DEFAULT_PRIZES: PrizeItem[] = [
     color: '#10B981',
     icon: 'watch',
     weight: 1,
-    textColor: '#FFDF00',
   },
   {
     id: 'prize-5',
@@ -49,7 +45,6 @@ export const DEFAULT_PRIZES: PrizeItem[] = [
     color: '#8B5CF6',
     icon: 'headphones',
     weight: 1,
-    textColor: '#FFDF00',
   },
   {
     id: 'prize-6',
@@ -59,7 +54,6 @@ export const DEFAULT_PRIZES: PrizeItem[] = [
     color: '#F59E0B',
     icon: 'gamepad',
     weight: 1,
-    textColor: '#FFDF00',
   },
   {
     id: 'prize-7',
@@ -69,7 +63,6 @@ export const DEFAULT_PRIZES: PrizeItem[] = [
     color: '#EF4444',
     icon: 'speaker',
     weight: 1,
-    textColor: '#FFDF00',
   },
   {
     id: 'prize-8',
@@ -79,7 +72,6 @@ export const DEFAULT_PRIZES: PrizeItem[] = [
     color: '#059669',
     icon: 'keyboard',
     weight: 1,
-    textColor: '#FFDF00',
   },
   {
     id: 'prize-9',
@@ -89,7 +81,6 @@ export const DEFAULT_PRIZES: PrizeItem[] = [
     color: '#6366F1',
     icon: 'mouse',
     weight: 1,
-    textColor: '#FFDF00',
   },
   {
     id: 'prize-10',
@@ -99,6 +90,5 @@ export const DEFAULT_PRIZES: PrizeItem[] = [
     color: '#D946EF',
     icon: 'charger',
     weight: 1,
-    textColor: '#FFDF00',
   },
 ];
