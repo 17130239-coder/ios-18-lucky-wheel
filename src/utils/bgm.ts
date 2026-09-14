@@ -1,15 +1,14 @@
 /**
  * Procedural Chill Background Music (BGM) Engine for iOS 18 Lucky Wheel.
  * 
- * Features:
- * - 100% Native Web Audio API procedural synthesis (0KB audio files, runs completely offline).
- * - 3 Hand-crafted Chill Moods:
- *   1. Lo-Fi Cafe (64 BPM, warm Rhodes chords, analog tape warmth, vinyl crackle, gentle sub bass)
- *   2. Dreamy Ambient (54 BPM, floating celestial pads, crystal pentatonic chime drops)
- *   3. Night Lounge (70 BPM, velvet jazz 9th chords, walking acoustic upright bass)
- * - Lookahead drift-free audio scheduler (W3C specification standard).
- * - Studio-grade Auto-Ducking: Smoothly reduces BGM volume when the wheel is spinning so wheel sound effects shine.
- * - Non-intrusive, calming master volume with smooth crossfades between styles.
+ * High-Fidelity Synthesizer featuring:
+ * - 100% Pure Native Web Audio API (0KB audio files, runs completely offline).
+ * - "Nhộn nhịp & Nhẹ nhàng" (Lively, rhythmic, foot-tapping, yet gentle and deeply relaxing).
+ * - Full Acoustic Drum Kit: Warm round kick, soft finger snap/rimshot, delicate swing hi-hat/shaker.
+ * - Dynamic Polyphonic Instruments: Warm Rhodes electric piano, walking groovy bass, dancing kalimba/marimba lead.
+ * - Crisp studio mastering EQ (open high frequencies, punchy low-end, zero muddiness).
+ * - Lookahead drift-free audio scheduler (W3C standard).
+ * - Studio Auto-Ducking: Smoothly ducks 65% when the wheel is spinning so wheel SFX shine.
  */
 
 export type BgmStyle = 'lofi' | 'ambient' | 'lounge';
@@ -17,114 +16,283 @@ export type BgmStyle = 'lofi' | 'ambient' | 'lounge';
 export interface BgmConfig {
   enabled: boolean;
   style: BgmStyle;
-  volume: number;      // 0.05 to 1.0 (default 0.35)
-  autoDuck: boolean;    // Duck volume when wheel is spinning
+  volume: number;      // 0.05 to 1.0 (default 0.60)
+  autoDuck: boolean;   // Duck volume when wheel is spinning
 }
 
-interface ChordBar {
-  bass: number;
-  chord: number[];
-  accent?: { offset: number; freq: number }[];
+interface NoteEvent {
+  timeOffset: number; // in beats (0.0 to 4.0)
+  freq: number;
+  duration?: number;
+  velocity?: number;
+}
+
+interface MoodBar {
+  chord: number[];        // Polyphonic chord frequencies
+  chordHits: number[];    // Beat offsets where chord is struck (e.g. [0, 1.5, 2.5])
+  bassNotes: NoteEvent[]; // Bass line notes
+  leadNotes?: NoteEvent[];// Kalimba / Marimba melodic lead
+  kickBeats: number[];    // Kick drum beat offsets
+  snareBeats: number[];   // Snap / Rimshot beat offsets
+  hatBeats: number[];     // Hi-hat / Shaker beat offsets
 }
 
 interface MoodDefinition {
   name: string;
   desc: string;
   bpm: number;
-  bars: ChordBar[];
+  bars: MoodBar[];
 }
 
+// Standard Equal Temperament Frequencies
+const N = {
+  F2: 87.31, G2: 98.00, A2: 110.00, Bb2: 116.54, B2: 123.47, C2: 65.41, D2: 73.42, E2: 82.41,
+  C3: 130.81, D3: 146.83, E3: 164.81, F3: 174.61, G3: 196.00, A3: 220.00, B3: 246.94,
+  C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
+  C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99, A5: 880.00, B5: 987.77,
+  C6: 1046.50
+};
+
 const BGM_MOODS: Record<BgmStyle, MoodDefinition> = {
+  // 1. LO-FI BOUNCY CHILL (84 BPM) - Royal Road chord progression: Fmaj7 -> G6 -> Em7 -> Am7
   lofi: {
-    name: 'Lo-Fi Cafe',
-    desc: 'Piano điện ấm áp, đĩa than cổ điển thư thái',
-    bpm: 64,
+    name: 'Lo-Fi Bouncy Chill',
+    desc: 'Nhịp trống êm ái, piano điện nảy nhịp & kalimba trong trẻo (Khuyên dùng)',
+    bpm: 84,
     bars: [
-      // Fmaj7
+      // Bar 1: Fmaj7
       {
-        bass: 87.31, // F2
-        chord: [174.61, 220.0, 261.63, 329.63], // F3, A3, C4, E4
-        accent: [{ offset: 2.2, freq: 392.0 }, { offset: 3.2, freq: 329.63 }], // G4, E4
+        chord: [N.F3, N.A3, N.C4, N.E4],
+        chordHits: [0, 1.5, 2.75],
+        bassNotes: [
+          { timeOffset: 0, freq: N.F2, duration: 1.2 },
+          { timeOffset: 1.5, freq: N.C3, duration: 0.8 },
+          { timeOffset: 2.5, freq: N.F2, duration: 1.0 },
+        ],
+        leadNotes: [
+          { timeOffset: 0.5, freq: N.E5, duration: 0.4 },
+          { timeOffset: 1.0, freq: N.G5, duration: 0.4 },
+          { timeOffset: 2.0, freq: N.A5, duration: 0.6 },
+          { timeOffset: 3.0, freq: N.G5, duration: 0.5 },
+        ],
+        kickBeats: [0, 2.5],
+        snareBeats: [1, 3],
+        hatBeats: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
       },
-      // Am7
+      // Bar 2: G6 (or G/F)
       {
-        bass: 110.0, // A2
-        chord: [164.81, 196.0, 261.63, 329.63], // E3, G3, C4, E4
-        accent: [{ offset: 2.2, freq: 293.66 }], // D4
+        chord: [N.G3, N.B3, N.D4, N.E4],
+        chordHits: [0, 1.5, 2.75],
+        bassNotes: [
+          { timeOffset: 0, freq: N.G2, duration: 1.2 },
+          { timeOffset: 1.5, freq: N.D3, duration: 0.8 },
+          { timeOffset: 2.5, freq: N.G2, duration: 1.0 },
+        ],
+        leadNotes: [
+          { timeOffset: 0.5, freq: N.B5, duration: 0.4 },
+          { timeOffset: 1.25, freq: N.G5, duration: 0.4 },
+          { timeOffset: 2.0, freq: N.E5, duration: 0.5 },
+          { timeOffset: 3.25, freq: N.D5, duration: 0.4 },
+        ],
+        kickBeats: [0, 2.5],
+        snareBeats: [1, 3],
+        hatBeats: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
       },
-      // Dm7
+      // Bar 3: Em7
       {
-        bass: 73.42, // D2
-        chord: [146.83, 174.61, 220.0, 261.63], // D3, F3, A3, C4
-        accent: [{ offset: 2.2, freq: 329.63 }, { offset: 3.0, freq: 261.63 }], // E4, C4
+        chord: [N.E3, N.G3, N.B3, N.D4],
+        chordHits: [0, 1.5, 2.75],
+        bassNotes: [
+          { timeOffset: 0, freq: N.E2, duration: 1.2 },
+          { timeOffset: 1.5, freq: N.B2, duration: 0.8 },
+          { timeOffset: 2.5, freq: N.E2, duration: 1.0 },
+        ],
+        leadNotes: [
+          { timeOffset: 0.5, freq: N.G5, duration: 0.5 },
+          { timeOffset: 1.5, freq: N.E5, duration: 0.4 },
+          { timeOffset: 2.5, freq: N.D5, duration: 0.5 },
+        ],
+        kickBeats: [0, 2.5],
+        snareBeats: [1, 3],
+        hatBeats: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
       },
-      // Bbmaj7
+      // Bar 4: Am7
       {
-        bass: 116.54, // Bb2
-        chord: [146.83, 174.61, 220.0, 293.66], // D3, F3, A3, D4
-        accent: [{ offset: 2.2, freq: 261.63 }], // C4
+        chord: [N.A3, N.C4, N.E4, N.G4],
+        chordHits: [0, 1.5, 2.75],
+        bassNotes: [
+          { timeOffset: 0, freq: N.A2, duration: 1.2 },
+          { timeOffset: 1.5, freq: N.E3, duration: 0.8 },
+          { timeOffset: 2.5, freq: N.A2, duration: 0.7 },
+          { timeOffset: 3.5, freq: N.C3, duration: 0.4 },
+        ],
+        leadNotes: [
+          { timeOffset: 0.5, freq: N.C5, duration: 0.4 },
+          { timeOffset: 1.25, freq: N.D5, duration: 0.4 },
+          { timeOffset: 2.0, freq: N.E5, duration: 0.8 },
+        ],
+        kickBeats: [0, 2.5],
+        snareBeats: [1, 3],
+        hatBeats: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
       },
     ],
   },
+
+  // 2. TROPICAL SUNSET CHILL (88 BPM) - Upbeat Marimba, sunny island chords
   ambient: {
-    name: 'Dreamy Ambient',
-    desc: 'Không gian bồng bềnh lơ lửng, êm dịu sâu lắng',
-    bpm: 52,
+    name: 'Tropical Sunset Chill',
+    desc: 'Mộc cầm Marimba rộn ràng, giai điệu tươi vui đón nắng hè',
+    bpm: 88,
     bars: [
-      // Cmaj9
+      // Bar 1: Cmaj7
       {
-        bass: 65.41, // C2
-        chord: [196.0, 246.94, 293.66, 329.63, 392.0], // G3, B3, D4, E4, G4
-        accent: [{ offset: 2.0, freq: 659.25 }, { offset: 3.2, freq: 987.77 }],
+        chord: [N.C4, N.E4, N.G4, N.B4],
+        chordHits: [0, 1.75, 2.5],
+        bassNotes: [
+          { timeOffset: 0, freq: N.C2, duration: 1.0 },
+          { timeOffset: 2.0, freq: N.G2, duration: 1.0 },
+        ],
+        leadNotes: [
+          { timeOffset: 0, freq: N.E5, duration: 0.3 },
+          { timeOffset: 0.5, freq: N.G5, duration: 0.3 },
+          { timeOffset: 1.25, freq: N.C6, duration: 0.4 },
+          { timeOffset: 2.0, freq: N.B5, duration: 0.3 },
+          { timeOffset: 2.5, freq: N.G5, duration: 0.4 },
+        ],
+        kickBeats: [0, 1.75, 2.5],
+        snareBeats: [1, 3],
+        hatBeats: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
       },
-      // Em9
+      // Bar 2: Am9
       {
-        bass: 82.41, // E2
-        chord: [196.0, 246.94, 293.66, 369.99, 493.88], // G3, B3, D4, F#4, B4
-        accent: [{ offset: 2.5, freq: 783.99 }],
+        chord: [N.A3, N.C4, N.E4, N.B4],
+        chordHits: [0, 1.75, 2.5],
+        bassNotes: [
+          { timeOffset: 0, freq: N.A2, duration: 1.0 },
+          { timeOffset: 2.0, freq: N.E2, duration: 1.0 },
+        ],
+        leadNotes: [
+          { timeOffset: 0.5, freq: N.A5, duration: 0.3 },
+          { timeOffset: 1.0, freq: N.B5, duration: 0.3 },
+          { timeOffset: 2.0, freq: N.A5, duration: 0.4 },
+          { timeOffset: 3.0, freq: N.E5, duration: 0.5 },
+        ],
+        kickBeats: [0, 1.75, 2.5],
+        snareBeats: [1, 3],
+        hatBeats: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
       },
-      // Fmaj7#11 (Lydian ethereal chord)
+      // Bar 3: Fmaj7
       {
-        bass: 87.31, // F2
-        chord: [220.0, 261.63, 329.63, 369.99, 440.0], // A3, C4, E4, B4, A4
-        accent: [{ offset: 1.8, freq: 880.0 }, { offset: 3.1, freq: 1318.51 }],
+        chord: [N.F3, N.A3, N.C4, N.E4],
+        chordHits: [0, 1.75, 2.5],
+        bassNotes: [
+          { timeOffset: 0, freq: N.F2, duration: 1.0 },
+          { timeOffset: 2.0, freq: N.C3, duration: 1.0 },
+        ],
+        leadNotes: [
+          { timeOffset: 0, freq: N.A5, duration: 0.3 },
+          { timeOffset: 0.75, freq: N.C6, duration: 0.3 },
+          { timeOffset: 1.5, freq: N.A5, duration: 0.3 },
+          { timeOffset: 2.5, freq: N.F5, duration: 0.5 },
+        ],
+        kickBeats: [0, 1.75, 2.5],
+        snareBeats: [1, 3],
+        hatBeats: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
       },
-      // G6/9
+      // Bar 4: G6/9
       {
-        bass: 98.0, // G2
-        chord: [196.0, 246.94, 293.66, 329.63, 440.0], // G3, B3, D4, E4, A4
-        accent: [{ offset: 2.2, freq: 587.33 }],
+        chord: [N.G3, N.B3, N.D4, N.A4],
+        chordHits: [0, 1.75, 2.5],
+        bassNotes: [
+          { timeOffset: 0, freq: N.G2, duration: 1.0 },
+          { timeOffset: 2.0, freq: N.D3, duration: 1.0 },
+        ],
+        leadNotes: [
+          { timeOffset: 0.5, freq: N.G5, duration: 0.3 },
+          { timeOffset: 1.25, freq: N.A5, duration: 0.3 },
+          { timeOffset: 2.0, freq: N.B5, duration: 0.4 },
+          { timeOffset: 3.0, freq: N.G5, duration: 0.6 },
+        ],
+        kickBeats: [0, 1.75, 2.5],
+        snareBeats: [1, 3],
+        hatBeats: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
       },
     ],
   },
+
+  // 3. BOSSA NOVA CAFE (92 BPM) - Syncopated Brazilian groove, sweet jazz chords
   lounge: {
-    name: 'Night Lounge',
-    desc: 'Hợp âm Jazz hoàng hôn sang trọng, êm dịu',
-    bpm: 68,
+    name: 'Bossa Nova Cafe',
+    desc: 'Hợp âm Jazz ngọt ngào, nhịp gõ gỗ du dương như ngồi quán cafe',
+    bpm: 92,
     bars: [
-      // Ebmaj7
+      // Bar 1: Dm9
       {
-        bass: 77.78, // Eb2
-        chord: [196.0, 233.08, 293.66, 349.23], // G3, Bb3, D4, F4
-        accent: [{ offset: 2.0, freq: 440.0 }, { offset: 3.0, freq: 392.0 }],
+        chord: [N.F3, N.A3, N.C4, N.E4],
+        chordHits: [0, 1.5, 2.5, 3.5],
+        bassNotes: [
+          { timeOffset: 0, freq: N.D2, duration: 0.8 },
+          { timeOffset: 2.0, freq: N.A2, duration: 0.8 },
+        ],
+        leadNotes: [
+          { timeOffset: 0.5, freq: N.F5, duration: 0.4 },
+          { timeOffset: 2.0, freq: N.E5, duration: 0.4 },
+          { timeOffset: 3.0, freq: N.D5, duration: 0.5 },
+        ],
+        kickBeats: [0, 2.0, 2.75],
+        snareBeats: [1.5, 3.0],
+        hatBeats: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
       },
-      // Cm9
+      // Bar 2: G13
       {
-        bass: 65.41, // C2
-        chord: [196.0, 233.08, 293.66, 311.13], // G3, Bb3, D4, Eb4
-        accent: [{ offset: 2.2, freq: 349.23 }],
+        chord: [N.F3, N.B3, N.E4, N.A4],
+        chordHits: [0, 1.5, 2.5, 3.5],
+        bassNotes: [
+          { timeOffset: 0, freq: N.G2, duration: 0.8 },
+          { timeOffset: 2.0, freq: N.D3, duration: 0.8 },
+        ],
+        leadNotes: [
+          { timeOffset: 0.5, freq: N.E5, duration: 0.4 },
+          { timeOffset: 2.0, freq: N.D5, duration: 0.4 },
+          { timeOffset: 3.0, freq: N.B4, duration: 0.5 },
+        ],
+        kickBeats: [0, 2.0, 2.75],
+        snareBeats: [1.5, 3.0],
+        hatBeats: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
       },
-      // Fm9
+      // Bar 3: Cmaj9
       {
-        bass: 87.31, // F2
-        chord: [207.65, 261.63, 311.13, 392.0], // Ab3, C4, Eb4, G4
-        accent: [{ offset: 2.0, freq: 440.0 }],
+        chord: [N.E3, N.G3, N.B3, N.D4],
+        chordHits: [0, 1.5, 2.5, 3.5],
+        bassNotes: [
+          { timeOffset: 0, freq: N.C2, duration: 0.8 },
+          { timeOffset: 2.0, freq: N.G2, duration: 0.8 },
+        ],
+        leadNotes: [
+          { timeOffset: 0.5, freq: N.D5, duration: 0.4 },
+          { timeOffset: 2.0, freq: N.C5, duration: 0.4 },
+          { timeOffset: 3.0, freq: N.G4, duration: 0.5 },
+        ],
+        kickBeats: [0, 2.0, 2.75],
+        snareBeats: [1.5, 3.0],
+        hatBeats: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
       },
-      // Bb13sus
+      // Bar 4: A7alt
       {
-        bass: 58.27, // Bb1
-        chord: [207.65, 261.63, 293.66, 392.0], // Ab3, C4, D4, G4
-        accent: [{ offset: 2.2, freq: 349.23 }],
+        chord: [N.G3, N.C4, N.F4, N.A4],
+        chordHits: [0, 1.5, 2.5, 3.5],
+        bassNotes: [
+          { timeOffset: 0, freq: N.A2, duration: 0.8 },
+          { timeOffset: 2.0, freq: N.E2, duration: 0.8 },
+        ],
+        leadNotes: [
+          { timeOffset: 0.5, freq: N.F5, duration: 0.4 },
+          { timeOffset: 2.0, freq: N.E5, duration: 0.4 },
+          { timeOffset: 3.0, freq: N.C5, duration: 0.5 },
+        ],
+        kickBeats: [0, 2.0, 2.75],
+        snareBeats: [1.5, 3.0],
+        hatBeats: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
       },
     ],
   },
@@ -135,11 +303,13 @@ export class ChillBgmSynthesizer {
   private isPlaying: boolean = false;
   private style: BgmStyle = 'lofi';
   private masterGain: GainNode | null = null;
-  private filterNode: BiquadFilterNode | null = null;
-  private vinylGain: GainNode | null = null;
-  private noiseNode: AudioBufferSourceNode | null = null;
+  private eqLow: BiquadFilterNode | null = null;
+  private eqHigh: BiquadFilterNode | null = null;
 
-  private userVolume: number = 0.35;
+  // Shared noise buffer for drums
+  private noiseBuffer: AudioBuffer | null = null;
+
+  private userVolume: number = 0.60;
   private isMuted: boolean = false;
   private isDucked: boolean = false;
 
@@ -166,67 +336,45 @@ export class ChillBgmSynthesizer {
   private setupAudioGraph(ctx: AudioContext) {
     if (this.masterGain) return;
 
-    // Master filter: warm analog lowpass cut at 950Hz to keep sound cozy & non-fatiguing
-    this.filterNode = ctx.createBiquadFilter();
-    this.filterNode.type = 'lowpass';
-    this.filterNode.frequency.setValueAtTime(950, ctx.currentTime);
-    this.filterNode.Q.setValueAtTime(0.7, ctx.currentTime);
+    // Highpass filter at 28Hz to clean up sub rumble
+    const highpass = ctx.createBiquadFilter();
+    highpass.type = 'highpass';
+    highpass.frequency.setValueAtTime(28, ctx.currentTime);
 
-    // Master gain
+    // Warm Low Shelf: +1.5dB boost at 100Hz for warm, cozy body
+    this.eqLow = ctx.createBiquadFilter();
+    this.eqLow.type = 'lowshelf';
+    this.eqLow.frequency.setValueAtTime(100, ctx.currentTime);
+    this.eqLow.gain.setValueAtTime(1.5, ctx.currentTime);
+
+    // Smooth High Shelf: crisp up to 7500Hz with gentle roll-off at the very top
+    this.eqHigh = ctx.createBiquadFilter();
+    this.eqHigh.type = 'highshelf';
+    this.eqHigh.frequency.setValueAtTime(7500, ctx.currentTime);
+    this.eqHigh.gain.setValueAtTime(-0.8, ctx.currentTime);
+
+    // Master Gain
     this.masterGain = ctx.createGain();
-    const effectiveVol = this.isMuted ? 0.0001 : this.userVolume * 0.45;
+    const effectiveVol = this.isMuted ? 0.0001 : this.userVolume * 0.72;
     this.masterGain.gain.setValueAtTime(effectiveVol, ctx.currentTime);
 
-    this.filterNode.connect(this.masterGain);
+    // Graph wiring: Sources -> highpass -> eqLow -> eqHigh -> masterGain -> destination
+    highpass.connect(this.eqLow);
+    this.eqLow.connect(this.eqHigh);
+    this.eqHigh.connect(this.masterGain);
     this.masterGain.connect(ctx.destination);
 
-    // Vinyl crackle generator
-    this.setupVinylCrackle(ctx);
+    // Create 1-second white noise buffer for crisp percussions
+    this.createNoiseBuffer(ctx);
   }
 
-  private setupVinylCrackle(ctx: AudioContext) {
-    if (!this.filterNode) return;
-    try {
-      const bufferSize = ctx.sampleRate * 3;
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-
-      // Generate gentle pink noise + sparse micro vinyl ticks
-      let b0 = 0, b1 = 0, b2 = 0;
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        b0 = 0.99886 * b0 + white * 0.0555179;
-        b1 = 0.99332 * b1 + white * 0.0750759;
-        b2 = 0.96900 * b2 + white * 0.1538520;
-        let val = (b0 + b1 + b2 + white * 0.5362) * 0.04;
-
-        // Occasional vinyl pop / dust static
-        if (Math.random() < 0.0008) {
-          val += (Math.random() * 2 - 1) * 0.35;
-        }
-        data[i] = val;
-      }
-
-      this.noiseNode = ctx.createBufferSource();
-      this.noiseNode.buffer = buffer;
-      this.noiseNode.loop = true;
-
-      const vinylFilter = ctx.createBiquadFilter();
-      vinylFilter.type = 'bandpass';
-      vinylFilter.frequency.setValueAtTime(1200, ctx.currentTime);
-      vinylFilter.Q.setValueAtTime(1.2, ctx.currentTime);
-
-      this.vinylGain = ctx.createGain();
-      // Very low level ambient warmth
-      this.vinylGain.gain.setValueAtTime(0.012, ctx.currentTime);
-
-      this.noiseNode.connect(vinylFilter);
-      vinylFilter.connect(this.vinylGain);
-      this.vinylGain.connect(this.filterNode);
-
-      this.noiseNode.start(ctx.currentTime);
-    } catch {
-      // Ignore
+  private createNoiseBuffer(ctx: AudioContext) {
+    if (this.noiseBuffer) return;
+    const length = ctx.sampleRate; // 1 second
+    this.noiseBuffer = ctx.createBuffer(1, length, ctx.sampleRate);
+    const output = this.noiseBuffer.getChannelData(0);
+    for (let i = 0; i < length; i++) {
+      output[i] = Math.random() * 2 - 1;
     }
   }
 
@@ -243,15 +391,13 @@ export class ChillBgmSynthesizer {
     if (this.isPlaying) return;
     this.isPlaying = true;
 
-    // Reset bar index and schedule starting now
     this.currentBarIndex = 0;
     this.nextBarTime = ctx.currentTime + 0.05;
 
     this.updateMasterVolume();
 
-    // Start lookahead scheduler
     if (this.timerId) clearInterval(this.timerId);
-    this.timerId = setInterval(() => this.scheduler(), 45);
+    this.timerId = setInterval(() => this.scheduler(), 35);
   }
 
   public stop() {
@@ -264,10 +410,9 @@ export class ChillBgmSynthesizer {
     }
 
     if (this.ctx && this.masterGain) {
-      // Smooth fadeout over 400ms
       const now = this.ctx.currentTime;
       this.masterGain.gain.cancelScheduledValues(now);
-      this.masterGain.gain.linearRampToValueAtTime(0.0001, now + 0.4);
+      this.masterGain.gain.linearRampToValueAtTime(0.0001, now + 0.35);
     }
   }
 
@@ -281,7 +426,7 @@ export class ChillBgmSynthesizer {
   }
 
   public setVolume(vol: number) {
-    this.userVolume = Math.max(0, Math.min(1, vol));
+    this.userVolume = Math.max(0.05, Math.min(1.0, vol));
     this.updateMasterVolume();
   }
 
@@ -290,9 +435,6 @@ export class ChillBgmSynthesizer {
     this.updateMasterVolume();
   }
 
-  /**
-   * Smoothly duck BGM when wheel starts spinning
-   */
   public duck(isDucked: boolean) {
     this.isDucked = isDucked;
     this.updateMasterVolume();
@@ -303,15 +445,15 @@ export class ChillBgmSynthesizer {
     const now = this.ctx.currentTime;
     this.masterGain.gain.cancelScheduledValues(now);
 
-    let target = this.userVolume * 0.42;
+    let target = this.userVolume * 0.72;
     if (this.isMuted || !this.isPlaying) {
       target = 0.0001;
     } else if (this.isDucked) {
-      // Duck down by 65% for crystal clear wheel sound effects
+      // Duck down 65% when wheel is spinning so wheel click/whistle shine
       target = target * 0.35;
     }
 
-    this.masterGain.gain.setTargetAtTime(target, now, 0.15);
+    this.masterGain.gain.setTargetAtTime(target, now, 0.12);
   }
 
   private scheduler() {
@@ -320,7 +462,7 @@ export class ChillBgmSynthesizer {
     const mood = BGM_MOODS[this.style] || BGM_MOODS.lofi;
     const secondsPerBeat = 60.0 / mood.bpm;
     const secondsPerBar = secondsPerBeat * 4.0;
-    const lookahead = 0.25; // schedule 250ms in advance
+    const lookahead = 0.25;
 
     while (this.nextBarTime < this.ctx.currentTime + lookahead) {
       this.scheduleBar(this.nextBarTime, mood, this.currentBarIndex);
@@ -330,161 +472,278 @@ export class ChillBgmSynthesizer {
   }
 
   private scheduleBar(barStartTime: number, mood: MoodDefinition, barIndex: number) {
-    if (!this.ctx || !this.filterNode) return;
+    if (!this.ctx || !this.eqLow) return;
     const ctx = this.ctx;
     const bar = mood.bars[barIndex];
     const secondsPerBeat = 60.0 / mood.bpm;
-    const barDuration = secondsPerBeat * 4.0;
 
-    // 1. Warm Acoustic / Sub Bass Note
-    this.scheduleBassNote(ctx, bar.bass, barStartTime, barDuration * 0.95);
-
-    // 2. Lush Rhodes / Ambient Polyphonic Chord (with natural human strum delay)
-    bar.chord.forEach((freq, noteIdx) => {
-      const humanStrumDelay = noteIdx * 0.022; // 22ms strum roll
-      const noteStartTime = barStartTime + humanStrumDelay;
-      this.scheduleChordVoice(ctx, freq, noteStartTime, barDuration);
+    // 1. Kick Drum
+    bar.kickBeats.forEach((beat) => {
+      this.scheduleKick(ctx, barStartTime + beat * secondsPerBeat);
     });
 
-    // 3. Gentle Secondary Syncopated Tap (at beat 2.5 for lo-fi swing)
-    if (this.style === 'lofi' || this.style === 'lounge') {
-      const syncopatedTime = barStartTime + secondsPerBeat * 2.5;
-      bar.chord.slice(1, 3).forEach((freq, idx) => {
-        this.scheduleSoftTap(ctx, freq, syncopatedTime + idx * 0.015, secondsPerBeat * 1.2);
-      });
-    }
+    // 2. Snare / Rimshot / Finger Snap
+    bar.snareBeats.forEach((beat) => {
+      this.scheduleSnare(ctx, barStartTime + beat * secondsPerBeat);
+    });
 
-    // 4. Subtle Melodic Accents / Pentatonic Drops
-    if (bar.accent) {
-      bar.accent.forEach((acc) => {
-        const accTime = barStartTime + acc.offset * secondsPerBeat;
-        this.scheduleChimeDrop(ctx, acc.freq, accTime);
+    // 3. Hi-Hats / Shakers with gentle swing on offbeats
+    bar.hatBeats.forEach((beat, idx) => {
+      const isOffbeat = idx % 2 === 1;
+      const swingDelay = isOffbeat ? 0.02 : 0;
+      this.scheduleHiHat(ctx, barStartTime + beat * secondsPerBeat + swingDelay, isOffbeat);
+    });
+
+    // 4. Bass Line (Walking / Syncopated)
+    bar.bassNotes.forEach((bn) => {
+      this.scheduleBass(
+        ctx,
+        bn.freq,
+        barStartTime + bn.timeOffset * secondsPerBeat,
+        (bn.duration || 1.0) * secondsPerBeat
+      );
+    });
+
+    // 5. Electric Piano Chords (Rhodes)
+    bar.chordHits.forEach((beat) => {
+      const chordTime = barStartTime + beat * secondsPerBeat;
+      this.scheduleRhodesChord(ctx, bar.chord, chordTime, secondsPerBeat * 1.15);
+    });
+
+    // 6. Melodic Kalimba / Marimba Lead
+    if (bar.leadNotes) {
+      bar.leadNotes.forEach((ln) => {
+        this.scheduleKalimbaNote(
+          ctx,
+          ln.freq,
+          barStartTime + ln.timeOffset * secondsPerBeat,
+          (ln.duration || 0.4) * secondsPerBeat
+        );
       });
     }
   }
 
-  private scheduleBassNote(ctx: AudioContext, freq: number, startTime: number, duration: number) {
-    if (!this.filterNode) return;
+  /* ==========================================================================
+     PERCUSSION INSTRUMENTS (Native Web Audio Synthesis)
+     ========================================================================== */
+
+  // Warm Acoustic Lo-Fi Kick Drum
+  private scheduleKick(ctx: AudioContext, time: number) {
+    if (!this.eqLow) return;
     try {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(130, time);
+      osc.frequency.exponentialRampToValueAtTime(42, time + 0.08);
+
+      gain.gain.setValueAtTime(0.35, time);
+      gain.gain.exponentialRampToValueAtTime(0.001, time + 0.12);
+
+      osc.connect(gain);
+      gain.connect(this.eqLow);
+
+      osc.start(time);
+      osc.stop(time + 0.13);
+    } catch {
+      // Ignore
+    }
+  }
+
+  // Soft Finger Snap / Wooden Rimshot
+  private scheduleSnare(ctx: AudioContext, time: number) {
+    if (!this.eqLow || !this.noiseBuffer) return;
+    try {
+      // Noise burst component
+      const noise = ctx.createBufferSource();
+      noise.buffer = this.noiseBuffer;
+
+      const noiseFilter = ctx.createBiquadFilter();
+      noiseFilter.type = 'bandpass';
+      noiseFilter.frequency.setValueAtTime(1600, time);
+      noiseFilter.Q.setValueAtTime(1.8, time);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.18, time);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, time + 0.09);
+
+      noise.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseGain.connect(this.eqLow);
+
+      noise.start(time);
+      noise.stop(time + 0.1);
+
+      // Subtle wooden body 'thud'
+      const click = ctx.createOscillator();
+      const clickGain = ctx.createGain();
+      click.type = 'triangle';
+      click.frequency.setValueAtTime(440, time);
+      click.frequency.exponentialRampToValueAtTime(180, time + 0.035);
+
+      clickGain.gain.setValueAtTime(0.12, time);
+      clickGain.gain.exponentialRampToValueAtTime(0.001, time + 0.04);
+
+      click.connect(clickGain);
+      clickGain.connect(this.eqLow);
+
+      click.start(time);
+      click.stop(time + 0.045);
+    } catch {
+      // Ignore
+    }
+  }
+
+  // Crisp, Delicate Swing Hi-Hat / Shaker
+  private scheduleHiHat(ctx: AudioContext, time: number, isOffbeat: boolean) {
+    if (!this.eqLow || !this.noiseBuffer) return;
+    try {
+      const noise = ctx.createBufferSource();
+      noise.buffer = this.noiseBuffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'highpass';
+      filter.frequency.setValueAtTime(isOffbeat ? 7800 : 7000, time);
+
+      const gain = ctx.createGain();
+      const peakVol = isOffbeat ? 0.045 : 0.085;
+      gain.gain.setValueAtTime(peakVol, time);
+      gain.gain.exponentialRampToValueAtTime(0.001, time + 0.035);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.eqLow);
+
+      noise.start(time);
+      noise.stop(time + 0.04);
+    } catch {
+      // Ignore
+    }
+  }
+
+  /* ==========================================================================
+     TONAL INSTRUMENTS (Bass, Rhodes Piano, Kalimba)
+     ========================================================================== */
+
+  // Warm, Groovy Bass Note
+  private scheduleBass(ctx: AudioContext, freq: number, time: number, duration: number) {
+    if (!this.eqLow) return;
+    try {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
 
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, startTime);
+      osc.frequency.setValueAtTime(freq, time);
 
-      // Warm bass envelope
-      gain.gain.setValueAtTime(0.0001, startTime);
-      gain.gain.linearRampToValueAtTime(0.18, startTime + 0.06);
-      gain.gain.exponentialRampToValueAtTime(0.08, startTime + duration * 0.6);
-      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(450, time);
+      filter.frequency.exponentialRampToValueAtTime(220, time + duration * 0.7);
 
-      osc.connect(gain);
-      gain.connect(this.filterNode);
+      gain.gain.setValueAtTime(0.001, time);
+      gain.gain.linearRampToValueAtTime(0.24, time + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.12, time + duration * 0.6);
+      gain.gain.exponentialRampToValueAtTime(0.001, time + duration);
 
-      osc.start(startTime);
-      osc.stop(startTime + duration + 0.05);
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.eqLow);
+
+      osc.start(time);
+      osc.stop(time + duration + 0.02);
     } catch {
       // Ignore
     }
   }
 
-  private scheduleChordVoice(ctx: AudioContext, freq: number, startTime: number, duration: number) {
-    if (!this.filterNode) return;
+  // Lush Electric Piano Chord (Rhodes)
+  private scheduleRhodesChord(ctx: AudioContext, freqs: number[], time: number, duration: number) {
+    if (!this.eqLow) return;
     try {
-      // Fundamental Voice
-      const osc1 = ctx.createOscillator();
-      const gain1 = ctx.createGain();
+      freqs.forEach((freq, idx) => {
+        const strumDelay = idx * 0.018; // 18ms human micro-strum
+        const noteTime = time + strumDelay;
 
-      osc1.type = 'sine';
-      osc1.frequency.setValueAtTime(freq, startTime);
+        // Fundamental
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(freq, noteTime);
 
-      // Overtone voice for Rhodes bell chime
-      const osc2 = ctx.createOscillator();
-      const gain2 = ctx.createGain();
-      osc2.type = 'triangle';
-      osc2.frequency.setValueAtTime(freq * 2.002, startTime); // Subtle detune
+        // Warm harmonic chime
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(freq * 2.002, noteTime); // subtle detuned overtone
 
-      // Warm vibrato LFO (gentle pitch wobble like a vintage vinyl/tape)
-      const lfo = ctx.createOscillator();
-      const lfoGain = ctx.createGain();
-      lfo.frequency.setValueAtTime(0.6, startTime); // 0.6 Hz slow wave
-      lfoGain.gain.setValueAtTime(1.2, startTime);   // subtle 1.2Hz depth
-      lfo.connect(lfoGain);
-      lfoGain.connect(osc1.frequency);
-      lfoGain.connect(osc2.frequency);
+        // Gentle lowpass filter for silky smooth piano warmth
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(2800, noteTime);
+        filter.frequency.exponentialRampToValueAtTime(1400, noteTime + duration * 0.8);
 
-      lfo.start(startTime);
-      lfo.stop(startTime + duration);
+        // Envelope
+        const peak = 0.075;
+        gain1.gain.setValueAtTime(0.001, noteTime);
+        gain1.gain.linearRampToValueAtTime(peak, noteTime + 0.02);
+        gain1.gain.exponentialRampToValueAtTime(0.001, noteTime + duration);
 
-      // Envelope
-      const attack = this.style === 'ambient' ? 0.6 : 0.05;
-      const peakGain = this.style === 'ambient' ? 0.045 : 0.055;
+        gain2.gain.setValueAtTime(0.001, noteTime);
+        gain2.gain.linearRampToValueAtTime(peak * 0.35, noteTime + 0.02);
+        gain2.gain.exponentialRampToValueAtTime(0.001, noteTime + duration * 0.7);
 
-      gain1.gain.setValueAtTime(0.0001, startTime);
-      gain1.gain.linearRampToValueAtTime(peakGain, startTime + attack);
-      gain1.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+        osc1.connect(gain1);
+        osc2.connect(gain2);
+        gain1.connect(filter);
+        gain2.connect(filter);
+        filter.connect(this.eqLow!);
 
-      gain2.gain.setValueAtTime(0.0001, startTime);
-      gain2.gain.linearRampToValueAtTime(peakGain * 0.35, startTime + attack * 0.8);
-      gain2.gain.exponentialRampToValueAtTime(0.0001, startTime + duration * 0.7);
-
-      osc1.connect(gain1);
-      osc2.connect(gain2);
-
-      gain1.connect(this.filterNode);
-      gain2.connect(this.filterNode);
-
-      osc1.start(startTime);
-      osc2.start(startTime);
-
-      osc1.stop(startTime + duration + 0.05);
-      osc2.stop(startTime + duration + 0.05);
+        osc1.start(noteTime);
+        osc2.start(noteTime);
+        osc1.stop(noteTime + duration + 0.05);
+        osc2.stop(noteTime + duration + 0.05);
+      });
     } catch {
       // Ignore
     }
   }
 
-  private scheduleSoftTap(ctx: AudioContext, freq: number, startTime: number, duration: number) {
-    if (!this.filterNode) return;
-    try {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, startTime);
-
-      gain.gain.setValueAtTime(0.0001, startTime);
-      gain.gain.linearRampToValueAtTime(0.025, startTime + 0.04);
-      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
-
-      osc.connect(gain);
-      gain.connect(this.filterNode);
-
-      osc.start(startTime);
-      osc.stop(startTime + duration + 0.02);
-    } catch {
-      // Ignore
-    }
-  }
-
-  private scheduleChimeDrop(ctx: AudioContext, freq: number, startTime: number) {
-    if (!this.filterNode) return;
+  // Sweet Crystal Kalimba / Marimba Melodic Pluck
+  private scheduleKalimbaNote(ctx: AudioContext, freq: number, time: number, duration: number) {
+    if (!this.eqLow) return;
     try {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, startTime);
+      osc.frequency.setValueAtTime(freq, time);
 
-      gain.gain.setValueAtTime(0.0001, startTime);
-      gain.gain.linearRampToValueAtTime(0.03, startTime + 0.03);
-      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 1.2);
+      // Overtone
+      const overtone = ctx.createOscillator();
+      const otGain = ctx.createGain();
+      overtone.type = 'triangle';
+      overtone.frequency.setValueAtTime(freq * 2.01, time);
+
+      const noteDuration = Math.max(0.35, duration);
+
+      gain.gain.setValueAtTime(0.001, time);
+      gain.gain.linearRampToValueAtTime(0.09, time + 0.008); // Instant bell ping
+      gain.gain.exponentialRampToValueAtTime(0.001, time + noteDuration);
+
+      otGain.gain.setValueAtTime(0.001, time);
+      otGain.gain.linearRampToValueAtTime(0.04, time + 0.008);
+      otGain.gain.exponentialRampToValueAtTime(0.001, time + noteDuration * 0.5);
 
       osc.connect(gain);
-      gain.connect(this.filterNode);
+      overtone.connect(otGain);
+      gain.connect(this.eqLow);
+      otGain.connect(this.eqLow);
 
-      osc.start(startTime);
-      osc.stop(startTime + 1.25);
+      osc.start(time);
+      overtone.start(time);
+      osc.stop(time + noteDuration + 0.05);
+      overtone.stop(time + noteDuration + 0.05);
     } catch {
       // Ignore
     }

@@ -38,7 +38,7 @@ export function useBgm(isMasterMuted: boolean = false, isSpinning: boolean = fal
         }
       }
     }
-    return 0.35;
+    return 0.60;
   });
 
   const [autoDuck, setAutoDuckState] = useState<boolean>(true);

@@ -43,12 +43,17 @@
   - **Hiệu ứng mở màn rạp hát (Curtain Overture)**: Âm thanh quét vải lụa trầm ấm kết hợp tiếng chuông khánh vang vọng.
   - **Âm thanh thủy tinh (Glass Pop)**: Phản hồi khi đóng/mở popup và drawer.
 
-### 1.4. Động Cơ Nhạc Nền Chill Chill Tự Sinh (Procedural Chill BGM Engine)
-- **100% Thuần Web Audio API**: Không tải file MP3 ngoài, không tốn băng thông, chạy mượt mà offline và không giới hạn thời lượng phát.
-- **3 Phong Cách Giai Điệu Thư Giãn Tuyệt Đối**:
-  1. ☕ **Lo-Fi Cafe (64 BPM)**: Hợp âm Rhodes Electric Piano ngọt ngào, tiếng đĩa than vinyl nổ tí tách ấm áp, âm trầm sub-bass analog êm ru.
-  2. ✨ **Dreamy Ambient (52 BPM)**: Không gian bồng bềnh lơ lửng, hợp âm Lydian thiền định cùng các giọt chuông sao rơi thánh thót.
-  3. 🎷 **Night Lounge (68 BPM)**: Hợp âm Jazz hoàng hôn sang trọng, tiếng bass mộc dìu dặt thư thái.
+### 1.4. Động Cơ Nhạc Nền Chill Chill Nhộn Nhịp & Nhẹ Nhàng (Procedural Chill BGM Engine)
+- **100% Thuần Web Audio API**: Không tải file MP3 ngoài (0KB audio download), không tốn băng thông, chạy mượt mà offline và không giới hạn thời lượng phát.
+- **Chất Lượng Âm Thanh Rõ Ràng & Ấm Áp (Studio Mastering EQ)**:
+  - Loại bỏ hoàn toàn cảm giác âm thanh bị nghẹt, mở dải cao tinh tế lên đến 7500Hz cùng dải trầm ấm áp ở 100Hz.
+  - Tăng cường âm lượng mặc định rõ nét (60%), dễ dàng thưởng thức trọn vẹn trên cả loa laptop và điện thoại.
+- **Bộ Gõ Mộc Tự Nhiên & Nhịp Điệu Nhộn Nhịp Dễ Chịu**:
+  - Tích hợp tiếng Kick tròn trịa, tiếng búng tay / rimshot gỗ tự nhiên và dải hi-hat nhịp nhàng tạo cảm giác nhún nhảy, vui tươi mà vẫn êm ái, nhẹ nhàng.
+- **3 Phong Cách Giai Điệu Thư Thái Đầy Sức Sống**:
+  1. ☕ **Lo-Fi Bouncy Chill (84 BPM - Mặc định)**: Hợp âm Fmaj7 -> G6 -> Em7 -> Am7 kinh điển (Royal Road), tiếng piano điện nảy nhịp, bè bass bước điệu nghệ cùng tiếng gõ chuông kalimba trong trẻo.
+  2. 🌴 **Tropical Sunset Chill (88 BPM)**: Tiếng mộc cầm Marimba rộn ràng, hợp âm đảo phách tươi sáng như làn gió biển hoàng hôn.
+  3. 🎷 **Bossa Nova Cafe (92 BPM)**: Hợp âm Jazz ngọt ngào lãng mạn, nhịp gõ gỗ woodblock dập dềnh như đang ngồi thưởng thức ly latte ở quán cà phê.
 - **Tính năng Studio-Grade Auto-Ducking**: Tự động hạ âm lượng BGM 65% trong suốt thời gian bánh xe quay để tiếng gõ kim giòn tan nổi bật, sau đó êm dịu tăng trở lại khi dừng quay.
 - **Nút Bật/Tắt Nhanh trên Header**: Nút nốt nhạc phát sáng kèm hiệu ứng sóng nhạc equalizer động khi đang phát.
 - **Tab Cài Đặt Âm Nhạc Riêng Biệt**: Cho phép chỉnh âm lượng (5% - 100%), đổi phong cách nhạc và bật/tắt Auto-Ducking với thiết kế Zero-Jitter chuẩn iOS 18.
