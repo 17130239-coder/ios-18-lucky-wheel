@@ -65,72 +65,75 @@ body {
 }
 
 /* ================= STAGE SPOTLIGHT SWEEP ANIMATIONS ================= */
+/* Left Spotlight: Points inwards toward wheel center (500, 500) at -40.4deg */
 @keyframes spotlight-sweep-left {
   0% {
-    transform: rotate(36deg);
+    transform: rotate(-32deg);
   }
   100% {
-    transform: rotate(56deg);
+    transform: rotate(-48deg);
   }
 }
 
+/* Right Spotlight: Points inwards toward wheel center (500, 500) at +40.4deg */
 @keyframes spotlight-sweep-right {
-  0% {
-    transform: rotate(-36deg);
-  }
-  100% {
-    transform: rotate(-56deg);
-  }
-}
-
-@keyframes spotlight-sweep-left-fast {
   0% {
     transform: rotate(32deg);
   }
   100% {
-    transform: rotate(60deg);
+    transform: rotate(48deg);
+  }
+}
+
+/* Fast energetic sweeping during wheel spin */
+@keyframes spotlight-sweep-left-fast {
+  0% {
+    transform: rotate(-30deg);
+  }
+  100% {
+    transform: rotate(-50deg);
   }
 }
 
 @keyframes spotlight-sweep-right-fast {
   0% {
-    transform: rotate(-32deg);
+    transform: rotate(30deg);
   }
   100% {
-    transform: rotate(-60deg);
+    transform: rotate(50deg);
   }
 }
 
 .spotlight-left-idle {
   transform-origin: 0 0;
-  animation: spotlight-sweep-left 4.2s ease-in-out infinite alternate;
+  animation: spotlight-sweep-left 4.5s ease-in-out infinite alternate;
 }
 
 .spotlight-right-idle {
   transform-origin: 0 0;
-  animation: spotlight-sweep-right 4.2s ease-in-out infinite alternate;
-  animation-delay: -1.4s;
+  animation: spotlight-sweep-right 4.5s ease-in-out infinite alternate;
+  animation-delay: -1.6s;
 }
 
 .spotlight-left-spin {
   transform-origin: 0 0;
-  animation: spotlight-sweep-left-fast 1.5s ease-in-out infinite alternate;
+  animation: spotlight-sweep-left-fast 1.6s ease-in-out infinite alternate;
 }
 
 .spotlight-right-spin {
   transform-origin: 0 0;
-  animation: spotlight-sweep-right-fast 1.5s ease-in-out infinite alternate;
-  animation-delay: -0.5s;
+  animation: spotlight-sweep-right-fast 1.6s ease-in-out infinite alternate;
+  animation-delay: -0.6s;
 }
 
 .spotlight-left-won {
   transform-origin: 0 0;
-  transform: rotate(46deg);
+  transform: rotate(-40.4deg);
   transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .spotlight-right-won {
   transform-origin: 0 0;
-  transform: rotate(-46deg);
+  transform: rotate(40.4deg);
   transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
