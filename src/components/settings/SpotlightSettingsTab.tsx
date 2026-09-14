@@ -2,8 +2,9 @@
 
 import React from 'react';
 import { SpotlightConfig, SpotlightColorMode, SpotlightStyle, BackgroundTheme } from '@/types/wheel';
-import { Sparkles, SunMedium, Lightbulb, Palette, Compass, Film, Play, Check, Mountain, Waves, Fish, Layers } from 'lucide-react';
+import { Sparkles, SunMedium, Lightbulb, Palette, Compass, Film, Play, Check, Mountain, Waves, Fish, Layers, Languages } from 'lucide-react';
 import { AnimatedRadioCheck } from './AnimatedRadioCheck';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface SpotlightSettingsTabProps {
   config: SpotlightConfig;
@@ -16,71 +17,6 @@ interface SpotlightSettingsTabProps {
   onSelectBgTheme?: (theme: BackgroundTheme) => void;
 }
 
-const SPOTLIGHT_STYLES: {
-  key: SpotlightStyle;
-  title: string;
-  desc: string;
-  dotColor: string;
-}[] = [
-  {
-    key: 'rim',
-    title: 'Chạm Nhẹ Viền Ngoài (Khuyên dùng)',
-    desc: 'Đèn chỉ lướt quanh viền ngoài, chạm nhẹ làm bừng sáng khung bánh xe và giữ các ô quà bên trong sáng rõ.',
-    dotColor: 'bg-[#FF6B00]',
-  },
-  {
-    key: 'sweep',
-    title: 'Quét Toàn Sân Khấu (Stage Sweep)',
-    desc: 'Đèn quét qua lại góc rộng đan chéo toàn bộ sân khấu và mặt đĩa.',
-    dotColor: 'bg-amber-400',
-  },
-  {
-    key: 'center',
-    title: 'Tập Trung Trung Tâm (Center Focus)',
-    desc: 'Đèn cố định hướng vào nút QUAY ở tâm bánh xe.',
-    dotColor: 'bg-cyan-400',
-  },
-];
-
-const BG_THEMES: {
-  key: BackgroundTheme;
-  title: string;
-  desc: string;
-  icon: React.ComponentType<{ className?: string }>;
-}[] = [
-  {
-    key: 'default',
-    title: 'Mặc định (iOS 18 Studio)',
-    desc: 'Titanium tối giản, kính mờ & hào quang rọi sáng',
-    icon: Layers,
-  },
-  {
-    key: 'forest',
-    title: 'Núi Rừng & Mây Ngàn',
-    desc: 'Dãy núi hùng vĩ, mây trôi & rừng thông xanh thẳm',
-    icon: Mountain,
-  },
-  {
-    key: 'ocean',
-    title: 'Biển Cả & Hoàng Hôn',
-    desc: 'Chân trời biển rộng & từng đợt sóng nước cuộn trào',
-    icon: Waves,
-  },
-  {
-    key: 'underwater',
-    title: 'Dưới Đáy Đại Dương',
-    desc: 'Biển sâu huyền bí, rạn san hô, ánh nắng & bọt khí bay',
-    icon: Fish,
-  },
-];
-
-const COLOR_PRESETS: { key: SpotlightColorMode; label: string; color: string; desc: string }[] = [
-  { key: 'amber', label: 'Vàng Hổ Phách', color: '#FFA04D', desc: 'Apple Warm Amber' },
-  { key: 'violet', label: 'Tím Neon', color: '#8B5CF6', desc: 'Electric Violet' },
-  { key: 'cyan', label: 'Xanh Băng', color: '#00F2FE', desc: 'Cryo Cyan' },
-  { key: 'rose', label: 'Hồng Neon', color: '#F43F5E', desc: 'Cyber Rose' },
-];
-
 export function SpotlightSettingsTab({
   config,
   onChange,
@@ -90,8 +26,136 @@ export function SpotlightSettingsTab({
   bgTheme = 'default',
   onSelectBgTheme,
 }: SpotlightSettingsTabProps) {
+  const { locale, setLocale, t } = useLanguage();
+
+  const SPOTLIGHT_STYLES: {
+    key: SpotlightStyle;
+    title: string;
+    desc: string;
+    dotColor: string;
+  }[] = [
+    {
+      key: 'rim',
+      title: t.settings.stage.rimTitle,
+      desc: t.settings.stage.rimDesc,
+      dotColor: 'bg-[#FF6B00]',
+    },
+    {
+      key: 'sweep',
+      title: t.settings.stage.sweepTitle,
+      desc: t.settings.stage.sweepDesc,
+      dotColor: 'bg-amber-400',
+    },
+    {
+      key: 'center',
+      title: t.settings.stage.centerTitle,
+      desc: t.settings.stage.centerDesc,
+      dotColor: 'bg-cyan-400',
+    },
+  ];
+
+  const BG_THEMES: {
+    key: BackgroundTheme;
+    title: string;
+    desc: string;
+    icon: React.ComponentType<{ className?: string }>;
+  }[] = [
+    {
+      key: 'default',
+      title: t.settings.stage.themeDefaultTitle,
+      desc: t.settings.stage.themeDefaultDesc,
+      icon: Layers,
+    },
+    {
+      key: 'forest',
+      title: t.settings.stage.themeForestTitle,
+      desc: t.settings.stage.themeForestDesc,
+      icon: Mountain,
+    },
+    {
+      key: 'ocean',
+      title: t.settings.stage.themeOceanTitle,
+      desc: t.settings.stage.themeOceanDesc,
+      icon: Waves,
+    },
+    {
+      key: 'underwater',
+      title: t.settings.stage.themeUnderwaterTitle,
+      desc: t.settings.stage.themeUnderwaterDesc,
+      icon: Fish,
+    },
+  ];
+
+  const COLOR_PRESETS: { key: SpotlightColorMode; label: string; color: string }[] = [
+    { key: 'amber', label: t.settings.stage.colorAmber, color: '#FFA04D' },
+    { key: 'violet', label: t.settings.stage.colorViolet, color: '#8B5CF6' },
+    { key: 'cyan', label: t.settings.stage.colorCyan, color: '#00F2FE' },
+    { key: 'rose', label: t.settings.stage.colorRose, color: '#F43F5E' },
+  ];
+
   return (
     <div className="flex flex-col gap-4 text-stone-800 dark:text-stone-100">
+      {/* 0. Display Language Config */}
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-1.5 px-0.5 text-[11px] font-bold tracking-wider text-stone-400 dark:text-stone-500 uppercase">
+          <Languages className="w-3.5 h-3.5 text-[#FF6B00]" />
+          <span>{t.settings.languageTitle}</span>
+        </div>
+        <p className="text-xs text-stone-500 dark:text-stone-400 px-0.5 -mt-0.5">
+          {t.settings.languageDesc}
+        </p>
+
+        <div className="grid grid-cols-1 gap-2">
+          {/* Vietnamese */}
+          <button
+            type="button"
+            onClick={() => setLocale('vi')}
+            className={`group flex items-center justify-between p-3 rounded-2xl border transition-all duration-200 ease-out cursor-pointer active:scale-[0.985] transform-gpu will-change-transform text-left ${
+              locale === 'vi'
+                ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/45 ring-1.5 ring-[#FF6B00]/30 shadow-[0_4px_16px_-4px_rgba(255,107,0,0.18)]'
+                : 'bg-stone-100/60 dark:bg-stone-800/30 border-stone-200/60 dark:border-white/5 hover:bg-stone-100/90 dark:hover:bg-stone-800/50'
+            }`}
+          >
+            <div className="flex items-center gap-3 min-w-0">
+              <span className="text-xl shrink-0">🇻🇳</span>
+              <div className="min-w-0">
+                <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">
+                  {t.settings.langVi}
+                </h5>
+                <p className="text-xs text-stone-500 dark:text-stone-400 truncate">
+                  {t.settings.langViDesc}
+                </p>
+              </div>
+            </div>
+            <AnimatedRadioCheck isSelected={locale === 'vi'} />
+          </button>
+
+          {/* English */}
+          <button
+            type="button"
+            onClick={() => setLocale('en')}
+            className={`group flex items-center justify-between p-3 rounded-2xl border transition-all duration-200 ease-out cursor-pointer active:scale-[0.985] transform-gpu will-change-transform text-left ${
+              locale === 'en'
+                ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/45 ring-1.5 ring-[#FF6B00]/30 shadow-[0_4px_16px_-4px_rgba(255,107,0,0.18)]'
+                : 'bg-stone-100/60 dark:bg-stone-800/30 border-stone-200/60 dark:border-white/5 hover:bg-stone-100/90 dark:hover:bg-stone-800/50'
+            }`}
+          >
+            <div className="flex items-center gap-3 min-w-0">
+              <span className="text-xl shrink-0">🇺🇸</span>
+              <div className="min-w-0">
+                <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">
+                  {t.settings.langEn}
+                </h5>
+                <p className="text-xs text-stone-500 dark:text-stone-400 truncate">
+                  {t.settings.langEnDesc}
+                </p>
+              </div>
+            </div>
+            <AnimatedRadioCheck isSelected={locale === 'en'} />
+          </button>
+        </div>
+      </div>
+
       {/* 1. Master On/Off Toggle */}
       <div className="flex items-center justify-between p-3.5 rounded-2xl bg-stone-100/70 dark:bg-stone-800/40 border border-stone-200/60 dark:border-white/5 shadow-xs backdrop-blur-xs">
         <div className="flex items-center gap-3">
@@ -106,10 +170,10 @@ export function SpotlightSettingsTab({
           </div>
           <div>
             <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">
-              Bật 2 Đèn Sân Khấu
+              {t.settings.stage.masterToggle}
             </h5>
             <p className="text-xs text-stone-500 dark:text-stone-400">
-              {config.enabled ? 'Đèn đang hoạt động rọi bánh xe' : 'Đã tắt hoàn toàn ánh sáng đèn'}
+              {config.enabled ? t.settings.stage.masterDescOn : t.settings.stage.masterDescOff}
             </p>
           </div>
         </div>
@@ -138,7 +202,7 @@ export function SpotlightSettingsTab({
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-1.5 px-0.5 text-[11px] font-bold tracking-wider text-stone-400 dark:text-stone-500 uppercase">
               <Compass className="w-3.5 h-3.5 text-[#FF6B00]" />
-              <span>Vùng & Kiểu Chiếu Sáng</span>
+              <span>{t.settings.stage.styleHeading}</span>
             </div>
 
             <div className="grid grid-cols-1 gap-2">
@@ -179,7 +243,7 @@ export function SpotlightSettingsTab({
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-1.5 px-0.5 text-[11px] font-bold tracking-wider text-stone-400 dark:text-stone-500 uppercase">
               <Palette className="w-3.5 h-3.5 text-[#FF6B00]" />
-              <span>Chế Độ Màu Ánh Sáng</span>
+              <span>{t.settings.stage.colorHeading}</span>
             </div>
 
             {/* RGB Rainbow Mode Feature Card */}
@@ -202,10 +266,10 @@ export function SpotlightSettingsTab({
                 </div>
                 <div className="text-left min-w-0">
                   <span className="text-xs font-bold text-stone-900 dark:text-stone-100 flex items-center gap-1.5">
-                    Chế độ Cầu Vồng RGB (Spectrum)
+                    {t.settings.stage.rgbTitle}
                   </span>
                   <p className="text-xs text-stone-500 dark:text-stone-400 truncate">
-                    Ánh đèn chuyển dải màu quang phổ tuần hoàn êm dịu
+                    {t.settings.stage.rgbDesc}
                   </p>
                 </div>
               </div>
@@ -270,7 +334,7 @@ export function SpotlightSettingsTab({
                   />
                 </label>
                 <span className="text-xs font-semibold text-stone-800 dark:text-stone-200">
-                  Mã màu tùy ý (Custom Hex)
+                  {t.settings.stage.customHex}
                 </span>
               </div>
               <button
@@ -292,7 +356,7 @@ export function SpotlightSettingsTab({
             <div className="flex items-center justify-between text-xs">
               <span className="font-bold text-stone-900 dark:text-stone-100 flex items-center gap-1.5">
                 <SunMedium className="w-3.5 h-3.5 text-[#FF6B00]" />
-                Độ Sáng / Cường Độ Đèn
+                {t.settings.stage.brightness}
               </span>
               <span className="font-bold text-[#FF6B00] tabular-nums">
                 {Math.round(config.brightness * 100)}%
@@ -311,7 +375,7 @@ export function SpotlightSettingsTab({
             />
           </div>
 
-          {/* 5. Natural Atmospheric Effects (Hạt bụi 3D) */}
+          {/* 5. Natural Atmospheric Effects (Light Dust) */}
           <div className="flex items-center justify-between p-3.5 rounded-2xl bg-stone-100/70 dark:bg-stone-800/40 border border-stone-200/60 dark:border-white/5 shadow-xs">
             <div className="flex items-center gap-3">
               <div
@@ -325,10 +389,10 @@ export function SpotlightSettingsTab({
               </div>
               <div>
                 <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">
-                  Hạt Bụi Thể Tích (Light Dust)
+                  {t.settings.stage.dustTitle}
                 </h5>
                 <p className="text-xs text-stone-500 dark:text-stone-400">
-                  Hạt bụi lơ lửng phản xạ ánh sáng tạo chiều sâu 3D chân thực
+                  {t.settings.stage.dustDesc}
                 </p>
               </div>
             </div>
@@ -352,11 +416,11 @@ export function SpotlightSettingsTab({
         </>
       )}
 
-      {/* 6. Grand Theater Curtain Setting Card (Dedicated section - Stable positioning) */}
+      {/* 6. Grand Theater Curtain Setting Card */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-1.5 px-0.5 text-[11px] font-bold tracking-wider text-stone-400 dark:text-stone-500 uppercase">
           <Film className="w-3.5 h-3.5 text-[#FF6B00]" />
-          <span>Mở Rèm Sân Khấu Hoàng Gia</span>
+          <span>{t.settings.stage.curtainHeading}</span>
         </div>
 
         <div className="flex flex-col gap-3 p-3.5 rounded-2xl bg-stone-100/70 dark:bg-stone-800/40 border border-stone-200/60 dark:border-white/5 shadow-xs">
@@ -367,10 +431,10 @@ export function SpotlightSettingsTab({
               </div>
               <div>
                 <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">
-                  Hiệu Ứng Mở Rèm Khi Vào Trang
+                  {t.settings.stage.curtainToggle}
                 </h5>
                 <p className="text-xs text-stone-500 dark:text-stone-400">
-                  Mở màn rạp hát hoàng gia khi bắt đầu truy cập
+                  {t.settings.stage.curtainToggleDesc}
                 </p>
               </div>
             </div>
@@ -394,7 +458,7 @@ export function SpotlightSettingsTab({
             )}
           </div>
 
-          {/* Replay Button (Soothing Frosted Orange Glass) */}
+          {/* Replay Button */}
           {onReplayCurtain && (
             <button
               type="button"
@@ -402,28 +466,28 @@ export function SpotlightSettingsTab({
               className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-orange-500/10 hover:bg-orange-500/15 text-[#FF6B00] border border-orange-500/20 text-xs font-bold transition-all duration-150 cursor-pointer active:scale-[0.98] transform-gpu"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
-              <span>Xem Lại Hiệu Ứng Mở Rèm Sân Khấu 🎭</span>
+              <span>{t.settings.stage.replayCurtain}</span>
             </button>
           )}
         </div>
       </div>
 
-      {/* 7. Vector Background Scene Themes (Zero-Jitter UX) */}
+      {/* 7. Vector Background Scene Themes */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-1.5 px-0.5 text-[11px] font-bold tracking-wider text-stone-400 dark:text-stone-500 uppercase">
           <Sparkles className="w-3.5 h-3.5 text-[#FF6B00]" />
-          <span>Chủ Đề Không Gian (Vector Scene)</span>
+          <span>{t.settings.stage.bgThemesHeading}</span>
         </div>
 
         <div className="grid grid-cols-1 gap-2">
-          {BG_THEMES.map((t) => {
-            const IconComp = t.icon;
-            const isSelected = bgTheme === t.key;
+          {BG_THEMES.map((theme) => {
+            const IconComp = theme.icon;
+            const isSelected = bgTheme === theme.key;
             return (
               <button
-                key={t.key}
+                key={theme.key}
                 type="button"
-                onClick={() => onSelectBgTheme?.(t.key)}
+                onClick={() => onSelectBgTheme?.(theme.key)}
                 className={`group flex items-center justify-between p-3 rounded-2xl border transition-all duration-200 ease-out cursor-pointer active:scale-[0.985] transform-gpu will-change-transform text-left ${
                   isSelected
                     ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/45 ring-1.5 ring-[#FF6B00]/30 shadow-[0_4px_16px_-4px_rgba(255,107,0,0.18)]'
@@ -442,10 +506,10 @@ export function SpotlightSettingsTab({
                   </div>
                   <div className="min-w-0">
                     <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100 truncate">
-                      {t.title}
+                      {theme.title}
                     </h5>
                     <p className="text-xs text-stone-500 dark:text-stone-400 truncate">
-                      {t.desc}
+                      {theme.desc}
                     </p>
                   </div>
                 </div>
@@ -459,4 +523,3 @@ export function SpotlightSettingsTab({
     </div>
   );
 }
-

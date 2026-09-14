@@ -5,6 +5,7 @@ import { PrizeItem } from '@/types/wheel';
 import { TECH_ICONS, ICON_METADATA } from '@/constants/techIcons';
 import { IconPickerModal } from './IconPickerModal';
 import { Sparkles } from 'lucide-react';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface PrizeRowItemProps {
   item: PrizeItem;
@@ -14,6 +15,7 @@ interface PrizeRowItemProps {
 
 export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const { t } = useLanguage();
 
   const iconMeta = ICON_METADATA.find((m) => m.key === item.icon);
   const iconLabel = iconMeta?.label || item.icon;
@@ -29,7 +31,7 @@ export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
         onClick={() => setIsPickerOpen(true)}
         className="relative group shrink-0 w-11 h-11 rounded-xl flex items-center justify-center p-2 shadow-xs cursor-pointer transition-[opacity,filter] duration-150 hover:brightness-105 active:opacity-85 border border-black/5 dark:border-white/10"
         style={{ backgroundColor: item.color, color: iconColor }}
-        title={`Bấm để đổi icon (${iconLabel})`}
+        title={`${t.settings.prizes.changeIconTooltip} (${iconLabel})`}
       >
         <div className="w-5 h-5 flex items-center justify-center">
           {TECH_ICONS[item.icon] || TECH_ICONS.gift}
@@ -45,7 +47,7 @@ export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
           <input
             type="text"
             value={item.line1}
-            placeholder="Dòng 1"
+            placeholder={t.settings.prizes.line1Placeholder}
             onChange={(e) => {
               const line1 = e.target.value;
               onChange(index, {
@@ -58,7 +60,7 @@ export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
           <input
             type="text"
             value={item.line2}
-            placeholder="Dòng 2"
+            placeholder={t.settings.prizes.line2Placeholder}
             onChange={(e) => {
               const line2 = e.target.value;
               onChange(index, {
@@ -90,7 +92,7 @@ export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
         </span>
         <label
           className="relative w-7 h-7 rounded-xl overflow-hidden border border-stone-300 dark:border-stone-600 shadow-2xs cursor-pointer transition-opacity duration-150 hover:opacity-90 active:opacity-80"
-          title="Chọn màu nền nan quạt"
+          title={t.settings.prizes.changeColorTooltip}
         >
           <input
             type="color"

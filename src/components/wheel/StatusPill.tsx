@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { PrizeItem, SpinState } from '@/types/wheel';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface StatusPillProps {
   spinState: SpinState;
@@ -10,18 +11,20 @@ interface StatusPillProps {
 }
 
 export const StatusPill = React.memo(function StatusPill({ spinState, activePrize, prizeCount = 10 }: StatusPillProps) {
+  const { t } = useLanguage();
+
   let dotClass = 'w-2.5 h-2.5 rounded-full bg-[#FF6B00]';
-  let message = `Bấm "QUAY" ở tâm để săn ${prizeCount} phần quà công nghệ`;
+  let message = t.statusPill.ready.replace('{count}', String(prizeCount));
 
   if (prizeCount === 0) {
     dotClass = 'w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse';
-    message = 'Đã hết phần quà! Bấm "ĐẶT LẠI" ở tâm để khởi tạo lại';
+    message = t.statusPill.empty;
   } else if (spinState === 'spinning') {
     dotClass = 'w-2.5 h-2.5 rounded-full bg-[#FF6B00] animate-ping';
-    message = 'Đang quay... Chúc bạn rinh siêu phẩm công nghệ!';
+    message = t.statusPill.spinning;
   } else if (spinState === 'won' && activePrize) {
     dotClass = 'w-2.5 h-2.5 rounded-full bg-emerald-500';
-    message = `Chúc mừng bạn đã trúng: ${activePrize.name}!`;
+    message = t.statusPill.won.replace('{prize}', activePrize.name);
   }
 
   return (

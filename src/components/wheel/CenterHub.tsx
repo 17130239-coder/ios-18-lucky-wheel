@@ -3,6 +3,7 @@
 import React from 'react';
 import { Laptop, RotateCcw } from 'lucide-react';
 import { SpinState } from '@/types/wheel';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface CenterHubProps {
   spinState: SpinState;
@@ -12,6 +13,7 @@ interface CenterHubProps {
 }
 
 export const CenterHub = React.memo(function CenterHub({ spinState, prizeCount = 10, onSpin, onResetPrizes }: CenterHubProps) {
+  const { t } = useLanguage();
   const isSpinning = spinState === 'spinning';
   const isEmpty = prizeCount === 0;
 
@@ -29,7 +31,7 @@ export const CenterHub = React.memo(function CenterHub({ spinState, prizeCount =
       <button
         type="button"
         onClick={handleClick}
-        aria-label={isEmpty ? 'Khôi phục danh sách quà' : 'Quay vòng quay may mắn'}
+        aria-label={isEmpty ? t.common.reset : t.common.spin}
         className={`group relative w-28 h-28 sm:w-36 sm:h-36 rounded-full p-2 glass-card shadow-[0_15px_35px_rgba(255,107,0,0.4),inset_0_2px_6px_rgba(255,255,255,0.9)] transition-all duration-200 focus:outline-none ring-4 ring-white cursor-pointer ${
           isSpinning
             ? 'scale-95'
@@ -63,10 +65,10 @@ export const CenterHub = React.memo(function CenterHub({ spinState, prizeCount =
 
           {/* Typography */}
           <span className="text-base sm:text-lg font-black tracking-wider uppercase drop-shadow leading-none">
-            {isSpinning ? 'ĐANG QUAY' : isEmpty ? 'ĐẶT LẠI' : 'QUAY'}
+            {isSpinning ? t.common.spinning : isEmpty ? t.common.reset : t.common.spin}
           </span>
           <span className="text-[10px] sm:text-[11px] text-orange-100 font-bold tracking-widest uppercase mt-0.5 opacity-95">
-            {isEmpty ? '10 PHẦN QUÀ' : 'CÔNG NGHỆ'}
+            {isEmpty ? t.common.prizesWord : t.common.tech}
           </span>
         </div>
       </button>

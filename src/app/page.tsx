@@ -133,6 +133,9 @@ export default function LuckyWheelPage() {
     (wonPrize: PrizeItem) => {
       addHistoryItem(wonPrize);
       playWinFanfare();
+      // Ensure any drawer currently open is closed when winning victory modal appears
+      setIsSettingsOpen(false);
+      setIsHistoryOpen(false);
       setIsVictoryOpen(true);
     },
     [addHistoryItem, playWinFanfare]
@@ -174,13 +177,24 @@ export default function LuckyWheelPage() {
     setAutoDuck,
   } = useBgm(isMuted, isSpinning);
 
+  const handleSpin = useCallback(() => {
+    setIsSettingsOpen(false);
+    setIsHistoryOpen(false);
+    setIsVictoryOpen(false);
+    spin();
+  }, [spin]);
+
   const handleOpenSettings = useCallback(() => {
     playGlassPop();
+    setIsVictoryOpen(false);
+    setIsHistoryOpen(false);
     setIsSettingsOpen(true);
   }, [playGlassPop]);
 
   const handleOpenHistory = useCallback(() => {
     playGlassPop();
+    setIsVictoryOpen(false);
+    setIsSettingsOpen(false);
     setIsHistoryOpen(true);
   }, [playGlassPop]);
 
@@ -247,7 +261,7 @@ export default function LuckyWheelPage() {
         wheelGroupRef={wheelGroupRef}
         needleRef={needleRef}
         spotlightConfig={spotlightConfig}
-        onSpin={spin}
+        onSpin={handleSpin}
         onResetPrizes={handleResetPrizes}
       />
 

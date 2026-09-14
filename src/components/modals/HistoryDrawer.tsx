@@ -4,6 +4,7 @@ import React from 'react';
 import { History, Trash2, X } from 'lucide-react';
 import { SpinHistoryItem } from '@/types/wheel';
 import { TECH_ICONS } from '@/constants/techIcons';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface HistoryDrawerProps {
   isOpen: boolean;
@@ -18,6 +19,8 @@ export function HistoryDrawer({
   onClose,
   onClearHistory,
 }: HistoryDrawerProps) {
+  const { t } = useLanguage();
+
   if (!isOpen) return null;
 
   return (
@@ -42,17 +45,17 @@ export function HistoryDrawer({
             </div>
             <div>
               <h4 className="text-base text-stone-900 dark:text-white font-bold">
-                Lịch Sử Trúng Thưởng
+                {t.history.title}
               </h4>
               <p className="text-xs text-stone-500 dark:text-stone-400">
-                {history.length} lượt quay gần nhất
+                {t.history.subtitle.replace('{count}', String(history.length))}
               </p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Đóng lịch sử"
+            aria-label={t.common.close}
             className="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 flex items-center justify-center text-stone-500 dark:text-stone-300 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
@@ -64,8 +67,8 @@ export function HistoryDrawer({
           {history.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-48 text-center text-stone-400 dark:text-stone-500">
               <History className="w-10 h-10 mb-2 stroke-[1.5] opacity-50" />
-              <p className="text-sm font-medium">Chưa có lượt quay nào</p>
-              <p className="text-xs">Hãy quay vòng quay để ghi nhận phần thưởng!</p>
+              <p className="text-sm font-medium">{t.history.emptyTitle}</p>
+              <p className="text-xs">{t.history.emptyDesc}</p>
             </div>
           ) : (
             history.map((item) => {
@@ -109,7 +112,7 @@ export function HistoryDrawer({
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
             >
               <Trash2 className="w-3.5 h-3.5" />
-              <span>Xóa lịch sử</span>
+              <span>{t.history.clear}</span>
             </button>
           </div>
         )}

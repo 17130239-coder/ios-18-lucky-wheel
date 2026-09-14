@@ -5,6 +5,7 @@ import confetti from 'canvas-confetti';
 import { Sparkles } from 'lucide-react';
 import { PrizeItem } from '@/types/wheel';
 import { TECH_ICONS } from '@/constants/techIcons';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface VictoryModalProps {
   isOpen: boolean;
@@ -23,6 +24,8 @@ export function VictoryModal({
   onClose,
   onSpinAgain,
 }: VictoryModalProps) {
+  const { t } = useLanguage();
+
   useEffect(() => {
     if (isOpen && prize) {
       // Fire celebratory confetti cannon
@@ -49,7 +52,7 @@ export function VictoryModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="victory-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-stone-900/40 backdrop-blur-md transition-opacity duration-300 animate-in fade-in"
+      className="fixed inset-0 z-60 flex items-center justify-center px-4 bg-stone-900/40 backdrop-blur-md transition-opacity duration-300 animate-in fade-in"
     >
       <div className="relative w-full max-w-sm p-7 rounded-3xl glass-card border border-white/95 dark:border-white/20 shadow-[0_32px_80px_-15px_rgba(255,107,0,0.35)] flex flex-col items-center text-center transform scale-100 ring-1 ring-white/90 dark:ring-white/10 transition-transform duration-300">
         {/* Glow halo */}
@@ -67,7 +70,7 @@ export function VictoryModal({
 
         {/* Header Tag */}
         <span className="text-[11px] uppercase tracking-widest text-[#FF6B00] font-black mb-1">
-          Thắng Quà Công Nghệ!
+          {t.victory.title}
         </span>
 
         {/* Prize Title */}
@@ -80,7 +83,7 @@ export function VictoryModal({
 
         {/* Description */}
         <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-300 mb-4 font-medium">
-          Bạn đã may mắn quay trúng phần quà công nghệ đẳng cấp này!
+          {t.victory.desc}
         </p>
 
         {/* Elimination badge if active */}
@@ -89,8 +92,8 @@ export function VictoryModal({
             <Sparkles className="w-3.5 h-3.5 shrink-0" />
             <span>
               {typeof remainingCount === 'number' && remainingCount > 1
-                ? `Đã loại bỏ quà này khỏi vòng quay (còn ${remainingCount - 1} món)`
-                : `Đã loại bỏ phần quà cuối cùng trên vòng quay!`}
+                ? t.victory.eliminatedMultiple.replace('{count}', String(remainingCount - 1))
+                : t.victory.eliminatedSingle}
             </span>
           </div>
         )}
@@ -102,14 +105,14 @@ export function VictoryModal({
             onClick={onClose}
             className="flex-1 py-3 px-4 rounded-full bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 text-sm font-bold hover:bg-stone-200 dark:hover:bg-stone-700 active:scale-95 transition-all cursor-pointer"
           >
-            Nhận Quà
+            {t.victory.claim}
           </button>
           <button
             type="button"
             onClick={onSpinAgain}
             className="flex-1 py-3 px-4 rounded-full bg-gradient-to-r from-[#FF6B00] to-[#E65100] text-white text-sm font-bold shadow-md shadow-orange-500/25 hover:brightness-105 active:scale-95 transition-all ring-1 ring-white/50 cursor-pointer"
           >
-            Quay Tiếp
+            {t.victory.spinAgain}
           </button>
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Laptop, FastForward } from 'lucide-react';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface StageCurtainProps {
   enabled?: boolean;
@@ -14,6 +15,7 @@ export const StageCurtain = React.memo(function StageCurtain({
   playCurtainSound,
   onOpenComplete,
 }: StageCurtainProps) {
+  const { t } = useLanguage();
   const [phase, setPhase] = useState<'idle' | 'opening' | 'open' | 'gone'>('idle');
 
   const triggerOpen = useCallback(() => {
@@ -96,7 +98,7 @@ export const StageCurtain = React.memo(function StageCurtain({
       className={`fixed inset-0 z-50 overflow-hidden select-none transition-opacity duration-500 will-change-transform ${
         phase === 'open' ? 'opacity-0 pointer-events-none' : 'opacity-100 cursor-pointer'
       }`}
-      title="Chạm vào bất kỳ đâu để mở rèm ngay lập tức"
+      title={t.curtain.screenTitle}
     >
       {/* 1. Left Velvet Curtain Panel - Hardware Accelerated */}
       <div
@@ -202,10 +204,10 @@ export const StageCurtain = React.memo(function StageCurtain({
 
             {/* Typography */}
             <span className="text-base sm:text-lg font-black tracking-wider uppercase drop-shadow leading-none">
-              QUAY
+              {t.common.spin}
             </span>
             <span className="text-[10px] sm:text-[11px] text-orange-100 font-bold tracking-widest uppercase mt-0.5 opacity-95">
-              CÔNG NGHỆ
+              {t.common.tech}
             </span>
           </div>
         </div>
@@ -216,7 +218,7 @@ export const StageCurtain = React.memo(function StageCurtain({
             isOpeningOrOpen ? 'opacity-0 scale-75 -translate-y-2' : 'opacity-100 scale-100 translate-y-0 animate-bounce'
           }`}
         >
-          <span>✨ Bấm để mở màn & quay</span>
+          <span>{t.curtain.tapHint}</span>
         </div>
       </div>
 
@@ -233,7 +235,7 @@ export const StageCurtain = React.memo(function StageCurtain({
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/50 hover:bg-black/80 backdrop-blur-md border border-white/20 text-white/90 text-xs font-semibold shadow-md transition-all cursor-pointer hover:scale-105 active:scale-95"
         >
           <FastForward className="w-3.5 h-3.5 text-orange-400" />
-          <span>Bỏ qua</span>
+          <span>{t.curtain.skip}</span>
         </button>
       </div>
     </div>

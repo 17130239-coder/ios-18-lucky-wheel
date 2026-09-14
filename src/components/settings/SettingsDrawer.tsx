@@ -7,6 +7,7 @@ import { BgmStyle } from '@/utils/bgm';
 import { PrizeRowItem } from './PrizeRowItem';
 import { SpotlightSettingsTab } from './SpotlightSettingsTab';
 import { AudioSettingsTab } from './AudioSettingsTab';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface SettingsDrawerProps {
   isOpen: boolean;
@@ -62,6 +63,7 @@ function SettingsDrawerContent({
   onChangeBgmVolume,
   onToggleAutoDuck,
 }: Omit<SettingsDrawerProps, 'isOpen'>) {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<SettingsTab>('spotlight');
   const [draftPrizes, setDraftPrizes] = useState<PrizeItem[]>(() =>
     JSON.parse(JSON.stringify(prizes))
@@ -98,7 +100,7 @@ function SettingsDrawerContent({
       {/* Drawer */}
       <aside
         role="dialog"
-        aria-label="Cài đặt hệ thống vòng quay"
+        aria-label={t.settings.drawerTitle}
         className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white/90 dark:bg-stone-900/90 backdrop-blur-2xl border-l border-stone-200/50 dark:border-white/10 shadow-[-20px_0_50px_rgba(0,0,0,0.15)] flex flex-col transition-transform duration-300 ease-out"
       >
         {/* Header */}
@@ -110,24 +112,24 @@ function SettingsDrawerContent({
             <div>
               <h4 className="text-sm font-bold text-stone-900 dark:text-stone-100 transition-all duration-200">
                 {activeTab === 'prizes'
-                  ? 'Tùy Chỉnh Phần Quà'
+                  ? t.settings.headerPrizesTitle
                   : activeTab === 'audio'
-                  ? 'Nhạc Nền Chill & Âm Thanh'
-                  : 'Sân Khấu & Không Gian'}
+                  ? t.settings.headerAudioTitle
+                  : t.settings.headerSpotlightTitle}
               </h4>
               <p className="text-xs text-stone-500 dark:text-stone-400 transition-all duration-200">
                 {activeTab === 'prizes'
-                  ? 'Chỉnh sửa tên danh mục, icon & màu sắc'
+                  ? t.settings.headerPrizesDesc
                   : activeTab === 'audio'
-                  ? 'Giai điệu lo-fi, pixel 8-bit, island beach & âm lượng'
-                  : 'Chủ đề vector cảnh quan, rèm mở màn & đèn rọi'}
+                  ? t.settings.headerAudioDesc
+                  : t.settings.headerSpotlightDesc}
               </p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Đóng bảng cài đặt"
+            aria-label={t.common.close}
             className="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 active:scale-90 flex items-center justify-center text-stone-500 dark:text-stone-400 transition-all duration-150 cursor-pointer"
           >
             <X className="w-4 h-4" />
@@ -156,7 +158,7 @@ function SettingsDrawerContent({
               }`}
             >
               <Lightbulb className={`w-3.5 h-3.5 text-[#FF6B00] transition-transform duration-200 ${activeTab === 'spotlight' ? 'scale-110' : 'scale-100'}`} />
-              <span>Sân Khấu</span>
+              <span>{t.settings.tabSpotlight}</span>
               {spotlightConfig.enabled && (
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-xs shadow-emerald-500/50" />
               )}
@@ -172,7 +174,7 @@ function SettingsDrawerContent({
               }`}
             >
               <Music className={`w-3.5 h-3.5 text-[#FF6B00] transition-transform duration-200 ${activeTab === 'audio' ? 'scale-110' : 'scale-100'}`} />
-              <span>Nhạc Chill</span>
+              <span>{t.settings.tabAudio}</span>
               {bgmEnabled && (
                 <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B00] shadow-xs shadow-orange-500/50" />
               )}
@@ -187,7 +189,7 @@ function SettingsDrawerContent({
                   : 'text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200'
               }`}
             >
-              <span>Quà ({draftPrizes.length})</span>
+              <span>{t.settings.tabPrizes} ({draftPrizes.length})</span>
             </button>
           </div>
         </div>
@@ -234,10 +236,10 @@ function SettingsDrawerContent({
                   </div>
                   <div className="text-left">
                     <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">
-                      Bỏ quà sau khi trúng
+                      {t.settings.prizes.eliminateTitle}
                     </h5>
                     <p className="text-xs text-stone-500 dark:text-stone-400">
-                      Tự động gỡ sản phẩm vừa trúng khỏi các lượt quay sau
+                      {t.settings.prizes.eliminateDesc}
                     </p>
                   </div>
                 </div>
@@ -263,7 +265,7 @@ function SettingsDrawerContent({
               {/* Counter and quick reset row */}
               <div className="flex items-center justify-between px-1 pt-1">
                 <span className="text-[11px] font-bold tracking-wider text-stone-400 dark:text-stone-500 uppercase">
-                  Danh sách quà ({draftPrizes.length})
+                  {t.settings.prizes.listHeading} ({draftPrizes.length})
                 </span>
                 {draftPrizes.length < 10 && (
                   <button
@@ -272,7 +274,7 @@ function SettingsDrawerContent({
                     className="text-xs font-semibold text-[#FF6B00] hover:underline cursor-pointer flex items-center gap-1 transition-colors duration-150"
                   >
                     <RotateCcw className="w-3 h-3" />
-                    <span>Khôi phục đủ 10 quà</span>
+                    <span>{t.settings.prizes.restoreCount}</span>
                   </button>
                 )}
               </div>
@@ -303,7 +305,7 @@ function SettingsDrawerContent({
                 className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200/70 dark:border-stone-700/60 text-stone-700 dark:text-stone-300 text-xs font-semibold hover:bg-stone-200/80 dark:hover:bg-stone-700/80 active:scale-[0.98] transition-all duration-150 cursor-pointer transform-gpu"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
-                <span>Mặc Định</span>
+                <span>{t.settings.prizes.defaultBtn}</span>
               </button>
               <button
                 type="button"
@@ -311,7 +313,7 @@ function SettingsDrawerContent({
                 className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] text-white text-xs font-bold shadow-sm shadow-orange-500/25 active:scale-[0.98] transition-all duration-150 cursor-pointer transform-gpu"
               >
                 <Check className="w-3.5 h-3.5" />
-                <span>Lưu & Áp Dụng</span>
+                <span>{t.settings.prizes.saveBtn}</span>
               </button>
             </>
           ) : activeTab === 'audio' ? (
@@ -322,7 +324,7 @@ function SettingsDrawerContent({
                 className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200/70 dark:border-stone-700/60 text-stone-700 dark:text-stone-300 text-xs font-semibold hover:bg-stone-200/80 dark:hover:bg-stone-700/80 active:scale-[0.98] transition-all duration-150 cursor-pointer transform-gpu"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
-                <span>Âm Lượng 35%</span>
+                <span>{t.settings.prizes.defaultVolBtn}</span>
               </button>
               <button
                 type="button"
@@ -330,7 +332,7 @@ function SettingsDrawerContent({
                 className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] text-white text-xs font-bold shadow-sm shadow-orange-500/25 active:scale-[0.98] transition-all duration-150 cursor-pointer transform-gpu"
               >
                 <Check className="w-3.5 h-3.5" />
-                <span>Hoàn Tất</span>
+                <span>{t.settings.prizes.doneBtn}</span>
               </button>
             </>
           ) : (
@@ -341,7 +343,7 @@ function SettingsDrawerContent({
                 className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200/70 dark:border-stone-700/60 text-stone-700 dark:text-stone-300 text-xs font-semibold hover:bg-stone-200/80 dark:hover:bg-stone-700/80 active:scale-[0.98] transition-all duration-150 cursor-pointer transform-gpu"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
-                <span>Đặt Lại Đèn</span>
+                <span>{t.settings.prizes.resetLightsBtn}</span>
               </button>
               <button
                 type="button"
@@ -349,7 +351,7 @@ function SettingsDrawerContent({
                 className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] text-white text-xs font-bold shadow-sm shadow-orange-500/25 active:scale-[0.98] transition-all duration-150 cursor-pointer transform-gpu"
               >
                 <Check className="w-3.5 h-3.5" />
-                <span>Hoàn Tất</span>
+                <span>{t.settings.prizes.doneBtn}</span>
               </button>
             </>
           )}

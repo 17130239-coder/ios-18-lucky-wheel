@@ -4,6 +4,7 @@ import React from 'react';
 import { BgmStyle } from '@/utils/bgm';
 import { Music, Volume2, Coffee, Disc3, Play, Pause, Waves, Gamepad2, Palmtree } from 'lucide-react';
 import { AnimatedRadioCheck } from './AnimatedRadioCheck';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface AudioSettingsTabProps {
   bgmEnabled: boolean;
@@ -17,40 +18,6 @@ interface AudioSettingsTabProps {
   onToggleAutoDuck: () => void;
 }
 
-const BGM_STYLES: {
-  key: BgmStyle;
-  name: string;
-  desc: string;
-  bpm: number;
-  icon: typeof Coffee;
-  color: string;
-}[] = [
-  {
-    key: 'lofi',
-    name: 'Lo-Fi Coffee Shop',
-    desc: 'Piano Rhodes ấm, trống boom-bap, sub-bass & sáo jazz êm ru',
-    bpm: 76,
-    icon: Coffee,
-    color: '#FF6B00',
-  },
-  {
-    key: 'ambient',
-    name: 'Retro 8-Bit Pixel Arcade',
-    desc: 'Nhạc game Nintendo 8-bit rộn ràng, arpeggio lấp lánh & bass NES vui nhộn',
-    bpm: 108,
-    icon: Gamepad2,
-    color: '#8B5CF6',
-  },
-  {
-    key: 'lounge',
-    name: 'Tropical Island Beach',
-    desc: 'Mộc cầm Marimba rộn rã, trống bongo gõ nhịp & đàn ukulele đón nắng hè',
-    bpm: 96,
-    icon: Palmtree,
-    color: '#0EA5E9',
-  },
-];
-
 export function AudioSettingsTab({
   bgmEnabled,
   bgmStyle,
@@ -62,6 +29,42 @@ export function AudioSettingsTab({
   onChangeVolume,
   onToggleAutoDuck,
 }: AudioSettingsTabProps) {
+  const { t } = useLanguage();
+
+  const BGM_STYLES: {
+    key: BgmStyle;
+    name: string;
+    desc: string;
+    bpm: number;
+    icon: typeof Coffee;
+    color: string;
+  }[] = [
+    {
+      key: 'lofi',
+      name: 'Lo-Fi Coffee Shop',
+      desc: t.settings.audio.lofiDesc,
+      bpm: 76,
+      icon: Coffee,
+      color: '#FF6B00',
+    },
+    {
+      key: 'ambient',
+      name: 'Retro 8-Bit Pixel Arcade',
+      desc: t.settings.audio.pixelDesc,
+      bpm: 108,
+      icon: Gamepad2,
+      color: '#8B5CF6',
+    },
+    {
+      key: 'lounge',
+      name: 'Tropical Island Beach',
+      desc: t.settings.audio.tropicalDesc,
+      bpm: 96,
+      icon: Palmtree,
+      color: '#0EA5E9',
+    },
+  ];
+
   const currentMood = BGM_STYLES.find((s) => s.key === bgmStyle) || BGM_STYLES[0];
 
   return (
@@ -80,10 +83,10 @@ export function AudioSettingsTab({
           </div>
           <div>
             <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">
-              Nhạc Nền Chill (Background Music)
+              {t.settings.audio.masterToggle}
             </h5>
             <p className="text-xs text-stone-500 dark:text-stone-400">
-              {bgmEnabled ? 'Nhạc nền đang hoạt động thư thái' : 'Đã tắt nhạc nền thư giãn'}
+              {bgmEnabled ? t.settings.audio.masterDescOn : t.settings.audio.masterDescOff}
             </p>
           </div>
         </div>
@@ -124,7 +127,7 @@ export function AudioSettingsTab({
                   </span>
                 </div>
                 <p className="text-[11px] text-stone-500 dark:text-stone-400 truncate">
-                  {isPlaying ? 'Đang phát âm thanh thư giãn...' : 'Tạm dừng (Chạm màn hình để phát)'}
+                  {isPlaying ? t.settings.audio.playingStatus : t.settings.audio.pausedStatus}
                 </p>
               </div>
             </div>
@@ -161,7 +164,7 @@ export function AudioSettingsTab({
               <button
                 type="button"
                 onClick={onToggleBgm}
-                aria-label={isPlaying ? 'Tạm dừng nhạc' : 'Phát nhạc'}
+                aria-label={isPlaying ? 'Pause' : 'Play'}
                 className="w-8 h-8 rounded-full bg-[#FF6B00] text-white flex items-center justify-center shadow-xs hover:bg-[#FF7A1A] active:scale-90 transition-all duration-150 cursor-pointer"
               >
                 {isPlaying ? <Pause className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current ml-0.5" />}
@@ -169,11 +172,11 @@ export function AudioSettingsTab({
             </div>
           </div>
 
-          {/* 3. Chill Mood Selector (Zero-Jitter fluid micro-interactions) */}
+          {/* 3. Chill Mood Selector */}
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-1.5 px-0.5 text-[11px] font-bold tracking-wider text-stone-400 dark:text-stone-500 uppercase">
               <Waves className="w-3.5 h-3.5 text-[#FF6B00]" />
-              <span>Giai Điệu & Phong Cách Chill</span>
+              <span>{t.settings.audio.moodHeading}</span>
             </div>
 
             <div className="grid grid-cols-1 gap-2">
@@ -225,7 +228,7 @@ export function AudioSettingsTab({
             <div className="flex items-center justify-between text-xs">
               <span className="font-bold text-stone-900 dark:text-stone-100 flex items-center gap-1.5">
                 <Volume2 className="w-3.5 h-3.5 text-[#FF6B00]" />
-                Âm Lượng Nhạc Nền (BGM Volume)
+                {t.settings.audio.volumeHeading}
               </span>
               <span className="font-bold text-[#FF6B00] tabular-nums">
                 {Math.round(bgmVolume * 100)}%
@@ -256,10 +259,10 @@ export function AudioSettingsTab({
               </div>
               <div>
                 <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">
-                  Tự Động Giảm Nhạc Khi Quay (Auto-Ducking)
+                  {t.settings.audio.autoDuckTitle}
                 </h5>
                 <p className="text-xs text-stone-500 dark:text-stone-400">
-                  Hạ âm lượng nhạc 65% khi vòng quay chuyển động để nghe rõ tiếng gõ kim
+                  {t.settings.audio.autoDuckDesc}
                 </p>
               </div>
             </div>

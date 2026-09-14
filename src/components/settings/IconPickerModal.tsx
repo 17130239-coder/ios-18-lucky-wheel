@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { X, Search, Check } from 'lucide-react';
 import { PrizeIconKey } from '@/types/wheel';
 import { ICON_METADATA, TECH_ICONS, IconMeta } from '@/constants/techIcons';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface IconPickerModalProps {
   isOpen: boolean;
@@ -15,13 +16,6 @@ interface IconPickerModalProps {
 
 type CategoryFilter = 'all' | 'tech' | 'reward' | 'lifestyle';
 
-const CATEGORIES: { key: CategoryFilter; label: string }[] = [
-  { key: 'all', label: 'Tất cả' },
-  { key: 'tech', label: '⚡ Công nghệ' },
-  { key: 'reward', label: '🏆 Giải thưởng' },
-  { key: 'lifestyle', label: '🚗 Đời sống' },
-];
-
 export function IconPickerModal({
   isOpen,
   currentIcon,
@@ -31,6 +25,14 @@ export function IconPickerModal({
 }: IconPickerModalProps) {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState<CategoryFilter>('all');
+  const { t } = useLanguage();
+
+  const CATEGORIES: { key: CategoryFilter; label: string }[] = [
+    { key: 'all', label: t.settings.iconPicker.catAll },
+    { key: 'tech', label: t.settings.iconPicker.catTech },
+    { key: 'reward', label: t.settings.iconPicker.catReward },
+    { key: 'lifestyle', label: t.settings.iconPicker.catLifestyle },
+  ];
 
   const filteredIcons = useMemo(() => {
     return ICON_METADATA.filter((item: IconMeta) => {
@@ -66,16 +68,18 @@ export function IconPickerModal({
               id="icon-picker-title"
               className="text-base font-bold text-stone-900 dark:text-stone-100"
             >
-              Chọn Biểu Tượng Trực Quan
+              {t.settings.iconPicker.title}
             </h3>
             <p className="text-xs text-stone-500 dark:text-stone-400 truncate max-w-xs sm:max-w-sm">
-              {prizeName ? `Biểu tượng cho: ${prizeName}` : 'Chọn biểu tượng hiển thị trên nan quạt'}
+              {prizeName
+                ? t.settings.iconPicker.subtitleFor.replace('{prize}', prizeName)
+                : t.settings.iconPicker.subtitleDefault}
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Đóng bảng chọn biểu tượng"
+            aria-label={t.settings.iconPicker.closeBtn}
             className="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 flex items-center justify-center text-stone-500 dark:text-stone-400 transition-colors duration-150 cursor-pointer"
           >
             <X className="w-4 h-4" />
@@ -91,7 +95,7 @@ export function IconPickerModal({
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Tìm kiếm icon (vd: laptop, cúp, xe, tiền, tai nghe...)"
+              placeholder={t.settings.iconPicker.searchPlaceholder}
               className="w-full bg-stone-100 dark:bg-stone-800/80 text-stone-900 dark:text-stone-100 text-xs pl-10 pr-9 py-2.5 rounded-xl border border-stone-200/50 dark:border-stone-700/50 focus:outline-none focus:ring-1.5 focus:ring-[#FF6B00]/70 focus:border-[#FF6B00] placeholder:text-stone-400 transition-colors duration-150"
             />
             {search && (
@@ -129,8 +133,8 @@ export function IconPickerModal({
           {filteredIcons.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-48 text-center text-stone-400">
               <Search className="w-8 h-8 mb-2 opacity-30" />
-              <p className="text-xs font-semibold">Không tìm thấy biểu tượng phù hợp</p>
-              <p className="text-xs mt-1 text-stone-400">Thử tìm kiếm với từ khóa khác</p>
+              <p className="text-xs font-semibold">{t.settings.iconPicker.notFound}</p>
+              <p className="text-xs mt-1 text-stone-400">{t.settings.iconPicker.notFoundHint}</p>
             </div>
           ) : (
             <div className="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-5 gap-2.5">
@@ -144,28 +148,32 @@ export function IconPickerModal({
                       onSelect(item.key);
                       onClose();
                     }}
-                    className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-colors duration-150 cursor-pointer relative group ${
+                    className={`flex flex-col items-center justify-center p-2.5 sm:p-3 min-h-[82px] rounded-2xl border transition-colors duration-150 cursor-pointer relative group ${
                       isSelected
-                        ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/60 ring-1 ring-[#FF6B00]/40 shadow-xs'
+                        ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/60 ring-1.5 ring-[#FF6B00]/40 shadow-xs'
                         : 'bg-stone-100/70 dark:bg-stone-800/40 border-stone-200/60 dark:border-white/5 hover:bg-white dark:hover:bg-stone-800 hover:border-[#FF6B00]/30'
                     }`}
                   >
-                    {isSelected && (
-                      <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-[#FF6B00] text-white flex items-center justify-center shadow-xs">
-                        <Check className="w-2.5 h-2.5 stroke-[3]" />
-                      </span>
-                    )}
-                    <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-150 transform-gpu group-hover:scale-105 ${
-                        isSelected
-                          ? 'text-[#FF6B00] bg-white dark:bg-stone-900 shadow-xs'
-                          : 'text-stone-700 dark:text-stone-200 bg-white/90 dark:bg-stone-900/80 shadow-2xs'
-                      }`}
-                    >
-                      {TECH_ICONS[item.key] || TECH_ICONS.gift}
+                    <div className="relative shrink-0">
+                      <div
+                        className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center transition-transform duration-150 transform-gpu group-hover:scale-105 ${
+                          isSelected
+                            ? 'text-[#FF6B00] bg-white dark:bg-stone-900 shadow-xs border border-[#FF6B00]/30'
+                            : 'text-stone-700 dark:text-stone-200 bg-white/90 dark:bg-stone-900/80 shadow-2xs'
+                        }`}
+                      >
+                        {TECH_ICONS[item.key] || TECH_ICONS.gift}
+                      </div>
+
+                      {isSelected && (
+                        <span className="absolute -top-1 -right-1 z-10 w-4 h-4 rounded-full bg-[#FF6B00] text-white flex items-center justify-center shadow-xs ring-2 ring-white dark:ring-stone-900">
+                          <Check className="w-2.5 h-2.5 stroke-[3]" />
+                        </span>
+                      )}
                     </div>
+
                     <span
-                      className={`text-[11px] font-semibold mt-2 text-center truncate max-w-full px-1 ${
+                      className={`text-[10px] sm:text-[11px] font-semibold mt-1.5 text-center leading-tight line-clamp-2 px-0.5 break-words w-full ${
                         isSelected
                           ? 'text-[#FF6B00]'
                           : 'text-stone-600 dark:text-stone-400'
@@ -184,14 +192,14 @@ export function IconPickerModal({
         {/* Footer */}
         <div className="p-3 px-5 border-t border-stone-200/40 dark:border-white/5 bg-white/50 dark:bg-stone-900/50 flex items-center justify-between">
           <span className="text-xs text-stone-500 dark:text-stone-400">
-            Tổng cộng: {filteredIcons.length} biểu tượng
+            {t.settings.iconPicker.totalIcons.replace('{count}', String(filteredIcons.length))}
           </span>
           <button
             type="button"
             onClick={onClose}
             className="px-4 py-1.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 text-xs font-semibold transition-colors duration-150 cursor-pointer"
           >
-            Đóng
+            {t.settings.iconPicker.closeBtn}
           </button>
         </div>
       </div>
