@@ -148,12 +148,14 @@ body {
   transform-origin: 0 0;
   transform: rotate(-36deg);
   will-change: transform;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .spotlight-right-center {
   transform-origin: 0 0;
   transform: rotate(36deg);
   will-change: transform;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Fast energetic sweeping during wheel spin - Continuous harmonic sweep */

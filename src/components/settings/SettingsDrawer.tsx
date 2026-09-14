@@ -103,12 +103,12 @@ function SettingsDrawerContent({
         </div>
 
         {/* iOS Segmented Navigation Bar */}
-        <div className="px-4 sm:px-5 pt-3 pb-2.5 bg-white/50 dark:bg-stone-900/50 border-b border-stone-200/40 dark:border-white/5">
+        <div className="px-4 sm:px-5 pt-3 pb-2.5 bg-white/50 dark:bg-stone-900/50 border-b border-stone-200/40 dark:border-white/5 shrink-0">
           <div className="flex p-1 bg-stone-100 dark:bg-stone-800/80 rounded-2xl border border-stone-200/50 dark:border-white/5">
             <button
               type="button"
               onClick={() => setActiveTab('spotlight')}
-              className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold transition-colors duration-150 flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeTab === 'spotlight'
                   ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-white shadow-xs'
                   : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
@@ -124,7 +124,7 @@ function SettingsDrawerContent({
             <button
               type="button"
               onClick={() => setActiveTab('prizes')}
-              className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold transition-colors duration-150 flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeTab === 'prizes'
                   ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-white shadow-xs'
                   : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
@@ -135,8 +135,8 @@ function SettingsDrawerContent({
           </div>
         </div>
 
-        {/* Tab Content */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-5">
+        {/* Tab Content with stable scrollbar gutter */}
+        <div className="flex-1 overflow-y-auto p-4 sm:p-5 [scrollbar-gutter:stable]">
           {activeTab === 'spotlight' ? (
             <SpotlightSettingsTab
               config={spotlightConfig}
@@ -152,7 +152,7 @@ function SettingsDrawerContent({
               <div className="flex items-center justify-between p-3.5 rounded-2xl bg-stone-100/70 dark:bg-stone-800/40 border border-stone-200/60 dark:border-white/5 shadow-xs">
                 <div className="flex items-center gap-3">
                   <div
-                    className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors duration-150 ${
                       eliminateWonPrizes
                         ? 'bg-[#FF6B00] text-white shadow-sm shadow-orange-500/25'
                         : 'bg-stone-200 dark:bg-stone-700 text-stone-400'
@@ -170,7 +170,7 @@ function SettingsDrawerContent({
                   </div>
                 </div>
 
-                {/* iOS Switch */}
+                {/* iOS Switch - GPU accelerated */}
                 <button
                   type="button"
                   role="switch"
@@ -181,7 +181,7 @@ function SettingsDrawerContent({
                   }`}
                 >
                   <span
-                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                    className={`pointer-events-none inline-block h-5 w-5 transform-gpu will-change-transform rounded-full bg-white shadow-md ring-0 transition-transform duration-200 ease-in-out ${
                       eliminateWonPrizes ? 'translate-x-5' : 'translate-x-0'
                     }`}
                   />
@@ -197,7 +197,7 @@ function SettingsDrawerContent({
                   <button
                     type="button"
                     onClick={handleResetPrizes}
-                    className="text-xs font-semibold text-[#FF6B00] hover:underline cursor-pointer flex items-center gap-1"
+                    className="text-xs font-semibold text-[#FF6B00] hover:underline cursor-pointer flex items-center gap-1 transition-colors duration-150"
                   >
                     <RotateCcw className="w-3 h-3" />
                     <span>Khôi phục đủ 10 quà</span>
@@ -221,13 +221,13 @@ function SettingsDrawerContent({
         </div>
 
         {/* Footer actions */}
-        <div className="p-4 sm:p-5 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md border-t border-stone-200/40 dark:border-white/5 flex items-center gap-2.5">
+        <div className="p-4 sm:p-5 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md border-t border-stone-200/40 dark:border-white/5 flex items-center gap-2.5 shrink-0">
           {activeTab === 'prizes' ? (
             <>
               <button
                 type="button"
                 onClick={handleResetPrizes}
-                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200/70 dark:border-stone-700/60 text-stone-700 dark:text-stone-300 text-xs font-semibold hover:bg-stone-200/80 dark:hover:bg-stone-700/80 active:scale-98 transition-all cursor-pointer"
+                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200/70 dark:border-stone-700/60 text-stone-700 dark:text-stone-300 text-xs font-semibold hover:bg-stone-200/80 dark:hover:bg-stone-700/80 active:opacity-85 transition-colors duration-150 cursor-pointer"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Mặc Định</span>
@@ -235,7 +235,7 @@ function SettingsDrawerContent({
               <button
                 type="button"
                 onClick={handleSavePrizes}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] text-white text-xs font-bold shadow-sm shadow-orange-500/25 active:scale-98 transition-all cursor-pointer"
+                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] text-white text-xs font-bold shadow-sm shadow-orange-500/25 active:opacity-85 transition-colors duration-150 cursor-pointer"
               >
                 <Check className="w-3.5 h-3.5" />
                 <span>Lưu & Áp Dụng</span>
@@ -246,7 +246,7 @@ function SettingsDrawerContent({
               <button
                 type="button"
                 onClick={onResetSpotlightConfig}
-                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200/70 dark:border-stone-700/60 text-stone-700 dark:text-stone-300 text-xs font-semibold hover:bg-stone-200/80 dark:hover:bg-stone-700/80 active:scale-98 transition-all cursor-pointer"
+                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200/70 dark:border-stone-700/60 text-stone-700 dark:text-stone-300 text-xs font-semibold hover:bg-stone-200/80 dark:hover:bg-stone-700/80 active:opacity-85 transition-colors duration-150 cursor-pointer"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Đặt Lại Đèn</span>
@@ -254,7 +254,7 @@ function SettingsDrawerContent({
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] text-white text-xs font-bold shadow-sm shadow-orange-500/25 active:scale-98 transition-all cursor-pointer"
+                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] text-white text-xs font-bold shadow-sm shadow-orange-500/25 active:opacity-85 transition-colors duration-150 cursor-pointer"
               >
                 <Check className="w-3.5 h-3.5" />
                 <span>Hoàn Tất</span>

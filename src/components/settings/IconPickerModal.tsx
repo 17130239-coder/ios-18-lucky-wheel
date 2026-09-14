@@ -58,9 +58,9 @@ export function IconPickerModal({
       aria-labelledby="icon-picker-title"
       className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
     >
-      <div className="relative w-full max-w-lg bg-white/95 dark:bg-stone-900/95 backdrop-blur-2xl border border-stone-200/60 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-lg h-[80vh] max-h-[600px] min-h-[460px] bg-white/95 dark:bg-stone-900/95 backdrop-blur-2xl border border-stone-200/60 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 px-5 border-b border-stone-200/40 dark:border-white/5 bg-white/50 dark:bg-stone-900/50 backdrop-blur-md">
+        <div className="flex items-center justify-between p-4 px-5 border-b border-stone-200/40 dark:border-white/5 bg-white/50 dark:bg-stone-900/50 backdrop-blur-md shrink-0">
           <div>
             <h3
               id="icon-picker-title"
@@ -76,14 +76,14 @@ export function IconPickerModal({
             type="button"
             onClick={onClose}
             aria-label="Đóng bảng chọn biểu tượng"
-            className="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 flex items-center justify-center text-stone-500 dark:text-stone-400 transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 flex items-center justify-center text-stone-500 dark:text-stone-400 transition-colors duration-150 cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Search & Filter Controls */}
-        <div className="p-4 pb-3 flex flex-col gap-3 border-b border-stone-200/40 dark:border-white/5">
+        <div className="p-4 pb-3 flex flex-col gap-3 border-b border-stone-200/40 dark:border-white/5 shrink-0">
           {/* Search bar */}
           <div className="relative flex items-center">
             <Search className="w-4 h-4 absolute left-3.5 text-stone-400 pointer-events-none" />
@@ -92,7 +92,7 @@ export function IconPickerModal({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Tìm kiếm icon (vd: laptop, cúp, xe, tiền, tai nghe...)"
-              className="w-full bg-stone-100 dark:bg-stone-800/80 text-stone-900 dark:text-stone-100 text-xs pl-10 pr-9 py-2.5 rounded-xl border border-stone-200/50 dark:border-stone-700/50 focus:outline-none focus:ring-1.5 focus:ring-[#FF6B00]/70 focus:border-[#FF6B00] placeholder:text-stone-400 transition-all"
+              className="w-full bg-stone-100 dark:bg-stone-800/80 text-stone-900 dark:text-stone-100 text-xs pl-10 pr-9 py-2.5 rounded-xl border border-stone-200/50 dark:border-stone-700/50 focus:outline-none focus:ring-1.5 focus:ring-[#FF6B00]/70 focus:border-[#FF6B00] placeholder:text-stone-400 transition-colors duration-150"
             />
             {search && (
               <button
@@ -112,7 +112,7 @@ export function IconPickerModal({
                 key={cat.key}
                 type="button"
                 onClick={() => setCategory(cat.key)}
-                className={`text-xs font-semibold px-3 py-1.5 rounded-xl transition-all shrink-0 cursor-pointer ${
+                className={`text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors duration-150 shrink-0 cursor-pointer ${
                   category === cat.key
                     ? 'bg-[#FF6B00] text-white shadow-xs'
                     : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-700'
@@ -125,7 +125,7 @@ export function IconPickerModal({
         </div>
 
         {/* Icon Grid */}
-        <div className="flex-1 overflow-y-auto p-4 min-h-[250px]">
+        <div className="flex-1 overflow-y-auto p-4 [scrollbar-gutter:stable]">
           {filteredIcons.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-48 text-center text-stone-400">
               <Search className="w-8 h-8 mb-2 opacity-30" />
@@ -144,7 +144,7 @@ export function IconPickerModal({
                       onSelect(item.key);
                       onClose();
                     }}
-                    className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-all cursor-pointer relative group ${
+                    className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-colors duration-150 cursor-pointer relative group ${
                       isSelected
                         ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/60 ring-1 ring-[#FF6B00]/40 shadow-xs'
                         : 'bg-stone-100/70 dark:bg-stone-800/40 border-stone-200/60 dark:border-white/5 hover:bg-white dark:hover:bg-stone-800 hover:border-[#FF6B00]/30'
@@ -156,7 +156,7 @@ export function IconPickerModal({
                       </span>
                     )}
                     <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110 ${
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-150 transform-gpu group-hover:scale-105 ${
                         isSelected
                           ? 'text-[#FF6B00] bg-white dark:bg-stone-900 shadow-xs'
                           : 'text-stone-700 dark:text-stone-200 bg-white/90 dark:bg-stone-900/80 shadow-2xs'
@@ -167,7 +167,7 @@ export function IconPickerModal({
                     <span
                       className={`text-[11px] font-semibold mt-2 text-center truncate max-w-full px-1 ${
                         isSelected
-                          ? 'text-[#FF6B00] font-bold'
+                          ? 'text-[#FF6B00]'
                           : 'text-stone-600 dark:text-stone-400'
                       }`}
                       title={item.label}
@@ -189,7 +189,7 @@ export function IconPickerModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-1.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 text-xs font-semibold transition-all cursor-pointer"
+            className="px-4 py-1.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 text-xs font-semibold transition-colors duration-150 cursor-pointer"
           >
             Đóng
           </button>

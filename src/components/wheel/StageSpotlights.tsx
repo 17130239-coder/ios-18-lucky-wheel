@@ -68,7 +68,7 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
 
   return (
     <div
-      className={`absolute inset-0 pointer-events-none flex items-center justify-center z-15 overflow-visible transition-opacity duration-300 ${
+      className={`absolute inset-0 pointer-events-none flex items-center justify-center z-15 overflow-visible ${
         isRgbMode ? 'spotlight-rgb-mode' : ''
       }`}
       style={{ opacity: brightness }}

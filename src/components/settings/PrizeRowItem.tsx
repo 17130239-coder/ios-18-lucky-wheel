@@ -27,7 +27,7 @@ export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
       <button
         type="button"
         onClick={() => setIsPickerOpen(true)}
-        className="relative group shrink-0 w-11 h-11 rounded-xl flex items-center justify-center p-2 shadow-xs cursor-pointer transition-all hover:scale-105 active:scale-95 border border-black/5 dark:border-white/10"
+        className="relative group shrink-0 w-11 h-11 rounded-xl flex items-center justify-center p-2 shadow-xs cursor-pointer transition-[opacity,filter] duration-150 hover:brightness-105 active:opacity-85 border border-black/5 dark:border-white/10"
         style={{ backgroundColor: item.color, color: iconColor }}
         title={`Bấm để đổi icon (${iconLabel})`}
       >
@@ -53,7 +53,7 @@ export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
                 name: `${line1} ${item.line2}`.trim(),
               });
             }}
-            className="w-1/2 bg-white/90 dark:bg-stone-900/90 border border-stone-200/70 dark:border-stone-700/60 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-stone-800 dark:text-stone-100 placeholder:text-stone-400 focus:outline-none focus:ring-1.5 focus:ring-[#FF6B00]/70 focus:border-[#FF6B00] transition-all"
+            className="w-1/2 bg-white/90 dark:bg-stone-900/90 border border-stone-200/70 dark:border-stone-700/60 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-stone-800 dark:text-stone-100 placeholder:text-stone-400 focus:outline-none focus:ring-1.5 focus:ring-[#FF6B00]/70 focus:border-[#FF6B00] transition-colors duration-150"
           />
           <input
             type="text"
@@ -66,14 +66,14 @@ export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
                 name: `${item.line1} ${line2}`.trim(),
               });
             }}
-            className="w-1/2 bg-white/90 dark:bg-stone-900/90 border border-stone-200/70 dark:border-stone-700/60 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-stone-800 dark:text-stone-100 placeholder:text-stone-400 focus:outline-none focus:ring-1.5 focus:ring-[#FF6B00]/70 focus:border-[#FF6B00] transition-all"
+            className="w-1/2 bg-white/90 dark:bg-stone-900/90 border border-stone-200/70 dark:border-stone-700/60 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-stone-800 dark:text-stone-100 placeholder:text-stone-400 focus:outline-none focus:ring-1.5 focus:ring-[#FF6B00]/70 focus:border-[#FF6B00] transition-colors duration-150"
           />
         </div>
         <div className="flex items-center gap-1.5 px-0.5">
           <button
             type="button"
             onClick={() => setIsPickerOpen(true)}
-            className="text-[10px] text-stone-500 dark:text-stone-400 hover:text-[#FF6B00] dark:hover:text-[#FF6B00] transition-colors truncate flex items-center gap-1 cursor-pointer"
+            className="text-[10px] text-stone-500 dark:text-stone-400 hover:text-[#FF6B00] dark:hover:text-[#FF6B00] transition-colors duration-150 truncate flex items-center gap-1 cursor-pointer"
           >
             <span>Icon:</span>
             <span className="font-semibold text-stone-700 dark:text-stone-300 underline underline-offset-2">
@@ -89,7 +89,7 @@ export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
           #{index + 1}
         </span>
         <label
-          className="relative w-7 h-7 rounded-xl overflow-hidden border border-stone-300 dark:border-stone-600 shadow-2xs cursor-pointer hover:scale-105 active:scale-95 transition-transform"
+          className="relative w-7 h-7 rounded-xl overflow-hidden border border-stone-300 dark:border-stone-600 shadow-2xs cursor-pointer transition-opacity duration-150 hover:opacity-90 active:opacity-80"
           title="Chọn màu nền nan quạt"
         >
           <input
