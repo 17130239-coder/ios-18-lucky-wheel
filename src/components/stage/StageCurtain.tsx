@@ -119,7 +119,7 @@ export function StageCurtain({
 
       {/* 3. Scalloped Theater Valance Pelmet (Rèm yếm viền cam trên) */}
       <div
-        className="absolute top-0 inset-x-0 h-20 sm:h-28 z-20 flex justify-around overflow-hidden transition-transform duration-[1800ms] ease-[cubic-bezier(0.77,0,0.175,1)] pointer-events-none"
+        className="absolute top-0 inset-x-0 h-16 sm:h-28 z-20 flex justify-around overflow-hidden transition-transform duration-[1800ms] ease-[cubic-bezier(0.77,0,0.175,1)] pointer-events-none"
         style={{
           transform: isOpeningOrOpen ? 'translateY(-65%)' : 'translateY(0%)',
         }}
@@ -159,12 +159,12 @@ export function StageCurtain({
         {/* Converging Light Streaks ("Hiệu ứng ánh sáng nhập lại vào tâm") */}
         <div
           className={`absolute right-full top-1/2 -translate-y-1/2 h-1.5 rounded-full bg-gradient-to-r from-transparent via-orange-400 to-white shadow-[0_0_15px_#FF6B00] pointer-events-none transition-all duration-1000 ease-out ${
-            isOpeningOrOpen ? 'w-0 opacity-0' : 'w-24 sm:w-40 opacity-90'
+            isOpeningOrOpen ? 'w-0 opacity-0' : 'w-20 sm:w-40 opacity-90'
           }`}
         />
         <div
           className={`absolute left-full top-1/2 -translate-y-1/2 h-1.5 rounded-full bg-gradient-to-l from-transparent via-orange-400 to-white shadow-[0_0_15px_#FF6B00] pointer-events-none transition-all duration-1000 ease-out ${
-            isOpeningOrOpen ? 'w-0 opacity-0' : 'w-24 sm:w-40 opacity-90'
+            isOpeningOrOpen ? 'w-0 opacity-0' : 'w-20 sm:w-40 opacity-90'
           }`}
         />
 
@@ -203,7 +203,7 @@ export function StageCurtain({
 
         {/* Pulsing Hint Badge positioned absolutely below button */}
         <div
-          className={`absolute top-[calc(100%+20px)] left-1/2 -translate-x-1/2 whitespace-nowrap px-4 py-1.5 rounded-full bg-black/70 backdrop-blur-md border border-[#FF6B00]/60 text-orange-300 text-xs font-bold tracking-wider flex items-center gap-1.5 shadow-xl transition-all duration-500 pointer-events-none ${
+          className={`absolute top-[calc(100%+14px)] sm:top-[calc(100%+20px)] left-1/2 -translate-x-1/2 whitespace-nowrap px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-black/70 backdrop-blur-md border border-[#FF6B00]/60 text-orange-300 text-[11px] sm:text-xs font-bold tracking-wider flex items-center gap-1.5 shadow-xl transition-all duration-500 pointer-events-none ${
             isOpeningOrOpen ? 'opacity-0 scale-75 -translate-y-2' : 'opacity-100 scale-100 translate-y-0 animate-bounce'
           }`}
         >
@@ -212,7 +212,7 @@ export function StageCurtain({
       </div>
 
       {/* 5. Top-Right Skip Button */}
-      <div className="absolute top-5 right-5 z-40">
+      <div className="absolute top-[max(1rem,env(safe-area-inset-top))] right-4 sm:right-6 z-40">
         <button
           type="button"
           onClick={(e) => {

@@ -141,6 +141,21 @@
 - Loại bỏ thuộc tính `disabled` và con trỏ chuột cấm đoán `cursor-not-allowed` khi vòng quay đang chạy.
 - Con trỏ chuột giữ nguyên hình bàn tay tự nhiên (`cursor-pointer`) đồng thời vẫn khóa lệnh gọi quay tiếp (`if (isSpinning) return;`), mang lại cảm giác dễ chịu cho người dùng.
 
+### 2.5. Hoàn Thiện Tương Thích & Responsive Màn Hình Di Động (Mobile Responsive Perfection)
+- **Khóa Cố Định Viewport Chuẩn 100dvh & Chống Lệch Tâm**:
+  - *Vấn đề trên Mobile/iOS Safari*: Trình duyệt di động có thanh địa chỉ trên và thanh công cụ dưới động, khiến đơn vị `100vh` bao gồm cả diện tích bị che khuất ($\approx 844\text{px}$). Điều này làm cho tâm của màn hình cha flexbox bị lệch xuống $\approx 65\text{px}$ so với tâm của rèm sân khấu (`fixed inset-0`), gây ra lỗi "hai nút quay tách rời nhau".
+  - *Giải pháp*:
+    - Cấu hình thẻ `<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />` trong `layout.tsx`.
+    - Thiết lập `html, body` khóa cứng `height: 100dvh; width: 100dvw; position: fixed; inset: 0; overscroll-behavior: none;`.
+    - Đồng bộ `LuckyWheel` và `StageCurtain` đều là `fixed inset-0 flex items-center justify-center pointer-events-none`, khóa tâm nút quay và tâm rèm trùng khớp $1:1$ tại tọa độ $(50\text{dvw}, 50\text{dvh})$ trên mọi kích thước màn hình.
+- **Tối Ưu Bố Cục Thanh Điều Hướng Header Trên Màn Hình Nhỏ (< 390px)**:
+  - Bổ sung đệm vùng an toàn tai thỏ / Dynamic Island: `pt-[env(safe-area-inset-top,0px)] px-3 sm:px-8`.
+  - Tinh gọn logo thương hiệu: hiển thị "TechLuckyWheel" trên máy tính và tự động rút gọn thành "LuckyWheel" trên điện thoại.
+  - Điều chỉnh kích thước nút tròn hành động `w-8 h-8` (sm: `w-9 sm:h-9`) với khoảng cách `gap-1.5` chuẩn tỉ lệ vàng, đảm bảo 5 nút điều khiển không bị tràn hay ép sát mép màn hình.
+- **Tỉ Lệ Khung Bánh Xe & Viên Trạng Thái Thích Ứng (Responsive Chassis & Status Pill)**:
+  - Bánh xe tự động co dãn thông minh theo kích thước màn hình: `w-[320px] h-[320px] xs:w-[370px] xs:h-[370px] sm:w-[520px] sm:h-[520px] max-w-[88vw] max-h-[88vw]`, tránh bị tràn khỏi cạnh dưới khi mở trên Safari.
+  - Viên trạng thái (Status Pill) neo động `top-[calc(100%+8px)]` dưới đáy bánh xe, hỗ trợ tự động cắt bớt văn bản (`truncate`, `max-w-[90vw]`), đảm bảo bố cục luôn cân đối và không bao giờ che khuất tâm quay.
+
 ---
 
 ## 3. Quy Tắc & Nguyên Tắc Thiết Kế (Rules & Guidelines)

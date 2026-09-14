@@ -190,7 +190,7 @@ export default function LuckyWheelPage() {
   }, [eliminateWonPrizes, activePrize, removePrizeById, resetSpin, spin]);
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden flex flex-col items-center justify-center">
+    <div className="fixed inset-0 w-full h-[100dvh] overflow-hidden flex flex-col items-center justify-center">
       {/* Dynamic Vector Scene Background (Forest, Ocean, Underwater, Studio Default) */}
       <VectorBackground theme={bgTheme} isDark={theme === 'dark'} />
 
