@@ -49,6 +49,9 @@ export default function LuckyWheelPage() {
   const {
     prizes,
     history,
+    eliminateWonPrizes,
+    toggleEliminateWonPrizes,
+    removePrizeById,
     updatePrizes,
     resetToDefaults,
     addHistoryItem,
@@ -99,13 +102,25 @@ export default function LuckyWheelPage() {
     onSpawnConfetti: spawnConfetti,
   });
 
+  const handleCloseVictoryModal = useCallback(() => {
+    playGlassPop();
+    setIsVictoryOpen(false);
+    if (eliminateWonPrizes && activePrize) {
+      removePrizeById(activePrize.id);
+    }
+    resetSpin();
+  }, [eliminateWonPrizes, activePrize, removePrizeById, resetSpin, playGlassPop]);
+
   const handleSpinAgain = useCallback(() => {
     setIsVictoryOpen(false);
+    if (eliminateWonPrizes && activePrize) {
+      removePrizeById(activePrize.id);
+    }
     resetSpin();
     setTimeout(() => {
       spin();
-    }, 300);
-  }, [resetSpin, spin]);
+    }, 350);
+  }, [eliminateWonPrizes, activePrize, removePrizeById, resetSpin, spin]);
 
   return (
     <div className="relative h-screen w-screen overflow-hidden flex flex-col items-center justify-center">
@@ -137,16 +152,19 @@ export default function LuckyWheelPage() {
         canvasRef={canvasRef}
         spotlightConfig={spotlightConfig}
         onSpin={spin}
+        onResetPrizes={() => {
+          playClick();
+          resetToDefaults();
+        }}
       />
 
       {/* Victory Celebration Modal */}
       <VictoryModal
         isOpen={isVictoryOpen}
         prize={activePrize}
-        onClose={() => {
-          playGlassPop();
-          setIsVictoryOpen(false);
-        }}
+        eliminateWonPrizes={eliminateWonPrizes}
+        remainingCount={prizes.length}
+        onClose={handleCloseVictoryModal}
         onSpinAgain={handleSpinAgain}
       />
 
@@ -169,6 +187,11 @@ export default function LuckyWheelPage() {
         isOpen={isSettingsOpen}
         prizes={prizes}
         spotlightConfig={spotlightConfig}
+        eliminateWonPrizes={eliminateWonPrizes}
+        onToggleEliminateWonPrizes={() => {
+          playClick();
+          toggleEliminateWonPrizes();
+        }}
         onClose={() => {
           playGlassPop();
           setIsSettingsOpen(false);

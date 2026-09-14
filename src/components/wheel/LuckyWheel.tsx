@@ -19,6 +19,7 @@ interface LuckyWheelProps {
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
   spotlightConfig: SpotlightConfig;
   onSpin: () => void;
+  onResetPrizes?: () => void;
 }
 
 export function LuckyWheel({
@@ -30,6 +31,7 @@ export function LuckyWheel({
   canvasRef,
   spotlightConfig,
   onSpin,
+  onResetPrizes,
 }: LuckyWheelProps) {
   return (
     <main className="relative z-10 flex flex-col items-center justify-center w-full h-full p-4">
@@ -52,11 +54,20 @@ export function LuckyWheel({
           </div>
 
           {/* Center Hub Spin Button */}
-          <CenterHub spinState={spinState} onSpin={onSpin} />
+          <CenterHub
+            spinState={spinState}
+            prizeCount={prizes.length}
+            onSpin={onSpin}
+            onResetPrizes={onResetPrizes}
+          />
         </div>
 
         {/* Dynamic Status Indicator */}
-        <StatusPill spinState={spinState} activePrize={activePrize} />
+        <StatusPill
+          spinState={spinState}
+          activePrize={activePrize}
+          prizeCount={prizes.length}
+        />
       </div>
     </main>
   );

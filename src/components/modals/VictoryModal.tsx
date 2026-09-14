@@ -2,12 +2,15 @@
 
 import React, { useEffect } from 'react';
 import confetti from 'canvas-confetti';
+import { Sparkles } from 'lucide-react';
 import { PrizeItem } from '@/types/wheel';
 import { TECH_ICONS } from '@/constants/techIcons';
 
 interface VictoryModalProps {
   isOpen: boolean;
   prize: PrizeItem | null;
+  eliminateWonPrizes?: boolean;
+  remainingCount?: number;
   onClose: () => void;
   onSpinAgain: () => void;
 }
@@ -15,6 +18,8 @@ interface VictoryModalProps {
 export function VictoryModal({
   isOpen,
   prize,
+  eliminateWonPrizes = false,
+  remainingCount,
   onClose,
   onSpinAgain,
 }: VictoryModalProps) {
@@ -74,9 +79,21 @@ export function VictoryModal({
         </h3>
 
         {/* Description */}
-        <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-300 mb-6 font-medium">
+        <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-300 mb-4 font-medium">
           Bạn đã may mắn quay trúng phần quà công nghệ đẳng cấp này!
         </p>
+
+        {/* Elimination badge if active */}
+        {eliminateWonPrizes && (
+          <div className="flex items-center gap-1.5 px-3 py-1.5 mb-5 rounded-full bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 text-[11px] text-[#FF6B00] font-semibold animate-in fade-in">
+            <Sparkles className="w-3.5 h-3.5 shrink-0" />
+            <span>
+              {typeof remainingCount === 'number' && remainingCount > 1
+                ? `Đã loại bỏ quà này khỏi vòng quay (còn ${remainingCount - 1} món)`
+                : `Đã loại bỏ phần quà cuối cùng trên vòng quay!`}
+            </span>
+          </div>
+        )}
 
         {/* Action Buttons */}
         <div className="flex gap-2.5 w-full">

@@ -76,107 +76,154 @@ export function WheelSvg({ prizes, rotation }: WheelSvgProps) {
           transform: `rotate(${rotation}deg)`,
         }}
       >
-        {prizes.map((item, index) => {
-          const startAngle = index * sliceAngle;
-          const endAngle = startAngle + sliceAngle;
-          const midAngle = startAngle + sliceAngle / 2;
-
-          // Metal pins at slice boundary
-          const pinAngle = ((startAngle - 90) * Math.PI) / 180;
-          const px = cx + 274 * Math.cos(pinAngle);
-          const py = cy + 274 * Math.sin(pinAngle);
-
-          const badgeY = cy - 205; // 95
-          const textY = cy - 145; // 155
-
-          const iconColor =
-            item.color.toLowerCase() === '#ffffff' ? '#1E293B' : item.color;
-
-          return (
-            <React.Fragment key={item.id || index}>
-              {/* Sector Wedge */}
-              <path
-                d={getSectorPath(cx, cy, radius, startAngle, endAngle)}
-                fill={item.color}
-                stroke="#FFFFFF"
-                strokeWidth="2"
-              />
-
-              {/* Item group rotated to midAngle */}
-              <g transform={`rotate(${midAngle} ${cx} ${cy})`}>
-                {/* Prize Icon Circular Badge */}
-                <circle
-                  cx={cx}
-                  cy={badgeY}
-                  r={23}
-                  fill="#FFFFFF"
-                  filter="url(#badge-shadow)"
-                />
-                <circle
-                  cx={cx}
-                  cy={badgeY}
-                  r={21}
-                  fill="none"
-                  stroke="rgba(0,0,0,0.06)"
-                  strokeWidth="1"
-                />
-
-                {/* SVG Icon centered in 22x22 frame */}
-                <g
-                  transform={`translate(${cx - 11}, ${badgeY - 11})`}
-                  fill={iconColor}
-                >
+        {count === 0 ? (
+          /* Empty State: All prizes won/eliminated */
+          <g className="select-none pointer-events-none">
+            <circle cx={cx} cy={cy} r={radius} fill="#1E293B" opacity="0.95" stroke="#FFFFFF" strokeWidth="2" />
+            <g transform={`translate(${cx}, ${cy - 85})`}>
+              <circle cx="0" cy="0" r="32" fill="rgba(255,107,0,0.2)" stroke="#FF6B00" strokeWidth="1.5" />
+              <text textAnchor="middle" y="10" fontSize="28">🎁</text>
+              <text textAnchor="middle" y="50" fill="#FFFFFF" fontSize="15" fontWeight="bold">
+                ĐÃ HẾT PHẦN QUÀ!
+              </text>
+              <text textAnchor="middle" y="70" fill="#94A3B8" fontSize="11" fontWeight="medium">
+                Bấm ĐẶT LẠI ở tâm để chơi lại
+              </text>
+            </g>
+          </g>
+        ) : count === 1 ? (
+          /* Single Prize Remaining: Full Circle Sector */
+          (() => {
+            const item = prizes[0];
+            const badgeY = cy - 180;
+            const textY = cy - 120;
+            const iconColor = item.color.toLowerCase() === '#ffffff' ? '#1E293B' : item.color;
+            return (
+              <g>
+                <circle cx={cx} cy={cy} r={radius} fill={item.color} stroke="#FFFFFF" strokeWidth="2" />
+                <circle cx={cx} cy={badgeY} r={28} fill="#FFFFFF" filter="url(#badge-shadow)" />
+                <g transform={`translate(${cx - 13}, ${badgeY - 13})`} fill={iconColor}>
                   {TECH_ICONS[item.icon] || TECH_ICONS.gift}
                 </g>
-
-                {/* 2-line clean typography */}
                 <text
                   x={cx}
                   y={textY}
                   textAnchor="middle"
                   fill="#FFFFFF"
                   className="font-sans select-none"
-                  fontSize="11"
-                  fontWeight="700"
-                  letterSpacing="0.3"
+                  fontSize="15"
+                  fontWeight="800"
                   filter="url(#label-shadow)"
                 >
-                  <tspan x={cx} dy="-2">
-                    {item.line1}
-                  </tspan>
-                  <tspan x={cx} dy="14" fontWeight="800">
-                    {item.line2}
-                  </tspan>
+                  <tspan x={cx} dy="-2">{item.line1}</tspan>
+                  <tspan x={cx} dy="18" fontWeight="900">{item.line2}</tspan>
                 </text>
               </g>
+            );
+          })()
+        ) : (
+          prizes.map((item, index) => {
+            const startAngle = index * sliceAngle;
+            const endAngle = startAngle + sliceAngle;
+            const midAngle = startAngle + sliceAngle / 2;
 
-              {/* Precision Rivet Pin at perimeter between sectors */}
-              <circle
-                cx={px}
-                cy={py + 1}
-                r={4.5}
-                fill="rgba(0,0,0,0.25)"
-                pointerEvents="none"
-              />
-              <circle
-                cx={px}
-                cy={py}
-                r={4}
-                fill="#FFFFFF"
-                stroke="#E29A3B"
-                strokeWidth="1.5"
-                pointerEvents="none"
-              />
-              <circle
-                cx={px}
-                cy={py}
-                r={1.8}
-                fill="#F59E0B"
-                pointerEvents="none"
-              />
-            </React.Fragment>
-          );
-        })}
+            // Metal pins at slice boundary
+            const pinAngle = ((startAngle - 90) * Math.PI) / 180;
+            const px = cx + 274 * Math.cos(pinAngle);
+            const py = cy + 274 * Math.sin(pinAngle);
+
+            const badgeY = cy - 205; // 95
+            const textY = cy - 145; // 155
+
+            const iconColor =
+              item.color.toLowerCase() === '#ffffff' ? '#1E293B' : item.color;
+
+            return (
+              <React.Fragment key={item.id || index}>
+                {/* Sector Wedge */}
+                <path
+                  d={getSectorPath(cx, cy, radius, startAngle, endAngle)}
+                  fill={item.color}
+                  stroke="#FFFFFF"
+                  strokeWidth="2"
+                />
+
+                {/* Item group rotated to midAngle */}
+                <g transform={`rotate(${midAngle} ${cx} ${cy})`}>
+                  {/* Prize Icon Circular Badge */}
+                  <circle
+                    cx={cx}
+                    cy={badgeY}
+                    r={23}
+                    fill="#FFFFFF"
+                    filter="url(#badge-shadow)"
+                  />
+                  <circle
+                    cx={cx}
+                    cy={badgeY}
+                    r={21}
+                    fill="none"
+                    stroke="rgba(0,0,0,0.06)"
+                    strokeWidth="1"
+                  />
+
+                  {/* SVG Icon centered in 22x22 frame */}
+                  <g
+                    transform={`translate(${cx - 11}, ${badgeY - 11})`}
+                    fill={iconColor}
+                  >
+                    {TECH_ICONS[item.icon] || TECH_ICONS.gift}
+                  </g>
+
+                  {/* 2-line clean typography */}
+                  <text
+                    x={cx}
+                    y={textY}
+                    textAnchor="middle"
+                    fill="#FFFFFF"
+                    className="font-sans select-none"
+                    fontSize="11"
+                    fontWeight="700"
+                    letterSpacing="0.3"
+                    filter="url(#label-shadow)"
+                  >
+                    <tspan x={cx} dy="-2">
+                      {item.line1}
+                    </tspan>
+                    <tspan x={cx} dy="14" fontWeight="800">
+                      {item.line2}
+                    </tspan>
+                  </text>
+                </g>
+
+                {/* Precision Rivet Pin at perimeter between sectors */}
+                <circle
+                  cx={px}
+                  cy={py + 1}
+                  r={4.5}
+                  fill="rgba(0,0,0,0.25)"
+                  pointerEvents="none"
+                />
+                <circle
+                  cx={px}
+                  cy={py}
+                  r={4}
+                  fill="#FFFFFF"
+                  stroke="#E29A3B"
+                  strokeWidth="1.5"
+                  pointerEvents="none"
+                />
+                <circle
+                  cx={px}
+                  cy={py}
+                  r={1.8}
+                  fill="#F59E0B"
+                  pointerEvents="none"
+                />
+              </React.Fragment>
+            );
+          })
+        )}
       </g>
 
       {/* Outer Decorative Bulbs on the Bezel Frame */}

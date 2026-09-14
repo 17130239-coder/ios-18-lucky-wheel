@@ -6,6 +6,7 @@ import { DEFAULT_PRIZES } from '@/constants/defaultPrizes';
 
 const STORAGE_KEY_PRIZES = 'tech_wheel_prizes_v4';
 const STORAGE_KEY_HISTORY = 'tech_wheel_history_v1';
+const STORAGE_KEY_ELIMINATE = 'tech_wheel_eliminate_won_v1';
 
 export function usePrizeStore() {
   const [prizes, setPrizes] = useState<PrizeItem[]>(() => {
@@ -14,7 +15,7 @@ export function usePrizeStore() {
         const storedPrizes = localStorage.getItem(STORAGE_KEY_PRIZES);
         if (storedPrizes) {
           const parsed = JSON.parse(storedPrizes);
-          if (Array.isArray(parsed) && parsed.length > 0) {
+          if (Array.isArray(parsed)) {
             return parsed;
           }
         }
@@ -23,6 +24,20 @@ export function usePrizeStore() {
       }
     }
     return DEFAULT_PRIZES;
+  });
+
+  const [eliminateWonPrizes, setEliminateWonPrizes] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY_ELIMINATE);
+        if (stored !== null) {
+          return JSON.parse(stored);
+        }
+      } catch {
+        // Fallback
+      }
+    }
+    return false;
   });
 
   const [history, setHistory] = useState<SpinHistoryItem[]>(() => {
@@ -41,6 +56,31 @@ export function usePrizeStore() {
     }
     return [];
   });
+
+  const toggleEliminateWonPrizes = useCallback(() => {
+    setEliminateWonPrizes((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem(STORAGE_KEY_ELIMINATE, JSON.stringify(next));
+      } catch {
+        // Ignore
+      }
+      return next;
+    });
+  }, []);
+
+  // Remove a single prize (e.g. after winning when eliminate mode is on)
+  const removePrizeById = useCallback((id: string) => {
+    setPrizes((prev) => {
+      const updated = prev.filter((item) => item.id !== id);
+      try {
+        localStorage.setItem(STORAGE_KEY_PRIZES, JSON.stringify(updated));
+      } catch {
+        // Ignore
+      }
+      return updated;
+    });
+  }, []);
 
   // Save updated prizes
   const updatePrizes = useCallback((newPrizes: PrizeItem[]) => {
@@ -96,6 +136,9 @@ export function usePrizeStore() {
   return {
     prizes,
     history,
+    eliminateWonPrizes,
+    toggleEliminateWonPrizes,
+    removePrizeById,
     updatePrizes,
     resetToDefaults,
     addHistoryItem,

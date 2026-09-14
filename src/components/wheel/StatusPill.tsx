@@ -6,13 +6,17 @@ import { PrizeItem, SpinState } from '@/types/wheel';
 interface StatusPillProps {
   spinState: SpinState;
   activePrize: PrizeItem | null;
+  prizeCount?: number;
 }
 
-export function StatusPill({ spinState, activePrize }: StatusPillProps) {
+export function StatusPill({ spinState, activePrize, prizeCount = 10 }: StatusPillProps) {
   let dotClass = 'w-2.5 h-2.5 rounded-full bg-[#FF6B00]';
-  let message = 'Bấm "QUAY" ở tâm để săn 10 phần quà công nghệ khủng';
+  let message = `Bấm "QUAY" ở tâm để săn ${prizeCount} phần quà công nghệ`;
 
-  if (spinState === 'spinning') {
+  if (prizeCount === 0) {
+    dotClass = 'w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse';
+    message = 'Đã hết phần quà! Bấm "ĐẶT LẠI" ở tâm để khởi tạo lại';
+  } else if (spinState === 'spinning') {
     dotClass = 'w-2.5 h-2.5 rounded-full bg-[#FF6B00] animate-ping';
     message = 'Đang quay... Chúc bạn rinh siêu phẩm công nghệ!';
   } else if (spinState === 'won' && activePrize) {

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { SlidersHorizontal, X, RotateCcw, Check, Lightbulb } from 'lucide-react';
+import { SlidersHorizontal, X, RotateCcw, Check, Lightbulb, Sparkles } from 'lucide-react';
 import { PrizeItem, SpotlightConfig } from '@/types/wheel';
 import { PrizeRowItem } from './PrizeRowItem';
 import { SpotlightSettingsTab } from './SpotlightSettingsTab';
@@ -10,6 +10,8 @@ interface SettingsDrawerProps {
   isOpen: boolean;
   prizes: PrizeItem[];
   spotlightConfig: SpotlightConfig;
+  eliminateWonPrizes: boolean;
+  onToggleEliminateWonPrizes: () => void;
   onClose: () => void;
   onSave: (updatedPrizes: PrizeItem[]) => void;
   onReset: () => void;
@@ -22,6 +24,8 @@ type SettingsTab = 'prizes' | 'spotlight';
 function SettingsDrawerContent({
   prizes,
   spotlightConfig,
+  eliminateWonPrizes,
+  onToggleEliminateWonPrizes,
   onClose,
   onSave,
   onReset,
@@ -134,15 +138,75 @@ function SettingsDrawerContent({
               onReset={onResetSpotlightConfig}
             />
           ) : (
-            <div className="flex flex-col gap-2.5">
-              {draftPrizes.map((item, index) => (
-                <PrizeRowItem
-                  key={item.id || index}
-                  item={item}
-                  index={index}
-                  onChange={handleRowChange}
-                />
-              ))}
+            <div className="flex flex-col gap-3">
+              {/* Auto-eliminate won prize toggle card */}
+              <div className="flex items-center justify-between p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-800/80 border border-stone-200/80 dark:border-stone-700/80 shadow-xs">
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
+                      eliminateWonPrizes
+                        ? 'bg-[#FF6B00] text-white shadow-sm shadow-orange-500/30'
+                        : 'bg-stone-200 dark:bg-stone-700 text-stone-400'
+                    }`}
+                  >
+                    <Sparkles className="w-4 h-4" />
+                  </div>
+                  <div className="text-left">
+                    <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-white">
+                      Bỏ quà sau khi trúng
+                    </h5>
+                    <p className="text-[11px] text-stone-500 dark:text-stone-400">
+                      Tự động gỡ sản phẩm vừa trúng khỏi các lượt quay sau
+                    </p>
+                  </div>
+                </div>
+
+                {/* iOS Switch */}
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={eliminateWonPrizes}
+                  onClick={onToggleEliminateWonPrizes}
+                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                    eliminateWonPrizes ? 'bg-[#FF6B00]' : 'bg-stone-300 dark:bg-stone-600'
+                  }`}
+                >
+                  <span
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                      eliminateWonPrizes ? 'translate-x-5' : 'translate-x-0'
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {/* Counter and quick reset row */}
+              <div className="flex items-center justify-between px-1 pt-1">
+                <span className="text-xs font-bold text-stone-600 dark:text-stone-400">
+                  Danh sách quà còn lại ({draftPrizes.length})
+                </span>
+                {draftPrizes.length < 10 && (
+                  <button
+                    type="button"
+                    onClick={handleResetPrizes}
+                    className="text-[11px] font-bold text-[#FF6B00] hover:underline cursor-pointer flex items-center gap-1"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    <span>Khôi phục đủ 10 quà</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Prize list */}
+              <div className="flex flex-col gap-2.5">
+                {draftPrizes.map((item, index) => (
+                  <PrizeRowItem
+                    key={item.id || index}
+                    item={item}
+                    index={index}
+                    onChange={handleRowChange}
+                  />
+                ))}
+              </div>
             </div>
           )}
         </div>
