@@ -91,3 +91,5 @@ export interface SpotlightConfig {
   showDust?: boolean; // Hạt bụi ánh sáng thể tích 3D
   beamReach?: 'deep' | 'standard'; // Tầm rọi sâu xuống sàn hoặc vừa vặn
 }
+
+export type BackgroundTheme = 'default' | 'forest' | 'ocean' | 'underwater';

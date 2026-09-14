@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { SlidersHorizontal, X, RotateCcw, Check, Lightbulb, Sparkles, Music } from 'lucide-react';
-import { PrizeItem, SpotlightConfig } from '@/types/wheel';
+import { PrizeItem, SpotlightConfig, BackgroundTheme } from '@/types/wheel';
 import { BgmStyle } from '@/utils/bgm';
 import { PrizeRowItem } from './PrizeRowItem';
 import { SpotlightSettingsTab } from './SpotlightSettingsTab';
@@ -22,6 +22,8 @@ interface SettingsDrawerProps {
   curtainEnabled?: boolean;
   onToggleCurtain?: () => void;
   onReplayCurtain?: () => void;
+  bgTheme?: BackgroundTheme;
+  onSelectBgTheme?: (theme: BackgroundTheme) => void;
   bgmEnabled?: boolean;
   bgmStyle?: BgmStyle;
   bgmVolume?: number;
@@ -48,6 +50,8 @@ function SettingsDrawerContent({
   curtainEnabled,
   onToggleCurtain,
   onReplayCurtain,
+  bgTheme = 'default',
+  onSelectBgTheme,
   bgmEnabled = false,
   bgmStyle = 'lofi',
   bgmVolume = 0.35,
@@ -107,14 +111,14 @@ function SettingsDrawerContent({
                   ? 'Tùy Chỉnh Phần Quà'
                   : activeTab === 'audio'
                   ? 'Nhạc Nền Chill & Âm Thanh'
-                  : 'Cài Đặt Đèn Sân Khấu'}
+                  : 'Sân Khấu & Không Gian'}
               </h4>
               <p className="text-xs text-stone-500 dark:text-stone-400">
                 {activeTab === 'prizes'
                   ? 'Chỉnh sửa tên danh mục, icon & màu sắc'
                   : activeTab === 'audio'
                   ? 'Giai điệu lo-fi, ambient, jazz & âm lượng'
-                  : 'Bật/tắt, góc chiếu viền bánh xe & màu RGB'}
+                  : 'Chủ đề vector cảnh quan, rèm mở màn & đèn rọi'}
               </p>
             </div>
           </div>
@@ -141,7 +145,7 @@ function SettingsDrawerContent({
               }`}
             >
               <Lightbulb className="w-3.5 h-3.5 text-[#FF6B00]" />
-              <span>Đèn</span>
+              <span>Sân Khấu</span>
               {spotlightConfig.enabled && (
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-xs shadow-emerald-500/50" />
               )}
@@ -187,6 +191,8 @@ function SettingsDrawerContent({
               curtainEnabled={curtainEnabled}
               onToggleCurtain={onToggleCurtain}
               onReplayCurtain={onReplayCurtain}
+              bgTheme={bgTheme}
+              onSelectBgTheme={onSelectBgTheme}
             />
           ) : activeTab === 'audio' ? (
             <AudioSettingsTab

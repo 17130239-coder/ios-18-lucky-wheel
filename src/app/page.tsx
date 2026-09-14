@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useEffect } from 'react';
-import { ThemeMode, PrizeItem } from '@/types/wheel';
+import { ThemeMode, PrizeItem, BackgroundTheme } from '@/types/wheel';
 import { usePrizeStore } from '@/hooks/usePrizeStore';
 import { useSpotlightStore } from '@/hooks/useSpotlightStore';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
@@ -14,6 +14,7 @@ import { VictoryModal } from '@/components/modals/VictoryModal';
 import { HistoryDrawer } from '@/components/modals/HistoryDrawer';
 import { SettingsDrawer } from '@/components/settings/SettingsDrawer';
 import { StageCurtain } from '@/components/stage/StageCurtain';
+import { VectorBackground } from '@/components/background/VectorBackground';
 
 export default function LuckyWheelPage() {
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -37,6 +38,25 @@ export default function LuckyWheelPage() {
   });
 
   const [curtainKey, setCurtainKey] = useState<number>(1);
+
+  const [bgTheme, setBgTheme] = useState<BackgroundTheme>(() => {
+    if (typeof window !== 'undefined') {
+      const savedBg = localStorage.getItem('tech_wheel_bg_theme') as BackgroundTheme;
+      if (['default', 'forest', 'ocean', 'underwater'].includes(savedBg)) {
+        return savedBg;
+      }
+    }
+    return 'default';
+  });
+
+  const handleSelectBgTheme = useCallback((selectedTheme: BackgroundTheme) => {
+    setBgTheme(selectedTheme);
+    try {
+      localStorage.setItem('tech_wheel_bg_theme', selectedTheme);
+    } catch {
+      // Ignore
+    }
+  }, []);
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
@@ -171,6 +191,9 @@ export default function LuckyWheelPage() {
 
   return (
     <div className="relative h-screen w-screen overflow-hidden flex flex-col items-center justify-center">
+      {/* Dynamic Vector Scene Background (Forest, Ocean, Underwater, Studio Default) */}
+      <VectorBackground theme={bgTheme} isDark={theme === 'dark'} />
+
       {/* Grand Stage Curtain Opening Entrance */}
       <StageCurtain
         key={curtainKey}
@@ -266,6 +289,8 @@ export default function LuckyWheelPage() {
         curtainEnabled={curtainEnabled}
         onToggleCurtain={toggleCurtain}
         onReplayCurtain={replayCurtain}
+        bgTheme={bgTheme}
+        onSelectBgTheme={handleSelectBgTheme}
         bgmEnabled={bgmEnabled}
         bgmStyle={bgmStyle}
         bgmVolume={bgmVolume}

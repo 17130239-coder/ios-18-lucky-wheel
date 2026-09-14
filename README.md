@@ -97,6 +97,16 @@
 - **Chế độ Sáng (Light Glass)**: Nền titan ấm áp, điểm xuyết sắc cam hổ phách thanh lịch.
 - **Chế độ Tối (Dark Glass)**: Nền hắc diện thạch lỏng Obsidian (`#08090C`) kết hợp ánh sáng neon viền nổi bật.
 
+### 1.9. Hệ Thống Hình Nền Vector Sân Khấu Sống Động (Dynamic Vector Scene Themes)
+- **100% Đồ Họa Vector Thuần Túy (Pure SVG & CSS)**: Không tải ảnh raster ngoài (0KB external image), sắc nét vô cực trên mọi màn hình Retina/4K và không bao giờ xảy ra lỗi gãy link ảnh.
+- **4 Chủ Đề Không Gian Sân Khấu Độc Đáo**:
+  1. 🏢 **Mặc định (iOS 18 Studio)**: Nền Titanium / Obsidian tối giản, thanh lịch tôn vinh tối đa bánh xe và hệ thống đèn rọi.
+  2. 🌲 **Núi Rừng & Mây Ngàn (Alpine Forest & Mist)**: Bầu trời bình minh/đêm trăng lãng mạn, các dãy núi đá trùng điệp, dải sương mù lượn lờ mềm mại (`.animate-mist-drift`) và rừng thông kim bạt ngàn.
+  3. 🌊 **Biển Cả & Hoàng Hôn (Ocean Waves & Horizon)**: Chân trời biển cả xa xăm, vầng dương/mặt trăng tròn tỏa rạng, kết hợp 3 lớp sóng nước cuộn trào dập dềnh sinh động (`.animate-wave-slow`, `.animate-wave-fast`).
+  4. 🪸 **Dưới Đáy Đại Dương (Deep Abyss & Coral Reef)**: Thủy cung huyền bí với các luồng sáng caustics xuyên tầng nước (`.animate-caustics`), rạn san hô & rừng rong biển mềm mại, cùng các chùm bọt khí phát quang nổi bồng bềnh (`.animate-bubble-slow`, `.animate-bubble-fast`).
+- **Tương Thích Tuyệt Đối Cả 2 Chế Độ Sáng / Tối**: Mỗi khung cảnh vector tự động chuyển đổi bảng màu tương ứng (ví dụ: rừng ban mai êm dịu $\leftrightarrow$ rừng đêm huyền ảo; biển hoàng hôn vàng cam $\leftrightarrow$ biển đêm ánh trăng bạc).
+- **Cơ Chế Zero-Jitter UX**: Tích hợp chọn chủ đề trực quan ngay trong tab **Sân Khấu & Không Gian** của Drawer Cài Đặt với khung radio cố định, chuyển cảnh êm dịu và tự động lưu trạng thái vào `localStorage`.
+
 ---
 
 ## 2. Các Cải Tiến Nổi Bật & Tinh Chỉnh UI/UX (Improvements)
@@ -172,6 +182,8 @@ ios-18-lucky-wheel/
 │   │   ├── page.tsx                # Trang chủ hội tụ toàn bộ sân khấu vòng quay
 │   │   └── globals.css             # Định nghĩa keyframes chuyển động & utility glass
 │   ├── components/
+│   │   ├── background/
+│   │   │   └── VectorBackground.tsx # Động cơ hình nền vector SVG đa cảnh quan (Núi, Biển, Đáy sâu)
 │   │   ├── canvas/
 │   │   │   └── ConfettiCanvas.tsx   # Canvas 2D render hạt pháo hoa chúc mừng
 │   │   ├── header/

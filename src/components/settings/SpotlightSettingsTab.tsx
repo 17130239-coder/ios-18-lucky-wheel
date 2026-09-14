@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { SpotlightConfig, SpotlightColorMode, SpotlightStyle } from '@/types/wheel';
-import { Sparkles, SunMedium, Lightbulb, Palette, Compass, Film, Play, Check } from 'lucide-react';
+import { SpotlightConfig, SpotlightColorMode, SpotlightStyle, BackgroundTheme } from '@/types/wheel';
+import { Sparkles, SunMedium, Lightbulb, Palette, Compass, Film, Play, Check, Mountain, Waves, Fish, Layers } from 'lucide-react';
 
 interface SpotlightSettingsTabProps {
   config: SpotlightConfig;
@@ -11,7 +11,41 @@ interface SpotlightSettingsTabProps {
   curtainEnabled?: boolean;
   onToggleCurtain?: () => void;
   onReplayCurtain?: () => void;
+  bgTheme?: BackgroundTheme;
+  onSelectBgTheme?: (theme: BackgroundTheme) => void;
 }
+
+const BG_THEMES: {
+  key: BackgroundTheme;
+  title: string;
+  desc: string;
+  icon: React.ComponentType<{ className?: string }>;
+}[] = [
+  {
+    key: 'default',
+    title: 'Mặc định (iOS 18 Studio)',
+    desc: 'Titanium tối giản, kính mờ & hào quang rọi sáng',
+    icon: Layers,
+  },
+  {
+    key: 'forest',
+    title: 'Núi Rừng & Mây Ngàn',
+    desc: 'Dãy núi hùng vĩ, mây trôi & rừng thông xanh thẳm',
+    icon: Mountain,
+  },
+  {
+    key: 'ocean',
+    title: 'Biển Cả & Hoàng Hôn',
+    desc: 'Chân trời biển rộng & từng đợt sóng nước cuộn trào',
+    icon: Waves,
+  },
+  {
+    key: 'underwater',
+    title: 'Dưới Đáy Đại Dương',
+    desc: 'Biển sâu huyền bí, rạn san hô, ánh nắng & bọt khí bay',
+    icon: Fish,
+  },
+];
 
 const COLOR_PRESETS: { key: SpotlightColorMode; label: string; color: string; desc: string }[] = [
   { key: 'amber', label: 'Vàng Hổ Phách', color: '#FFA04D', desc: 'Apple Warm Amber' },
@@ -26,6 +60,8 @@ export function SpotlightSettingsTab({
   curtainEnabled = true,
   onToggleCurtain,
   onReplayCurtain,
+  bgTheme = 'default',
+  onSelectBgTheme,
 }: SpotlightSettingsTabProps) {
   return (
     <div className="flex flex-col gap-4 text-stone-800 dark:text-stone-100">
@@ -403,6 +439,64 @@ export function SpotlightSettingsTab({
               <span>Xem Lại Hiệu Ứng Mở Rèm Sân Khấu 🎭</span>
             </button>
           )}
+        </div>
+      </div>
+
+      {/* 7. Vector Background Scene Themes (Zero-Jitter UX) */}
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-1.5 px-0.5 text-[11px] font-bold tracking-wider text-stone-400 dark:text-stone-500 uppercase">
+          <Sparkles className="w-3.5 h-3.5 text-[#FF6B00]" />
+          <span>Chủ Đề Không Gian (Vector Scene)</span>
+        </div>
+
+        <div className="grid grid-cols-1 gap-2">
+          {BG_THEMES.map((t) => {
+            const IconComp = t.icon;
+            const isSelected = bgTheme === t.key;
+            return (
+              <button
+                key={t.key}
+                type="button"
+                onClick={() => onSelectBgTheme?.(t.key)}
+                className={`flex items-center justify-between p-3 rounded-2xl border transition-colors duration-150 cursor-pointer text-left ${
+                  isSelected
+                    ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/40 ring-1 ring-[#FF6B00]/30 shadow-xs'
+                    : 'bg-stone-100/60 dark:bg-stone-800/30 border-stone-200/60 dark:border-white/5 hover:bg-stone-100/90 dark:hover:bg-stone-800/50'
+                }`}
+              >
+                <div className="flex items-center gap-3 min-w-0 pr-2">
+                  <div
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors duration-150 ${
+                      isSelected
+                        ? 'bg-[#FF6B00] text-white shadow-xs'
+                        : 'bg-stone-200/70 dark:bg-stone-700/60 text-stone-600 dark:text-stone-300'
+                    }`}
+                  >
+                    <IconComp className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100 truncate">
+                      {t.title}
+                    </h5>
+                    <p className="text-xs text-stone-500 dark:text-stone-400 truncate">
+                      {t.desc}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Stable fixed-size radio indicator (Zero-Jitter UX) */}
+                <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0">
+                  {isSelected ? (
+                    <div className="w-5 h-5 rounded-full bg-[#FF6B00] text-white flex items-center justify-center shadow-xs">
+                      <Check className="w-3 h-3 stroke-[3]" />
+                    </div>
+                  ) : (
+                    <div className="w-5 h-5 rounded-full border border-stone-300 dark:border-stone-600" />
+                  )}
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
