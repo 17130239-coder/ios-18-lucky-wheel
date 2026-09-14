@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Zap, RotateCcw } from 'lucide-react';
+import { Laptop, RotateCcw } from 'lucide-react';
 import { SpinState } from '@/types/wheel';
 
 interface CenterHubProps {
@@ -54,11 +54,10 @@ export function CenterHub({ spinState, prizeCount = 10, onSpin, onResetPrizes }:
               className="w-6 h-6 sm:w-7 sm:h-7 text-white drop-shadow mb-0.5 group-hover:rotate-180 transition-transform duration-500"
             />
           ) : (
-            <Zap
+            <Laptop
               className={`w-6 h-6 sm:w-7 sm:h-7 text-white drop-shadow mb-0.5 transition-transform duration-500 ${
                 isSpinning ? 'animate-bounce' : 'group-hover:rotate-12'
               }`}
-              fill="currentColor"
             />
           )}
 

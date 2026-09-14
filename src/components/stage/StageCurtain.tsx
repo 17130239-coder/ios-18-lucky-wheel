@@ -136,28 +136,78 @@ export function StageCurtain({
         ))}
       </div>
 
-      {/* 4. Center Emblem with Website Logo (Orange Brand Theme) */}
+      {/* 4. Center Spin Button Emblem & Fusion Animation */}
       <div
-        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center justify-center transition-all duration-700 pointer-events-none ${
-          isOpeningOrOpen ? 'scale-50 opacity-0' : 'scale-100 opacity-100'
-        }`}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center justify-center pointer-events-auto"
+        onClick={(e) => {
+          e.stopPropagation();
+          triggerOpen();
+        }}
       >
-        {/* Orange Medallion Ring */}
-        <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full p-2 bg-gradient-to-tr from-[#FF6B00] via-[#FFA04D] to-[#FF8533] shadow-[0_0_50px_rgba(255,107,0,0.7),0_15px_35px_rgba(0,0,0,0.8)] flex items-center justify-center animate-pulse">
-          {/* Inner velvet crest disc */}
-          <div className="w-full h-full rounded-full bg-gradient-to-b from-[#580010] to-[#200006] border-2 border-[#FF6B00]/80 flex items-center justify-center shadow-inner relative overflow-hidden">
-            {/* Ambient orange glow */}
-            <div className="absolute inset-0 bg-radial from-[#FF6B00]/30 via-transparent to-transparent pointer-events-none" />
-            {/* Website Logo: Laptop in TechLuckyWheel Orange Badge */}
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-[#FF6B00] to-[#FFA04D] flex items-center justify-center text-white shadow-xl shadow-orange-600/40 ring-2 ring-white/80 transition-transform duration-300">
-              <Laptop className="w-7 h-7 sm:w-8 sm:h-8 drop-shadow-md" />
-            </div>
+        {/* Shockwave Radial Energy Rings upon Opening */}
+        <div
+          className={`absolute -inset-6 rounded-full border-2 border-[#FF6B00] shadow-[0_0_25px_rgba(255,107,0,0.8)] pointer-events-none transition-all duration-1000 ease-out ${
+            isOpeningOrOpen ? 'scale-[2.4] opacity-0' : 'scale-90 opacity-0'
+          }`}
+        />
+        <div
+          className={`absolute -inset-12 rounded-full border border-amber-300/80 shadow-[0_0_35px_rgba(255,170,85,0.6)] pointer-events-none transition-all duration-1200 delay-100 ease-out ${
+            isOpeningOrOpen ? 'scale-[3.2] opacity-0' : 'scale-75 opacity-0'
+          }`}
+        />
+
+        {/* Converging Light Streaks ("Hiệu ứng ánh sáng nhập lại vào tâm") */}
+        <div
+          className={`absolute right-full top-1/2 -translate-y-1/2 h-1.5 rounded-full bg-gradient-to-r from-transparent via-orange-400 to-white shadow-[0_0_15px_#FF6B00] pointer-events-none transition-all duration-1000 ease-out ${
+            isOpeningOrOpen ? 'w-0 opacity-0' : 'w-24 sm:w-40 opacity-90'
+          }`}
+        />
+        <div
+          className={`absolute left-full top-1/2 -translate-y-1/2 h-1.5 rounded-full bg-gradient-to-l from-transparent via-orange-400 to-white shadow-[0_0_15px_#FF6B00] pointer-events-none transition-all duration-1000 ease-out ${
+            isOpeningOrOpen ? 'w-0 opacity-0' : 'w-24 sm:w-40 opacity-90'
+          }`}
+        />
+
+        {/* Master Spin Button (Identical to CenterHub for 100% Seamless Fusion) */}
+        <div
+          className={`group relative w-28 h-28 sm:w-36 sm:h-36 rounded-full p-2 glass-card shadow-[0_15px_35px_rgba(255,107,0,0.6),inset_0_2px_6px_rgba(255,255,255,0.9)] ring-4 ring-white cursor-pointer select-none transition-all duration-500 hover:scale-105 active:scale-95 ${
+            isOpeningOrOpen ? 'opacity-0 scale-105 pointer-events-none' : 'opacity-100 scale-100'
+          }`}
+          style={{
+            transitionProperty: 'opacity, transform, filter',
+            transitionDuration: isOpeningOrOpen ? '600ms, 800ms, 800ms' : '300ms',
+            transitionDelay: isOpeningOrOpen ? '1000ms, 0ms, 0ms' : '0ms',
+          }}
+          title="Bấm để mở màn sân khấu & quay thưởng"
+        >
+          {/* Pulsing Aura */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#FF6B00] via-[#FF8826] to-[#FFAA55] opacity-95 group-hover:opacity-100 animate-pulse" />
+
+          {/* Inner 3D Glass Layer */}
+          <div className="relative w-full h-full rounded-full bg-gradient-to-b from-[#FF8C33] via-[#FF6B00] to-[#E65100] flex flex-col items-center justify-center shadow-[inset_0_3px_5px_rgba(255,255,255,0.7),inset_0_-3px_8px_rgba(180,50,0,0.4)] text-white overflow-hidden">
+            {/* Top Specular Reflection Arc */}
+            <div className="absolute top-0 inset-x-0 h-1/2 bg-gradient-to-b from-white/35 to-transparent rounded-t-full pointer-events-none" />
+
+            {/* Laptop Brand Logo Icon */}
+            <Laptop className="w-6 h-6 sm:w-7 sm:h-7 text-white drop-shadow mb-0.5 group-hover:rotate-12 transition-transform duration-500" />
+
+            {/* Typography */}
+            <span className="text-base sm:text-lg font-black tracking-wider uppercase drop-shadow leading-none">
+              QUAY
+            </span>
+            <span className="text-[10px] sm:text-[11px] text-orange-100 font-bold tracking-widest uppercase mt-0.5 opacity-95">
+              CÔNG NGHỆ
+            </span>
           </div>
         </div>
 
         {/* Pulsing Hint Badge */}
-        <div className="mt-5 px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-[#FF6B00]/50 text-orange-300 text-xs font-semibold tracking-wide flex items-center gap-1.5 shadow-lg animate-bounce">
-          <span>✨ Chạm để mở</span>
+        <div
+          className={`mt-6 px-4 py-1.5 rounded-full bg-black/70 backdrop-blur-md border border-[#FF6B00]/60 text-orange-300 text-xs font-bold tracking-wider flex items-center gap-1.5 shadow-xl transition-all duration-500 pointer-events-none ${
+            isOpeningOrOpen ? 'opacity-0 scale-75 -translate-y-2' : 'opacity-100 scale-100 translate-y-0 animate-bounce'
+          }`}
+        >
+          <span>✨ Bấm để mở màn & quay</span>
         </div>
       </div>
 

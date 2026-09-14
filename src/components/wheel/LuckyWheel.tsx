@@ -35,7 +35,7 @@ export function LuckyWheel({
 }: LuckyWheelProps) {
   return (
     <main className="relative z-10 flex flex-col items-center justify-center w-full h-full p-4">
-      <div className="relative flex flex-col items-center justify-center">
+      <div className="relative flex items-center justify-center">
         {/* Dual Stage Spotlights precisely aligned and focused on the Wheel */}
         <StageSpotlights spinState={spinState} config={spotlightConfig} />
 
@@ -62,12 +62,14 @@ export function LuckyWheel({
           />
         </div>
 
-        {/* Dynamic Status Indicator */}
-        <StatusPill
-          spinState={spinState}
-          activePrize={activePrize}
-          prizeCount={prizes.length}
-        />
+        {/* Dynamic Status Indicator anchored below the wheel without altering its center point */}
+        <div className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 z-20 pointer-events-auto whitespace-nowrap">
+          <StatusPill
+            spinState={spinState}
+            activePrize={activePrize}
+            prizeCount={prizes.length}
+          />
+        </div>
       </div>
     </main>
   );
