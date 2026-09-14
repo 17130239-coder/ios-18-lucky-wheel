@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Sparkles, FastForward } from 'lucide-react';
+import { Drama, FastForward } from 'lucide-react';
 
 interface StageCurtainProps {
   enabled?: boolean;
@@ -75,8 +75,8 @@ export function StageCurtain({
       >
         {/* Velvety surface sheen */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70 pointer-events-none" />
-        {/* Golden fringe trim at hem */}
-        <div className="absolute bottom-0 inset-x-0 h-4 bg-gradient-to-r from-amber-500 via-yellow-300 to-amber-600 shadow-md border-t border-yellow-200/60" />
+        {/* Orange fringe trim at hem */}
+        <div className="absolute bottom-0 inset-x-0 h-4 bg-gradient-to-r from-orange-600 via-orange-400 to-amber-500 shadow-md border-t border-orange-300/80" />
       </div>
     ));
   };
@@ -99,8 +99,8 @@ export function StageCurtain({
         }}
       >
         {renderPleats(8)}
-        {/* Leading edge golden braided cord */}
-        <div className="absolute top-0 bottom-0 right-0 w-2.5 bg-gradient-to-b from-yellow-300 via-amber-500 to-yellow-400 shadow-lg border-l border-white/40" />
+        {/* Leading edge orange braided cord */}
+        <div className="absolute top-0 bottom-0 right-0 w-3 bg-gradient-to-b from-orange-400 via-orange-500 to-amber-600 shadow-[0_0_15px_rgba(249,115,22,0.6)] border-l border-orange-200/70" />
       </div>
 
       {/* 2. Right Velvet Curtain Panel */}
@@ -113,11 +113,11 @@ export function StageCurtain({
         }}
       >
         {renderPleats(8)}
-        {/* Leading edge golden braided cord */}
-        <div className="absolute top-0 bottom-0 left-0 w-2.5 bg-gradient-to-b from-yellow-300 via-amber-500 to-yellow-400 shadow-lg border-r border-white/40" />
+        {/* Leading edge orange braided cord */}
+        <div className="absolute top-0 bottom-0 left-0 w-3 bg-gradient-to-b from-orange-400 via-orange-500 to-amber-600 shadow-[0_0_15px_rgba(249,115,22,0.6)] border-r border-orange-200/70" />
       </div>
 
-      {/* 3. Scalloped Theater Valance Pelmet (Rèm yếm viền trên) */}
+      {/* 3. Scalloped Theater Valance Pelmet (Rèm yếm viền cam trên) */}
       <div
         className="absolute top-0 inset-x-0 h-20 sm:h-28 z-20 flex justify-around overflow-hidden transition-transform duration-[1800ms] ease-[cubic-bezier(0.77,0,0.175,1)] pointer-events-none"
         style={{
@@ -127,43 +127,37 @@ export function StageCurtain({
         {Array.from({ length: 7 }).map((_, i) => (
           <div
             key={i}
-            className="flex-1 -mx-2 h-full rounded-b-[45%] bg-gradient-to-b from-[#38000A] via-[#8B0000] to-[#580010] border-b-4 border-amber-400 shadow-[0_12px_25px_rgba(0,0,0,0.7)] relative"
+            className="flex-1 -mx-2 h-full rounded-b-[45%] bg-gradient-to-b from-[#38000A] via-[#8B0000] to-[#580010] border-b-4 border-orange-500 shadow-[0_12px_25px_rgba(0,0,0,0.7)] relative"
           >
             <div className="absolute inset-0 bg-radial from-transparent via-black/20 to-black/60 rounded-b-[45%]" />
-            {/* Hanging golden tassel at scallop notch */}
-            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-2 h-5 bg-gradient-to-b from-amber-300 to-amber-600 rounded-full shadow-md" />
+            {/* Hanging orange tassel at scallop notch */}
+            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-2.5 h-5 bg-gradient-to-b from-orange-400 via-orange-500 to-orange-600 rounded-full shadow-[0_2px_8px_rgba(249,115,22,0.6)]" />
           </div>
         ))}
       </div>
 
-      {/* 4. Center Grand Medallion & Theater Crest */}
+      {/* 4. Center Theater Emblem (Icon only, Orange theme) */}
       <div
         className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center justify-center transition-all duration-700 pointer-events-none ${
           isOpeningOrOpen ? 'scale-50 opacity-0' : 'scale-100 opacity-100'
         }`}
       >
-        {/* Golden Medallion Ring */}
-        <div className="relative w-40 h-40 sm:w-48 sm:h-48 rounded-full p-2 bg-gradient-to-tr from-amber-600 via-yellow-200 to-amber-500 shadow-[0_0_50px_rgba(255,180,0,0.6),0_15px_35px_rgba(0,0,0,0.7)] flex items-center justify-center animate-pulse">
+        {/* Orange Medallion Ring */}
+        <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full p-2 bg-gradient-to-tr from-orange-600 via-amber-400 to-orange-500 shadow-[0_0_50px_rgba(249,115,22,0.7),0_15px_35px_rgba(0,0,0,0.8)] flex items-center justify-center animate-pulse">
           {/* Inner velvet crest disc */}
-          <div className="w-full h-full rounded-full bg-gradient-to-b from-[#580010] to-[#250007] border-2 border-yellow-300/80 flex flex-col items-center justify-center text-center p-3 shadow-inner">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-400 to-yellow-200 flex items-center justify-center text-red-900 shadow-md mb-1.5 ring-2 ring-white/60">
-              <Sparkles className="w-6 h-6 animate-spin" style={{ animationDuration: '6s' }} />
+          <div className="w-full h-full rounded-full bg-gradient-to-b from-[#580010] to-[#200006] border-2 border-orange-400/80 flex items-center justify-center shadow-inner relative overflow-hidden">
+            {/* Ambient orange glow */}
+            <div className="absolute inset-0 bg-radial from-orange-500/25 via-transparent to-transparent pointer-events-none" />
+            {/* Theatrical stage icon */}
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-orange-500 via-amber-400 to-orange-500 flex items-center justify-center text-red-950 shadow-lg ring-2 ring-orange-200/80">
+              <Drama className="w-8 h-8 sm:w-9 sm:h-9 drop-shadow" />
             </div>
-            <span className="text-[10px] tracking-[0.25em] uppercase text-amber-300 font-extrabold">
-              NHÀ HÁT CÔNG NGHỆ
-            </span>
-            <h2 className="text-base sm:text-lg font-black text-white tracking-tight leading-tight mt-0.5 drop-shadow-md">
-              LUCKY WHEEL
-            </h2>
-            <span className="text-[10px] text-amber-200/90 font-semibold tracking-wider mt-0.5">
-              ĐÊM HỘI MAY MẮN
-            </span>
           </div>
         </div>
 
         {/* Pulsing Hint Badge */}
-        <div className="mt-6 px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-amber-400/40 text-amber-300 text-xs font-bold tracking-wider flex items-center gap-1.5 shadow-lg animate-bounce">
-          <span>✨ Chạm để mở màn ngay</span>
+        <div className="mt-5 px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-orange-500/40 text-orange-300 text-xs font-semibold tracking-wide flex items-center gap-1.5 shadow-lg animate-bounce">
+          <span>✨ Chạm để mở</span>
         </div>
       </div>
 
@@ -179,7 +173,7 @@ export function StageCurtain({
           }}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/50 hover:bg-black/80 backdrop-blur-md border border-white/20 text-white/90 text-xs font-semibold shadow-md transition-all cursor-pointer hover:scale-105 active:scale-95"
         >
-          <FastForward className="w-3.5 h-3.5 text-amber-400" />
+          <FastForward className="w-3.5 h-3.5 text-orange-400" />
           <span>Bỏ qua</span>
         </button>
       </div>
