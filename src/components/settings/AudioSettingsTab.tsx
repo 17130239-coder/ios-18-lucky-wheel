@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { BgmStyle } from '@/utils/bgm';
-import { Music, Volume2, Sparkles, Coffee, Moon, Disc3, Check, Play, Pause, Waves } from 'lucide-react';
+import { Music, Volume2, Coffee, Disc3, Check, Play, Pause, Waves, Gamepad2, Palmtree } from 'lucide-react';
 
 interface AudioSettingsTabProps {
   bgmEnabled: boolean;
@@ -26,26 +26,26 @@ const BGM_STYLES: {
 }[] = [
   {
     key: 'lofi',
-    name: 'Lo-Fi Bouncy Chill',
-    desc: 'Nhịp trống êm ái, piano điện nảy nhịp & kalimba trong trẻo (Khuyên dùng)',
-    bpm: 84,
+    name: 'Lo-Fi Coffee Shop',
+    desc: 'Piano Rhodes ấm, trống boom-bap, sub-bass & sáo jazz êm ru',
+    bpm: 76,
     icon: Coffee,
     color: '#FF6B00',
   },
   {
     key: 'ambient',
-    name: 'Tropical Sunset Chill',
-    desc: 'Mộc cầm Marimba rộn ràng, giai điệu tươi vui đón nắng hè',
-    bpm: 88,
-    icon: Sparkles,
+    name: 'Retro 8-Bit Pixel Arcade',
+    desc: 'Nhạc game Nintendo 8-bit rộn ràng, arpeggio lấp lánh & bass NES vui nhộn',
+    bpm: 108,
+    icon: Gamepad2,
     color: '#8B5CF6',
   },
   {
     key: 'lounge',
-    name: 'Bossa Nova Cafe',
-    desc: 'Hợp âm Jazz ngọt ngào, nhịp gõ gỗ du dương như ngồi quán cafe',
-    bpm: 92,
-    icon: Moon,
+    name: 'Tropical Island Beach',
+    desc: 'Mộc cầm Marimba rộn rã, trống bongo gõ nhịp & đàn ukulele đón nắng hè',
+    bpm: 96,
+    icon: Palmtree,
     color: '#0EA5E9',
   },
 ];

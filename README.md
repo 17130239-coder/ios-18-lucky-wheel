@@ -50,10 +50,10 @@
   - Tăng cường âm lượng mặc định rõ nét (60%), dễ dàng thưởng thức trọn vẹn trên cả loa laptop và điện thoại.
 - **Bộ Gõ Mộc Tự Nhiên & Nhịp Điệu Nhộn Nhịp Dễ Chịu**:
   - Tích hợp tiếng Kick tròn trịa, tiếng búng tay / rimshot gỗ tự nhiên và dải hi-hat nhịp nhàng tạo cảm giác nhún nhảy, vui tươi mà vẫn êm ái, nhẹ nhàng.
-- **3 Phong Cách Giai Điệu Thư Thái Đầy Sức Sống**:
-  1. ☕ **Lo-Fi Bouncy Chill (84 BPM - Mặc định)**: Hợp âm Fmaj7 -> G6 -> Em7 -> Am7 kinh điển (Royal Road), tiếng piano điện nảy nhịp, bè bass bước điệu nghệ cùng tiếng gõ chuông kalimba trong trẻo.
-  2. 🌴 **Tropical Sunset Chill (88 BPM)**: Tiếng mộc cầm Marimba rộn ràng, hợp âm đảo phách tươi sáng như làn gió biển hoàng hôn.
-  3. 🎷 **Bossa Nova Cafe (92 BPM)**: Hợp âm Jazz ngọt ngào lãng mạn, nhịp gõ gỗ woodblock dập dềnh như đang ngồi thưởng thức ly latte ở quán cà phê.
+- **3 Phong Cách Âm Nhạc Độc Đáo Khác Biệt Hoàn Toàn**:
+  1. ☕ **Lo-Fi Coffee Shop (76 BPM - Chậm rãi, Trầm ấm)**: Tiếng đĩa than vinyl nổ tí tách ấm cúng, hợp âm piano Rhodes cổ điển, trống boom-bap, sub-bass 808 êm ru cùng giai điệu sáo jazz du dương như ngồi ngắm mưa bên quán cà phê.
+  2. 🎮 **Retro 8-Bit Pixel Arcade (108 BPM - Vui nhộn, Lấp lánh)**: Phong cách Chiptune Nintendo / Game Boy nguyên bản với sóng Square Arpeggiator 16th-note chạy rộn rã, bè bass NES Triangle nhún nhảy, bộ gõ bit-crush crunchy và tiếng chuông coin ăn điểm phấn khích.
+  3. 🏝️ **Tropical Island Beach (96 BPM - Đung đưa, Nắng hè)**: Âm hưởng biển đảo Caribbean Calypso & Reggae với tiếng mộc cầm Marimba / Steel Pan rộn rã, bộ gõ trống Bongo da mộc (high/low), lắc hạt Latin Cabasa cùng tiếng gảy đàn Ukulele đảo phách cực kỳ bắt tai.
 - **Tính năng Studio-Grade Auto-Ducking**: Tự động hạ âm lượng BGM 65% trong suốt thời gian bánh xe quay để tiếng gõ kim giòn tan nổi bật, sau đó êm dịu tăng trở lại khi dừng quay.
 - **Nút Bật/Tắt Nhanh trên Header**: Nút nốt nhạc phát sáng kèm hiệu ứng sóng nhạc equalizer động khi đang phát.
 - **Tab Cài Đặt Âm Nhạc Riêng Biệt**: Cho phép chỉnh âm lượng (5% - 100%), đổi phong cách nhạc và bật/tắt Auto-Ducking với thiết kế Zero-Jitter chuẩn iOS 18.
