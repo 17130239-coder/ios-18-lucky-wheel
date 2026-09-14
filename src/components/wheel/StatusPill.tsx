@@ -9,7 +9,7 @@ interface StatusPillProps {
   prizeCount?: number;
 }
 
-export function StatusPill({ spinState, activePrize, prizeCount = 10 }: StatusPillProps) {
+export const StatusPill = React.memo(function StatusPill({ spinState, activePrize, prizeCount = 10 }: StatusPillProps) {
   let dotClass = 'w-2.5 h-2.5 rounded-full bg-[#FF6B00]';
   let message = `Bấm "QUAY" ở tâm để săn ${prizeCount} phần quà công nghệ`;
 
@@ -32,4 +32,4 @@ export function StatusPill({ spinState, activePrize, prizeCount = 10 }: StatusPi
       </span>
     </div>
   );
-}
+});

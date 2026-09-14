@@ -8,7 +8,10 @@ interface VectorBackgroundProps {
   isDark: boolean;
 }
 
-export const VectorBackground: React.FC<VectorBackgroundProps> = ({ theme, isDark }) => {
+export const VectorBackground = React.memo(function VectorBackground({
+  theme,
+  isDark,
+}: VectorBackgroundProps) {
   if (theme === 'default') {
     return null;
   }
@@ -23,7 +26,7 @@ export const VectorBackground: React.FC<VectorBackgroundProps> = ({ theme, isDar
       {theme === 'underwater' && <UnderwaterTheme isDark={isDark} />}
     </div>
   );
-};
+});
 
 /* ==========================================================================
    1. FOREST & MOUNTAINS THEME (Núi Rừng & Rừng Thông Hùng Vĩ)

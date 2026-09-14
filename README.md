@@ -156,6 +156,23 @@
   - Bánh xe tự động co dãn thông minh theo kích thước màn hình: `w-[320px] h-[320px] xs:w-[370px] xs:h-[370px] sm:w-[520px] sm:h-[520px] max-w-[88vw] max-h-[88vw]`, tránh bị tràn khỏi cạnh dưới khi mở trên Safari.
   - Viên trạng thái (Status Pill) neo động `top-[calc(100%+8px)]` dưới đáy bánh xe, hỗ trợ tự động cắt bớt văn bản (`truncate`, `max-w-[90vw]`), đảm bảo bố cục luôn cân đối và không bao giờ che khuất tâm quay.
 
+### 2.6. Tối Ưu Hóa Hiệu Năng Animation 60–120 FPS & Kiến Trúc Direct DOM (Mobile Ultra-Smooth Engine)
+- **Kiến Trúc Direct DOM Compositor (0 React Re-renders trong 5.4s quay)**:
+  - *Vấn đề trước đây*: Trước đó hàm `animate` trong `requestAnimationFrame` gọi `setCurrentRotation(nextRotation)` và `setNeedleDeflection(deflection)` liên tục mỗi 16ms (hoặc 8ms trên màn hình 120Hz ProMotion). Điều này ép React phải diff Virtual DOM toàn bộ cây component (`page.tsx`, `Header`, `VectorBackground`, `LuckyWheel`, `WheelSvg`, `StageSpotlights`) 60-120 lần/giây, làm nghẽn CPU main thread và gây giật khựng nặng trên điện thoại.
+  - *Giải pháp*: Tách hoàn toàn luồng xoay bánh xe và nảy kim chỉ khỏi React state. Sử dụng `wheelGroupRef` và `needleRef` để cập nhật trực tiếp `transform: rotate(...)` trên phần tử DOM trong suốt thời gian quay. React state chỉ cập nhật duy nhất 1 lần khi chuyển sang trạng thái chiến thắng. CPU đạt độ rảnh rỗi tuyệt đối, chuyển giao toàn bộ gánh nặng chuyển động cho GPU compositor chạy mượt 60-120 FPS như app native.
+- **Triệt Tiêu SVG `feDropShadow` Nặng Nề Trên Khối Xoay**:
+  - *Vấn đề*: SVG `<feDropShadow>` áp dụng lên 10 huy hiệu quà và 10 dòng chữ bên trong `<g style={{ transform: rotate(...) }}>`. Khi góc xoay đổi từng frame, GPU di động không thể cache bitmap và buộc phải chạy tích chập Gaussian Blur trên 20 phần tử ở mỗi frame.
+  - *Giải pháp*: Thay thế bằng bóng procedural vector (vòng tròn offset mờ tự nhiên và text underlay offset), mang lại chiều sâu 3D sắc nét tuyệt đối với **0ms chi phí tính toán Gaussian Blur**.
+- **Chuyển Đổi `AmbientGlow` Sang CSS Radial Gradients Thuần Túy**:
+  - Loại bỏ các lớp div mang bộ lọc `blur-[140px]` khổng lồ ngốn hàng triệu phép tính fragment shader, thay bằng procedural CSS `radial-gradient` tán sắc tự nhiên, GPU dựng hình tức thì.
+- **Tối Ưu Hóa Bộ Lọc Đèn Sân Khấu `StageSpotlights`**:
+  - Tinh giảm bán kính Gaussian Blur từ `stdDeviation="20"` xuống `7.0` (giảm hơn 80% diện tích tích chập), loại bỏ bộ lọc blur trên 10 hạt bụi đang bay.
+- **Tinh Chỉnh Lớp Kính Mờ `backdrop-filter` & Bật Hardware Layer Composition**:
+  - Tối ưu `backdrop-filter: blur(10px - 12px)` trên màn hình mobile (`max-width: 640px`) để không làm nghẽn bộ đệm khung hình.
+  - Bổ sung `transform: translateZ(0)` và `will-change: transform` trên toàn bộ rèm sân khấu, cánh sóng biển, dải sương mù, bọt khí và kim chỉ.
+- **Ghi Nhớ Component (`React.memo`) Toàn Diện**:
+  - Bọc `React.memo` cho tất cả các component tĩnh (`Header`, `VectorBackground`, `LuckyWheel`, `WheelSvg`, `CenterHub`, `StatusPill`, `StageCurtain`, `StageSpotlights`, `AmbientGlow`), ngăn chặn mọi re-render thừa.
+
 ---
 
 ## 3. Quy Tắc & Nguyên Tắc Thiết Kế (Rules & Guidelines)

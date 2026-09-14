@@ -15,7 +15,7 @@ const PRESET_COLORS: Record<string, { primary: string; secondary: string }> = {
   rose: { primary: '#FB7185', secondary: '#F43F5E' },
 };
 
-export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
+export const StageSpotlights = React.memo(function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
   // If disabled by user in settings, do not render
   if (!config.enabled) return null;
 
@@ -80,38 +80,33 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* 1. Ultra-soft Atmospheric Fog Blur (Gentle, wide & dreamy dispersion) */}
-          <filter id="cfg-fog-blur" x="-60%" y="-20%" width="220%" height="150%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="20" />
+          {/* 1. Optimized Atmospheric Fog Blur (7.0 for 80% lower GPU convolution fill-rate) */}
+          <filter id="cfg-fog-blur" x="-30%" y="-10%" width="160%" height="130%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="7.0" />
           </filter>
 
           {/* 2. Soft Volumetric Beam Blur */}
-          <filter id="cfg-beam-blur" x="-50%" y="-20%" width="200%" height="150%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="9.0" />
+          <filter id="cfg-beam-blur" x="-30%" y="-10%" width="160%" height="130%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4.0" />
           </filter>
 
-          {/* 3. Soft Core Warmth Blur (No harsh laser edges) */}
-          <filter id="cfg-core-blur" x="-40%" y="-20%" width="180%" height="150%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="5.0" />
+          {/* 3. Soft Core Warmth Blur */}
+          <filter id="cfg-core-blur" x="-25%" y="-10%" width="150%" height="130%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="3.0" />
           </filter>
 
           {/* 4. Lamp Lens Glow */}
-          <filter id="cfg-lens-glow" x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="5.0" result="glow" />
+          <filter id="cfg-lens-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4.0" result="glow" />
             <feMerge>
               <feMergeNode in="glow" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
 
-          {/* 5. Rim Grazing Soft Glow (Wide subtle aura) */}
-          <filter id="cfg-rim-blur" x="-50%" y="-30%" width="200%" height="160%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
-          </filter>
-
-          {/* 6. Floating Dust Particles Blur */}
-          <filter id="cfg-dust-blur" x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="0.7" />
+          {/* 5. Rim Grazing Soft Glow */}
+          <filter id="cfg-rim-blur" x="-30%" y="-20%" width="160%" height="140%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="6.0" />
           </filter>
 
           {/* GRADIENTS: Atmospheric Fog Envelope (Soft, Flared & Dissolves by y = 660) */}
@@ -214,14 +209,14 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
               className="transition-opacity duration-700 ease-out"
             />
 
-            {/* 5. Delicate Floating Stage Dust Motes across the Flared Cone */}
+            {/* 5. Delicate Floating Stage Dust Motes across the Flared Cone (No blur filter for 60fps) */}
             {showDust && (
               <g className="pointer-events-none">
-                <circle cx="5" cy="130" r="1.3" fill="#FFFFFF" opacity="0.6" className="spotlight-dust-a" filter="url(#cfg-dust-blur)" />
-                <circle cx="-12" cy="220" r="1.6" fill={primaryColor} opacity="0.5" className="spotlight-dust-b" filter="url(#cfg-dust-blur)" />
-                <circle cx="22" cy="320" r="1.2" fill="#FFFFFF" opacity="0.65" className="spotlight-dust-c" filter="url(#cfg-dust-blur)" />
-                <circle cx="-28" cy="430" r="1.8" fill={secondaryColor} opacity="0.45" className="spotlight-dust-a" filter="url(#cfg-dust-blur)" />
-                <circle cx="35" cy="530" r="1.5" fill="#FFFFFF" opacity="0.5" className="spotlight-dust-b" filter="url(#cfg-dust-blur)" />
+                <circle cx="5" cy="130" r="1.3" fill="#FFFFFF" opacity="0.6" className="spotlight-dust-a" />
+                <circle cx="-12" cy="220" r="1.6" fill={primaryColor} opacity="0.5" className="spotlight-dust-b" />
+                <circle cx="22" cy="320" r="1.2" fill="#FFFFFF" opacity="0.65" className="spotlight-dust-c" />
+                <circle cx="-28" cy="430" r="1.8" fill={secondaryColor} opacity="0.45" className="spotlight-dust-a" />
+                <circle cx="35" cy="530" r="1.5" fill="#FFFFFF" opacity="0.5" className="spotlight-dust-b" />
               </g>
             )}
 
@@ -330,14 +325,14 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
               className="transition-opacity duration-700 ease-out"
             />
 
-            {/* 5. Delicate Floating Stage Dust Motes across the Flared Cone */}
+            {/* 5. Delicate Floating Stage Dust Motes across the Flared Cone (No blur filter for 60fps) */}
             {showDust && (
               <g className="pointer-events-none">
-                <circle cx="-5" cy="140" r="1.3" fill="#FFFFFF" opacity="0.6" className="spotlight-dust-a" filter="url(#cfg-dust-blur)" />
-                <circle cx="12" cy="230" r="1.6" fill={primaryColor} opacity="0.5" className="spotlight-dust-b" filter="url(#cfg-dust-blur)" />
-                <circle cx="-22" cy="330" r="1.2" fill="#FFFFFF" opacity="0.65" className="spotlight-dust-c" filter="url(#cfg-dust-blur)" />
-                <circle cx="28" cy="440" r="1.8" fill={secondaryColor} opacity="0.45" className="spotlight-dust-a" filter="url(#cfg-dust-blur)" />
-                <circle cx="-35" cy="540" r="1.5" fill="#FFFFFF" opacity="0.5" className="spotlight-dust-b" filter="url(#cfg-dust-blur)" />
+                <circle cx="-5" cy="140" r="1.3" fill="#FFFFFF" opacity="0.6" className="spotlight-dust-a" />
+                <circle cx="12" cy="230" r="1.6" fill={primaryColor} opacity="0.5" className="spotlight-dust-b" />
+                <circle cx="-22" cy="330" r="1.2" fill="#FFFFFF" opacity="0.65" className="spotlight-dust-c" />
+                <circle cx="28" cy="440" r="1.8" fill={secondaryColor} opacity="0.45" className="spotlight-dust-a" />
+                <circle cx="-35" cy="540" r="1.5" fill="#FFFFFF" opacity="0.5" className="spotlight-dust-b" />
               </g>
             )}
 
@@ -392,4 +387,4 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
       </svg>
     </div>
   );
-}
+});

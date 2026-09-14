@@ -7,10 +7,15 @@ import { TECH_ICONS } from '@/constants/techIcons';
 
 interface WheelSvgProps {
   prizes: PrizeItem[];
-  rotation: number;
+  rotation?: number;
+  wheelGroupRef?: React.RefObject<SVGGElement | null>;
 }
 
-export function WheelSvg({ prizes, rotation }: WheelSvgProps) {
+export const WheelSvg = React.memo(function WheelSvg({
+  prizes,
+  rotation = 0,
+  wheelGroupRef,
+}: WheelSvgProps) {
   const cx = 300;
   const cy = 300;
   const radius = 280;
@@ -44,33 +49,13 @@ export function WheelSvg({ prizes, rotation }: WheelSvgProps) {
           <stop offset="45%" stopColor="#FF6B00" />
           <stop offset="100%" stopColor="#E05300" />
         </radialGradient>
-
-        {/* Shadow for prize icon circle badges */}
-        <filter id="badge-shadow" x="-30%" y="-30%" width="160%" height="160%">
-          <feDropShadow
-            dx="0"
-            dy="3"
-            stdDeviation="3"
-            floodColor="#000000"
-            floodOpacity="0.22"
-          />
-        </filter>
-
-        {/* Text Drop Shadow */}
-        <filter id="label-shadow" x="-25%" y="-25%" width="150%" height="150%">
-          <feDropShadow
-            dx="0"
-            dy="1.5"
-            stdDeviation="2"
-            floodColor="#000000"
-            floodOpacity="0.55"
-          />
-        </filter>
       </defs>
 
-      {/* Rotating Wheel Group */}
+      {/* Rotating Wheel Group - Driven directly by wheelGroupRef on GPU compositor */}
       <g
         id="wheel-group"
+        ref={wheelGroupRef}
+        className="will-change-transform"
         style={{
           transformOrigin: '300px 300px',
           transform: `rotate(${rotation}deg)`,
@@ -101,7 +86,9 @@ export function WheelSvg({ prizes, rotation }: WheelSvgProps) {
             return (
               <g>
                 <circle cx={cx} cy={cy} r={radius} fill={item.color} stroke="#FFFFFF" strokeWidth="2" />
-                <circle cx={cx} cy={badgeY} r={28} fill="#FFFFFF" stroke={item.color} strokeWidth="3" filter="url(#badge-shadow)" />
+                {/* Hardware-friendly procedural shadow circle (0ms GPU filter cost) */}
+                <circle cx={cx} cy={badgeY + 2.5} r={28} fill="rgba(0,0,0,0.2)" pointerEvents="none" />
+                <circle cx={cx} cy={badgeY} r={28} fill="#FFFFFF" stroke={item.color} strokeWidth="3" />
                 <g
                   transform={`translate(${cx - 13}, ${badgeY - 13})`}
                   style={{ color: iconColor }}
@@ -109,6 +96,19 @@ export function WheelSvg({ prizes, rotation }: WheelSvgProps) {
                 >
                   {TECH_ICONS[item.icon] || TECH_ICONS.gift}
                 </g>
+                {/* Text Shadow underlay */}
+                <text
+                  x={cx}
+                  y={textY + 1.5}
+                  textAnchor="middle"
+                  fill="rgba(0,0,0,0.5)"
+                  className="font-sans select-none pointer-events-none"
+                  fontSize="15"
+                  fontWeight="800"
+                >
+                  <tspan x={cx} dy="-2">{item.line1}</tspan>
+                  <tspan x={cx} dy="18" fontWeight="900">{item.line2}</tspan>
+                </text>
                 <text
                   x={cx}
                   y={textY}
@@ -117,7 +117,6 @@ export function WheelSvg({ prizes, rotation }: WheelSvgProps) {
                   className="font-sans select-none"
                   fontSize="15"
                   fontWeight="800"
-                  filter="url(#label-shadow)"
                 >
                   <tspan x={cx} dy="-2">{item.line1}</tspan>
                   <tspan x={cx} dy="18" fontWeight="900">{item.line2}</tspan>
@@ -154,6 +153,14 @@ export function WheelSvg({ prizes, rotation }: WheelSvgProps) {
 
                 {/* Item group rotated to midAngle */}
                 <g transform={`rotate(${midAngle} ${cx} ${cy})`}>
+                  {/* Procedural hardware-accelerated badge shadow (0ms GPU filter cost) */}
+                  <circle
+                    cx={cx}
+                    cy={badgeY + 2}
+                    r={24}
+                    fill="rgba(0,0,0,0.18)"
+                    pointerEvents="none"
+                  />
                   {/* Prize Icon Circular Badge with sector color ring */}
                   <circle
                     cx={cx}
@@ -162,7 +169,6 @@ export function WheelSvg({ prizes, rotation }: WheelSvgProps) {
                     fill="#FFFFFF"
                     stroke={item.color}
                     strokeWidth="2.5"
-                    filter="url(#badge-shadow)"
                   />
                   <circle
                     cx={cx}
@@ -182,6 +188,24 @@ export function WheelSvg({ prizes, rotation }: WheelSvgProps) {
                     {TECH_ICONS[item.icon] || TECH_ICONS.gift}
                   </g>
 
+                  {/* High-performance text shadow underlay */}
+                  <text
+                    x={cx}
+                    y={textY + 1}
+                    textAnchor="middle"
+                    fill="rgba(0,0,0,0.45)"
+                    className="font-sans select-none pointer-events-none"
+                    fontSize="11"
+                    fontWeight="700"
+                    letterSpacing="0.3"
+                  >
+                    <tspan x={cx} dy="-2">
+                      {item.line1}
+                    </tspan>
+                    <tspan x={cx} dy="14" fontWeight="800">
+                      {item.line2}
+                    </tspan>
+                  </text>
                   {/* 2-line clean typography */}
                   <text
                     x={cx}
@@ -192,7 +216,6 @@ export function WheelSvg({ prizes, rotation }: WheelSvgProps) {
                     fontSize="11"
                     fontWeight="700"
                     letterSpacing="0.3"
-                    filter="url(#label-shadow)"
                   >
                     <tspan x={cx} dy="-2">
                       {item.line1}
@@ -269,4 +292,4 @@ export function WheelSvg({ prizes, rotation }: WheelSvgProps) {
       />
     </svg>
   );
-}
+});

@@ -17,18 +17,22 @@ interface LuckyWheelProps {
   needleDeflection: number;
   activePrize: PrizeItem | null;
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
+  wheelGroupRef?: React.RefObject<SVGGElement | null>;
+  needleRef?: React.RefObject<HTMLDivElement | null>;
   spotlightConfig: SpotlightConfig;
   onSpin: () => void;
   onResetPrizes?: () => void;
 }
 
-export function LuckyWheel({
+export const LuckyWheel = React.memo(function LuckyWheel({
   prizes,
   rotation,
   spinState,
   needleDeflection,
   activePrize,
   canvasRef,
+  wheelGroupRef,
+  needleRef,
   spotlightConfig,
   onSpin,
   onResetPrizes,
@@ -45,11 +49,11 @@ export function LuckyWheel({
         {/* Outer Chassis Frame */}
         <div className="relative w-[320px] h-[320px] xs:w-[370px] xs:h-[370px] sm:w-[520px] sm:h-[520px] md:w-[580px] md:h-[580px] max-w-[88vw] max-h-[88vw] p-2 sm:p-3 rounded-full glass-card border-2 border-white/95 dark:border-white/20 wheel-shadow ring-1 ring-white/90 dark:ring-white/10 flex items-center justify-center">
           {/* Needle Pointer at 12 O'Clock with dynamic deflection */}
-          <PointerNeedle deflectionAngle={needleDeflection} />
+          <PointerNeedle deflectionAngle={needleDeflection} needleRef={needleRef} />
 
           {/* Rotating Turntable SVG Container */}
           <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-white dark:bg-stone-900 shadow-[inset_0_0_35px_rgba(0,0,0,0.06)]">
-            <WheelSvg prizes={prizes} rotation={rotation} />
+            <WheelSvg prizes={prizes} rotation={rotation} wheelGroupRef={wheelGroupRef} />
             <ConfettiCanvas canvasRef={canvasRef} />
           </div>
 
@@ -73,4 +77,4 @@ export function LuckyWheel({
       </div>
     </main>
   );
-}
+});

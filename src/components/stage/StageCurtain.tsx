@@ -9,44 +9,53 @@ interface StageCurtainProps {
   playCurtainSound?: () => void;
 }
 
-export function StageCurtain({
+export const StageCurtain = React.memo(function StageCurtain({
   enabled = true,
-  onOpenComplete,
   playCurtainSound,
+  onOpenComplete,
 }: StageCurtainProps) {
-  const [phase, setPhase] = useState<'closed' | 'opening' | 'open' | 'gone'>('closed');
+  const [phase, setPhase] = useState<'idle' | 'opening' | 'open' | 'gone'>('idle');
 
   const triggerOpen = useCallback(() => {
-    if (phase === 'closed') {
-      playCurtainSound?.();
-      setPhase('opening');
-    } else if (phase === 'opening') {
-      // Fast forward immediately if user taps while opening
+    if (phase !== 'idle') return;
+    setPhase('opening');
+    playCurtainSound?.();
+
+    const t1 = setTimeout(() => {
       setPhase('open');
-      setTimeout(() => setPhase('gone'), 300);
       onOpenComplete?.();
-    }
+    }, 1800);
+
+    const t2 = setTimeout(() => {
+      setPhase('gone');
+    }, 2400);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
   }, [phase, playCurtainSound, onOpenComplete]);
 
+  // Initial grand reveal animation on page load
   useEffect(() => {
     if (!enabled) return;
 
-    // Auto-initiate the opening after an initial suspense beat
+    // After 800ms teaser stillness, begin grand parting
     const timer1 = setTimeout(() => {
-      playCurtainSound?.();
       setPhase('opening');
-    }, 400);
+      playCurtainSound?.();
+    }, 800);
 
-    // Natural sequence completion
+    // Transition completes at 2600ms (800ms delay + 1800ms transition)
     const timer2 = setTimeout(() => {
       setPhase('open');
       onOpenComplete?.();
-    }, 2200);
+    }, 2600);
 
-    // Remove from DOM / completely transparent
+    // Unmount from DOM completely after fade out
     const timer3 = setTimeout(() => {
       setPhase('gone');
-    }, 2600);
+    }, 3100);
 
     return () => {
       clearTimeout(timer1);
@@ -70,7 +79,7 @@ export function StageCurtain({
             i % 2 === 0
               ? 'linear-gradient(90deg, rgba(74,0,15,0.9) 0%, rgba(139,0,0,0.95) 45%, rgba(180,20,30,1) 50%, rgba(100,0,15,0.95) 85%, rgba(50,0,10,0.9) 100%)'
               : 'linear-gradient(90deg, rgba(50,0,10,0.95) 0%, rgba(120,0,20,1) 50%, rgba(70,0,15,0.95) 100%)',
-          boxShadow: 'inset 0 0 40px rgba(0,0,0,0.6)',
+          boxShadow: 'inset 0 0 25px rgba(0,0,0,0.5)',
         }}
       >
         {/* Velvety surface sheen */}
@@ -84,18 +93,18 @@ export function StageCurtain({
   return (
     <div
       onClick={triggerOpen}
-      className={`fixed inset-0 z-50 overflow-hidden select-none transition-opacity duration-500 ${
+      className={`fixed inset-0 z-50 overflow-hidden select-none transition-opacity duration-500 will-change-transform ${
         phase === 'open' ? 'opacity-0 pointer-events-none' : 'opacity-100 cursor-pointer'
       }`}
       title="Chạm vào bất kỳ đâu để mở rèm ngay lập tức"
     >
-      {/* 1. Left Velvet Curtain Panel */}
+      {/* 1. Left Velvet Curtain Panel - Hardware Accelerated */}
       <div
-        className="absolute top-0 bottom-0 left-0 w-1/2 flex transition-transform duration-[1800ms] ease-[cubic-bezier(0.77,0,0.175,1)]"
+        className="absolute top-0 bottom-0 left-0 w-1/2 flex transition-transform duration-[1800ms] ease-[cubic-bezier(0.77,0,0.175,1)] will-change-transform"
         style={{
           transformOrigin: 'left center',
-          transform: isOpeningOrOpen ? 'translateX(-100%) scaleX(0.2)' : 'translateX(0%) scaleX(1)',
-          boxShadow: '15px 0 50px rgba(0,0,0,0.8)',
+          transform: isOpeningOrOpen ? 'translate3d(-100%, 0, 0) scaleX(0.2)' : 'translate3d(0%, 0, 0) scaleX(1)',
+          boxShadow: '15px 0 35px rgba(0,0,0,0.7)',
         }}
       >
         {renderPleats(8)}
@@ -103,13 +112,13 @@ export function StageCurtain({
         <div className="absolute top-0 bottom-0 right-0 w-3 bg-gradient-to-b from-orange-400 via-orange-500 to-amber-600 shadow-[0_0_15px_rgba(249,115,22,0.6)] border-l border-orange-200/70" />
       </div>
 
-      {/* 2. Right Velvet Curtain Panel */}
+      {/* 2. Right Velvet Curtain Panel - Hardware Accelerated */}
       <div
-        className="absolute top-0 bottom-0 right-0 w-1/2 flex transition-transform duration-[1800ms] ease-[cubic-bezier(0.77,0,0.175,1)]"
+        className="absolute top-0 bottom-0 right-0 w-1/2 flex transition-transform duration-[1800ms] ease-[cubic-bezier(0.77,0,0.175,1)] will-change-transform"
         style={{
           transformOrigin: 'right center',
-          transform: isOpeningOrOpen ? 'translateX(100%) scaleX(0.2)' : 'translateX(0%) scaleX(1)',
-          boxShadow: '-15px 0 50px rgba(0,0,0,0.8)',
+          transform: isOpeningOrOpen ? 'translate3d(100%, 0, 0) scaleX(0.2)' : 'translate3d(0%, 0, 0) scaleX(1)',
+          boxShadow: '-15px 0 35px rgba(0,0,0,0.7)',
         }}
       >
         {renderPleats(8)}
@@ -117,11 +126,11 @@ export function StageCurtain({
         <div className="absolute top-0 bottom-0 left-0 w-3 bg-gradient-to-b from-orange-400 via-orange-500 to-amber-600 shadow-[0_0_15px_rgba(249,115,22,0.6)] border-r border-orange-200/70" />
       </div>
 
-      {/* 3. Scalloped Theater Valance Pelmet (Rèm yếm viền cam trên) */}
+      {/* 3. Scalloped Theater Valance Pelmet (Rèm yếm viền cam trên) - Hardware Accelerated */}
       <div
-        className="absolute top-0 inset-x-0 h-16 sm:h-28 z-20 flex justify-around overflow-hidden transition-transform duration-[1800ms] ease-[cubic-bezier(0.77,0,0.175,1)] pointer-events-none"
+        className="absolute top-0 inset-x-0 h-16 sm:h-28 z-20 flex justify-around overflow-hidden transition-transform duration-[1800ms] ease-[cubic-bezier(0.77,0,0.175,1)] pointer-events-none will-change-transform"
         style={{
-          transform: isOpeningOrOpen ? 'translateY(-65%)' : 'translateY(0%)',
+          transform: isOpeningOrOpen ? 'translate3d(0, -65%, 0)' : 'translate3d(0, 0%, 0)',
         }}
       >
         {Array.from({ length: 7 }).map((_, i) => (
@@ -229,4 +238,4 @@ export function StageCurtain({
       </div>
     </div>
   );
-}
+});

@@ -7,24 +7,58 @@ interface AmbientGlowProps {
   spinState: SpinState;
 }
 
-export function AmbientGlow({ spinState }: AmbientGlowProps) {
+export const AmbientGlow = React.memo(function AmbientGlow({ spinState }: AmbientGlowProps) {
   const isSpinning = spinState === 'spinning';
 
   return (
     <>
-      {/* Background ambient lighting spheres */}
+      {/* Background ambient lighting spheres - 100% GPU Procedural Radial Gradients (0ms blur cost) */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-gradient-to-tr from-orange-200/35 via-amber-100/30 to-sky-100/25 dark:from-purple-950/40 dark:via-indigo-900/30 dark:to-cyan-950/25 rounded-full blur-[140px]" />
-        <div className="absolute -top-24 -left-24 w-[420px] h-[420px] bg-gradient-to-br from-orange-300/30 to-rose-200/20 dark:from-violet-900/30 dark:to-fuchsia-900/20 rounded-full blur-[120px]" />
-        <div className="absolute -bottom-24 -right-24 w-[480px] h-[480px] bg-gradient-to-tl from-amber-200/35 to-orange-100/30 dark:from-cyan-900/30 dark:to-blue-900/20 rounded-full blur-[130px]" />
+        {/* Center ambient glow */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] rounded-full pointer-events-none opacity-80 dark:opacity-75"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(255,160,77,0.18) 0%, rgba(254,215,170,0.08) 45%, transparent 70%)',
+          }}
+        />
+        <div
+          className="hidden dark:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] rounded-full pointer-events-none opacity-85"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(147,51,234,0.18) 0%, rgba(79,70,229,0.08) 45%, transparent 70%)',
+          }}
+        />
+
+        {/* Top-left subtle warm glow */}
+        <div
+          className="absolute -top-16 -left-16 w-[380px] h-[380px] rounded-full pointer-events-none opacity-70"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(251,146,60,0.14) 0%, transparent 70%)',
+          }}
+        />
+
+        {/* Bottom-right subtle accent glow */}
+        <div
+          className="absolute -bottom-16 -right-16 w-[420px] h-[420px] rounded-full pointer-events-none opacity-70"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(245,158,11,0.12) 0%, transparent 70%)',
+          }}
+        />
       </div>
 
-      {/* Radial Backlight behind wheel */}
+      {/* Radial Backlight directly behind wheel frame with smooth CSS scale transition */}
       <div
-        className={`absolute w-[600px] h-[600px] sm:w-[720px] sm:h-[720px] rounded-full bg-gradient-to-tr from-orange-400/25 via-amber-200/25 to-sky-200/20 dark:from-violet-600/20 dark:via-purple-500/20 dark:to-cyan-400/15 blur-[120px] pointer-events-none -z-10 transition-transform duration-700 ${
-          isSpinning ? 'scale-125' : 'scale-100'
+        className={`absolute w-[520px] h-[520px] sm:w-[640px] sm:h-[640px] rounded-full pointer-events-none -z-10 transition-transform duration-700 will-change-transform ${
+          isSpinning ? 'scale-120' : 'scale-100'
         }`}
+        style={{
+          background:
+            'radial-gradient(circle, rgba(255,107,0,0.22) 0%, rgba(255,160,77,0.10) 40%, transparent 70%)',
+        }}
       />
     </>
   );
-}
+});

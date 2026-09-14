@@ -27,7 +27,7 @@ interface HeaderProps {
   onToggleBgm?: () => void;
 }
 
-export function Header({
+export const Header = React.memo(function Header({
   prizeCount,
   historyCount,
   isMuted,
@@ -141,4 +141,4 @@ export function Header({
       </div>
     </header>
   );
-}
+});

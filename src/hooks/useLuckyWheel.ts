@@ -6,6 +6,8 @@ import { iosSpringInertiaEase, getActiveSectorIndex } from '@/utils/geometry';
 
 interface UseLuckyWheelOptions {
   prizes: PrizeItem[];
+  wheelGroupRef?: React.RefObject<SVGGElement | null>;
+  needleRef?: React.RefObject<HTMLDivElement | null>;
   onSpinStart?: () => void;
   onTick?: (velocityRatio: number) => void;
   onWin?: (prize: PrizeItem) => void;
@@ -14,6 +16,8 @@ interface UseLuckyWheelOptions {
 
 export function useLuckyWheel({
   prizes,
+  wheelGroupRef,
+  needleRef,
   onSpinStart,
   onTick,
   onWin,
@@ -69,7 +73,11 @@ export function useLuckyWheel({
         lastRot = nextRotation;
 
         rotationRef.current = nextRotation;
-        setCurrentRotation(nextRotation);
+
+        // HIGH-PERFORMANCE DIRECT DOM COMPOSITOR UPDATE (0 React re-renders)
+        if (wheelGroupRef?.current) {
+          wheelGroupRef.current.style.transform = `rotate(${nextRotation}deg)`;
+        }
 
         const velocityDegPerSec = (deltaDeg / dt) * 1000;
         const velocityRatio = Math.min(1, velocityDegPerSec / 2400);
@@ -84,12 +92,20 @@ export function useLuckyWheel({
             ? -9 - Math.random() * 3
             : -15 - Math.random() * 3;
 
-          setNeedleDeflection(deflection);
+          // Direct DOM needle deflection (0 React re-renders)
+          if (needleRef?.current) {
+            needleRef.current.style.transition = 'transform 25ms ease-out';
+            needleRef.current.style.transform = `rotate(${deflection}deg)`;
+          }
+
           if (needleTimerRef.current) clearTimeout(needleTimerRef.current);
 
           const returnDuration = velocityRatio > 0.5 ? 25 : 55;
           needleTimerRef.current = setTimeout(() => {
-            setNeedleDeflection(0);
+            if (needleRef?.current) {
+              needleRef.current.style.transition = 'transform 120ms cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+              needleRef.current.style.transform = 'rotate(0deg)';
+            }
           }, returnDuration);
 
           onTick?.(velocityRatio);
@@ -97,14 +113,13 @@ export function useLuckyWheel({
 
         // Terminal micro-rebound needle reaction
         if (progress > 0.89 && progress < 0.98) {
-          // Subtle positive counter-deflection on spring rebound
-          if (Math.abs(needleDeflection) < 1) {
-            setNeedleDeflection(2.2);
+          if (needleRef?.current) {
+            needleRef.current.style.transform = 'rotate(2.2deg)';
           }
         }
 
-        // Confetti drift during initial high speed
-        if (progress < 0.65 && Math.random() < 0.22) {
+        // Light celebratory sparkle drift without saturating GPU
+        if (progress < 0.45 && Math.random() < 0.06) {
           onSpawnConfetti?.(false);
         }
 
@@ -113,6 +128,15 @@ export function useLuckyWheel({
         // Spin complete: exact lock
         const finalRotation = startRot + deltaRotation;
         rotationRef.current = finalRotation;
+        
+        if (wheelGroupRef?.current) {
+          wheelGroupRef.current.style.transform = `rotate(${finalRotation}deg)`;
+        }
+        if (needleRef?.current) {
+          needleRef.current.style.transition = 'transform 150ms ease-out';
+          needleRef.current.style.transform = 'rotate(0deg)';
+        }
+
         setCurrentRotation(finalRotation);
         setNeedleDeflection(0);
 
@@ -127,13 +151,16 @@ export function useLuckyWheel({
     };
 
     animFrameId.current = requestAnimationFrame(animate);
-  }, [prizes, spinState, onSpinStart, onTick, onWin, onSpawnConfetti, needleDeflection]);
+  }, [prizes, spinState, onSpinStart, onTick, onWin, onSpawnConfetti, wheelGroupRef, needleRef]);
 
   const resetSpin = useCallback(() => {
     setSpinState('idle');
     setActivePrize(null);
     setNeedleDeflection(0);
-  }, []);
+    if (needleRef?.current) {
+      needleRef.current.style.transform = 'rotate(0deg)';
+    }
+  }, [needleRef]);
 
   return {
     spinState,

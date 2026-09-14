@@ -11,7 +11,7 @@ interface CenterHubProps {
   onResetPrizes?: () => void;
 }
 
-export function CenterHub({ spinState, prizeCount = 10, onSpin, onResetPrizes }: CenterHubProps) {
+export const CenterHub = React.memo(function CenterHub({ spinState, prizeCount = 10, onSpin, onResetPrizes }: CenterHubProps) {
   const isSpinning = spinState === 'spinning';
   const isEmpty = prizeCount === 0;
 
@@ -72,4 +72,4 @@ export function CenterHub({ spinState, prizeCount = 10, onSpin, onResetPrizes }:
       </button>
     </div>
   );
-}
+});

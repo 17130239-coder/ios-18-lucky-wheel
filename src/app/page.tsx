@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { ThemeMode, PrizeItem, BackgroundTheme } from '@/types/wheel';
 import { usePrizeStore } from '@/hooks/usePrizeStore';
 import { useSpotlightStore } from '@/hooks/useSpotlightStore';
@@ -138,6 +138,9 @@ export default function LuckyWheelPage() {
     [addHistoryItem, playWinFanfare]
   );
 
+  const wheelGroupRef = useRef<SVGGElement | null>(null);
+  const needleRef = useRef<HTMLDivElement | null>(null);
+
   // Master Wheel Animation Hook
   const {
     spinState,
@@ -148,6 +151,8 @@ export default function LuckyWheelPage() {
     resetSpin,
   } = useLuckyWheel({
     prizes,
+    wheelGroupRef,
+    needleRef,
     onSpinStart: playSpinLaunch,
     onTick: playTick,
     onWin: handleWin,
@@ -168,6 +173,21 @@ export default function LuckyWheelPage() {
     setBgmVolume,
     setAutoDuck,
   } = useBgm(isMuted, isSpinning);
+
+  const handleOpenSettings = useCallback(() => {
+    playGlassPop();
+    setIsSettingsOpen(true);
+  }, [playGlassPop]);
+
+  const handleOpenHistory = useCallback(() => {
+    playGlassPop();
+    setIsHistoryOpen(true);
+  }, [playGlassPop]);
+
+  const handleResetPrizes = useCallback(() => {
+    playClick();
+    resetToDefaults();
+  }, [playClick, resetToDefaults]);
 
   const handleCloseVictoryModal = useCallback(() => {
     playGlassPop();
@@ -209,14 +229,8 @@ export default function LuckyWheelPage() {
         theme={theme}
         onToggleMute={toggleMute}
         onToggleTheme={toggleTheme}
-        onOpenSettings={() => {
-          playGlassPop();
-          setIsSettingsOpen(true);
-        }}
-        onOpenHistory={() => {
-          playGlassPop();
-          setIsHistoryOpen(true);
-        }}
+        onOpenSettings={handleOpenSettings}
+        onOpenHistory={handleOpenHistory}
         bgmEnabled={bgmEnabled}
         isBgmPlaying={isBgmPlaying}
         onToggleBgm={toggleBgm}
@@ -230,12 +244,11 @@ export default function LuckyWheelPage() {
         needleDeflection={needleDeflection}
         activePrize={activePrize}
         canvasRef={canvasRef}
+        wheelGroupRef={wheelGroupRef}
+        needleRef={needleRef}
         spotlightConfig={spotlightConfig}
         onSpin={spin}
-        onResetPrizes={() => {
-          playClick();
-          resetToDefaults();
-        }}
+        onResetPrizes={handleResetPrizes}
       />
 
       {/* Victory Celebration Modal */}
