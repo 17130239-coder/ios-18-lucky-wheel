@@ -54,8 +54,15 @@ export default function LuckyWheelPage() {
     clearHistory,
   } = usePrizeStore();
 
-  const { isMuted, toggleMute, playTick, playWinFanfare, playClick } =
-    useSoundEffects();
+  const {
+    isMuted,
+    toggleMute,
+    playTick,
+    playSpinLaunch,
+    playWinFanfare,
+    playClick,
+    playGlassPop,
+  } = useSoundEffects();
 
   const { canvasRef, spawnConfetti } = useConfetti();
 
@@ -79,6 +86,7 @@ export default function LuckyWheelPage() {
     resetSpin,
   } = useLuckyWheel({
     prizes,
+    onSpinStart: playSpinLaunch,
     onTick: playTick,
     onWin: handleWin,
     onSpawnConfetti: spawnConfetti,
@@ -103,11 +111,11 @@ export default function LuckyWheelPage() {
         onToggleMute={toggleMute}
         onToggleTheme={toggleTheme}
         onOpenSettings={() => {
-          playClick();
+          playGlassPop();
           setIsSettingsOpen(true);
         }}
         onOpenHistory={() => {
-          playClick();
+          playGlassPop();
           setIsHistoryOpen(true);
         }}
       />
@@ -128,7 +136,7 @@ export default function LuckyWheelPage() {
         isOpen={isVictoryOpen}
         prize={activePrize}
         onClose={() => {
-          playClick();
+          playGlassPop();
           setIsVictoryOpen(false);
         }}
         onSpinAgain={handleSpinAgain}
@@ -139,7 +147,7 @@ export default function LuckyWheelPage() {
         isOpen={isHistoryOpen}
         history={history}
         onClose={() => {
-          playClick();
+          playGlassPop();
           setIsHistoryOpen(false);
         }}
         onClearHistory={() => {
@@ -153,11 +161,11 @@ export default function LuckyWheelPage() {
         isOpen={isSettingsOpen}
         prizes={prizes}
         onClose={() => {
-          playClick();
+          playGlassPop();
           setIsSettingsOpen(false);
         }}
         onSave={(updated) => {
-          playClick();
+          playGlassPop();
           updatePrizes(updated);
         }}
         onReset={() => {

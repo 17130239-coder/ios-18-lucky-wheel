@@ -33,6 +33,10 @@ export function useSoundEffects() {
     soundManager.playTick(velocityRatio);
   }, []);
 
+  const playSpinLaunch = useCallback(() => {
+    soundManager.playSpinLaunch();
+  }, []);
+
   const playWinFanfare = useCallback(() => {
     soundManager.playWinFanfare();
   }, []);
@@ -41,11 +45,17 @@ export function useSoundEffects() {
     soundManager.playClick();
   }, []);
 
+  const playGlassPop = useCallback(() => {
+    soundManager.playGlassPop();
+  }, []);
+
   return {
     isMuted,
     toggleMute,
     playTick,
+    playSpinLaunch,
     playWinFanfare,
     playClick,
+    playGlassPop,
   };
 }

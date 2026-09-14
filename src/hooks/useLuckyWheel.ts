@@ -6,6 +6,7 @@ import { iosSpringInertiaEase, getActiveSectorIndex } from '@/utils/geometry';
 
 interface UseLuckyWheelOptions {
   prizes: PrizeItem[];
+  onSpinStart?: () => void;
   onTick?: (velocityRatio: number) => void;
   onWin?: (prize: PrizeItem) => void;
   onSpawnConfetti?: (burst: boolean) => void;
@@ -13,6 +14,7 @@ interface UseLuckyWheelOptions {
 
 export function useLuckyWheel({
   prizes,
+  onSpinStart,
   onTick,
   onWin,
   onSpawnConfetti,
@@ -32,6 +34,7 @@ export function useLuckyWheel({
 
     setSpinState('spinning');
     setActivePrize(null);
+    onSpinStart?.();
 
     const count = prizes.length;
     const sliceAngle = 360 / count;
@@ -124,7 +127,7 @@ export function useLuckyWheel({
     };
 
     animFrameId.current = requestAnimationFrame(animate);
-  }, [prizes, spinState, onTick, onWin, onSpawnConfetti, needleDeflection]);
+  }, [prizes, spinState, onSpinStart, onTick, onWin, onSpawnConfetti, needleDeflection]);
 
   const resetSpin = useCallback(() => {
     setSpinState('idle');
