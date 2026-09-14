@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Drama, FastForward } from 'lucide-react';
+import { Laptop, FastForward } from 'lucide-react';
 
 interface StageCurtainProps {
   enabled?: boolean;
@@ -136,27 +136,27 @@ export function StageCurtain({
         ))}
       </div>
 
-      {/* 4. Center Theater Emblem (Icon only, Orange theme) */}
+      {/* 4. Center Emblem with Website Logo (Orange Brand Theme) */}
       <div
         className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center justify-center transition-all duration-700 pointer-events-none ${
           isOpeningOrOpen ? 'scale-50 opacity-0' : 'scale-100 opacity-100'
         }`}
       >
         {/* Orange Medallion Ring */}
-        <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full p-2 bg-gradient-to-tr from-orange-600 via-amber-400 to-orange-500 shadow-[0_0_50px_rgba(249,115,22,0.7),0_15px_35px_rgba(0,0,0,0.8)] flex items-center justify-center animate-pulse">
+        <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full p-2 bg-gradient-to-tr from-[#FF6B00] via-[#FFA04D] to-[#FF8533] shadow-[0_0_50px_rgba(255,107,0,0.7),0_15px_35px_rgba(0,0,0,0.8)] flex items-center justify-center animate-pulse">
           {/* Inner velvet crest disc */}
-          <div className="w-full h-full rounded-full bg-gradient-to-b from-[#580010] to-[#200006] border-2 border-orange-400/80 flex items-center justify-center shadow-inner relative overflow-hidden">
+          <div className="w-full h-full rounded-full bg-gradient-to-b from-[#580010] to-[#200006] border-2 border-[#FF6B00]/80 flex items-center justify-center shadow-inner relative overflow-hidden">
             {/* Ambient orange glow */}
-            <div className="absolute inset-0 bg-radial from-orange-500/25 via-transparent to-transparent pointer-events-none" />
-            {/* Theatrical stage icon */}
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-orange-500 via-amber-400 to-orange-500 flex items-center justify-center text-red-950 shadow-lg ring-2 ring-orange-200/80">
-              <Drama className="w-8 h-8 sm:w-9 sm:h-9 drop-shadow" />
+            <div className="absolute inset-0 bg-radial from-[#FF6B00]/30 via-transparent to-transparent pointer-events-none" />
+            {/* Website Logo: Laptop in TechLuckyWheel Orange Badge */}
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-[#FF6B00] to-[#FFA04D] flex items-center justify-center text-white shadow-xl shadow-orange-600/40 ring-2 ring-white/80 transition-transform duration-300">
+              <Laptop className="w-7 h-7 sm:w-8 sm:h-8 drop-shadow-md" />
             </div>
           </div>
         </div>
 
         {/* Pulsing Hint Badge */}
-        <div className="mt-5 px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-orange-500/40 text-orange-300 text-xs font-semibold tracking-wide flex items-center gap-1.5 shadow-lg animate-bounce">
+        <div className="mt-5 px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-[#FF6B00]/50 text-orange-300 text-xs font-semibold tracking-wide flex items-center gap-1.5 shadow-lg animate-bounce">
           <span>✨ Chạm để mở</span>
         </div>
       </div>
