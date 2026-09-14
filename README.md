@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# iOS 18 Lucky Wheel (Tech Lucky Wheel)
+
+A high-performance, responsive Lucky Wheel application designed according to Apple iOS 18 Liquid Glassmorphism design principles, connected to Stitch design **"iOS 18 Lucky Wheel"** (`projects/5082927756393735580`).
+
+Built with **Next.js 16 (App Router)**, **TypeScript**, and **Tailwind CSS**.
+
+---
+
+## Key Features
+
+- 🎡 **Precision SVG Turntable Engine**:
+  - Center coordinates $(300, 300)$ and radius $R = 280\text{px}$.
+  - Exactly 10 sectors ($36^\circ$ each) with custom tech gadget colors and drop-shadow SVG badges.
+  - Two-line high-contrast typography for maximum readability.
+  - 10 perimeter metallic rivet pins and 30 outer polished rim LED bulbs.
+- 🎯 **Realistic Physics & Collision Feedback**:
+  - 5-second realistic decelerating spin using quartic easing: $1 - (1 - t)^4$.
+  - Dynamic top needle pointer deflection ($-15^\circ$ bounce) upon crossing sector boundary pins.
+  - Zero-latency procedural sound synthesizer via native browser **Web Audio API** (880Hz notch tick + 4-chord victory fanfare, no external audio files required).
+- 🏆 **Celebratory Victory Experience**:
+  - HTML5 Canvas particle confetti system with velocity decay and burst explosions.
+  - Glassmorphic victory popover presenting the prize with "Nhận Quà" (Claim) and "Quay Tiếp" (Spin Again).
+  - Spin history drawer tracking past awards with timestamps.
+- ⚙️ **Prize Customization & Persistence**:
+  - Slide-over glass drawer to customize all 10 prizes (Line 1, Line 2, Icon, Color).
+  - Instant local storage synchronization and single-click "Mặc Định" reset to factory tech prizes.
+- 🌓 **Dual iOS Theme Support**:
+  - **Light Glass**: Warm Apple Titanium aesthetic with orange/amber accents.
+  - **Dark Glass**: Liquid Specular Obsidian (`#08090C`) with Electric Violet and Cryo Cyan accents.
+
+---
+
+## 10 Flagship Tech Prizes
+
+1. **iPhone 16 Pro Max** (`#FF6B00`)
+2. **MacBook Pro M3** (`#1E293B`)
+3. **iPad Pro M4** (`#0EA5E9`)
+4. **Apple Watch Ultra 2** (`#10B981`)
+5. **AirPods Max** (`#8B5CF6`)
+6. **PlayStation 5** (`#F59E0B`)
+7. **Loa Marshall** (`#EF4444`)
+8. **Bàn Phím Cơ Custom** (`#059669`)
+9. **Chuột MX Master 3S** (`#6366F1`)
+10. **Củ Sạc Anker 140W** (`#D946EF`)
+
+---
+
+## Project Structure
+
+```
+ios-18-lucky-wheel/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx         # Root layout with fonts & metadata
+│   │   ├── page.tsx           # Master Lucky Wheel arena page
+│   │   └── globals.css        # Tailwind & iOS 18 glassmorphic styling
+│   ├── components/
+│   │   ├── canvas/
+│   │   │   └── ConfettiCanvas.tsx
+│   │   ├── header/
+│   │   │   └── Header.tsx     # Brand, theme toggle, audio toggle, settings trigger
+│   │   ├── modals/
+│   │   │   ├── VictoryModal.tsx
+│   │   │   └── HistoryDrawer.tsx
+│   │   ├── settings/
+│   │   │   ├── SettingsDrawer.tsx
+│   │   │   └── PrizeRowItem.tsx
+│   │   └── wheel/
+│   │       ├── AmbientGlow.tsx
+│   │       ├── CenterHub.tsx  # 3D interactive center "QUAY" button
+│   │       ├── LuckyWheel.tsx # Main wheel stage assembly
+│   │       ├── PointerNeedle.tsx
+│   │       ├── StatusPill.tsx
+│   │       └── WheelSvg.tsx   # SVG turntable renderer
+│   ├── constants/
+│   │   ├── defaultPrizes.ts
+│   │   └── techIcons.tsx      # Scalable SVG tech icons
+│   ├── hooks/
+│   │   ├── useConfetti.ts
+│   │   ├── useLuckyWheel.ts   # Rotation math, easing & collision detection
+│   │   ├── usePrizeStore.ts   # LocalStorage state management
+│   │   └── useSoundEffects.ts # Web Audio synthesis
+│   ├── types/
+│   │   └── wheel.ts
+│   └── utils/
+│       ├── audio.ts           # Web Audio API engine
+│       └── geometry.ts        # SVG sector trigonometrics & easing
+```
+
+---
 
 ## Getting Started
 
-First, run the development server:
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To create a production build:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run build
+npm run start
+```
