@@ -3,16 +3,16 @@
 import { useState, useCallback } from 'react';
 import { SpotlightConfig } from '@/types/wheel';
 
-const STORAGE_KEY = 'tech_wheel_spotlight_cfg_v1';
+const STORAGE_KEY = 'tech_wheel_spotlight_cfg_v2';
 
 export const DEFAULT_SPOTLIGHT_CONFIG: SpotlightConfig = {
   enabled: true,
   colorMode: 'amber',
   customColor: '#FFA04D',
   style: 'rim', // Default: Rim Grazing (chỉ chạm nhẹ viền ngoài xung quanh bánh xe)
-  brightness: 0.70,
+  brightness: 0.50,
   showDust: true,
-  beamReach: 'deep',
+  beamReach: 'standard',
 };
 
 export function useSpotlightStore() {
