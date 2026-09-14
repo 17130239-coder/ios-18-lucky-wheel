@@ -58,7 +58,7 @@ export function VictoryModal({
         {/* Prize Icon Badge */}
         <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-[#FF6B00] via-amber-300 to-yellow-200 p-1 shadow-[0_10px_25px_rgba(255,107,0,0.3)] mb-3.5 flex items-center justify-center ring-2 ring-white">
           <div
-            className="w-full h-full rounded-full bg-white flex items-center justify-center p-3 shadow-inner"
+            className="w-full h-full rounded-full bg-white flex items-center justify-center p-3 shadow-inner [&>svg]:w-9 [&>svg]:h-9 [&>svg]:stroke-[2.5]"
             style={{ color: iconColor }}
           >
             {TECH_ICONS[prize.icon] || TECH_ICONS.gift}

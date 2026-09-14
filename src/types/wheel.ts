@@ -1,4 +1,5 @@
 export type PrizeIconKey =
+  // Công nghệ
   | 'smartphone'
   | 'laptop'
   | 'tablet'
@@ -9,8 +10,44 @@ export type PrizeIconKey =
   | 'keyboard'
   | 'mouse'
   | 'charger'
+  | 'camera'
+  | 'tv'
+  | 'monitor'
+  | 'cpu'
+  | 'hard-drive'
+  | 'wifi'
+  | 'mic'
+  | 'battery'
+  // Giải thưởng & May mắn
   | 'gift'
-  | 'star';
+  | 'star'
+  | 'trophy'
+  | 'crown'
+  | 'medal'
+  | 'gem'
+  | 'ticket'
+  | 'sparkles'
+  | 'coins'
+  | 'wallet'
+  | 'shopping-bag'
+  | 'percent'
+  | 'award'
+  // Đời sống & Xe cộ
+  | 'car'
+  | 'bike'
+  | 'plane'
+  | 'coffee'
+  | 'pizza'
+  | 'utensils'
+  | 'shirt'
+  | 'glasses'
+  | 'heart'
+  | 'flame'
+  | 'zap'
+  | 'music'
+  | 'shield-check'
+  | 'sun'
+  | 'package';
 
 export interface PrizeItem {
   id: string;
@@ -18,6 +55,7 @@ export interface PrizeItem {
   line2: string;
   name: string;
   color: string;
+  textColor?: string;
   icon: PrizeIconKey;
   weight?: number;
 }
