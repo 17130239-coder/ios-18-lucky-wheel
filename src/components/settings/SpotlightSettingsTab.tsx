@@ -28,22 +28,24 @@ export function SpotlightSettingsTab({
   onReplayCurtain,
 }: SpotlightSettingsTabProps) {
   return (
-    <div className="flex flex-col gap-5 text-stone-800 dark:text-stone-100">
+    <div className="flex flex-col gap-4 text-stone-800 dark:text-stone-100">
       {/* 1. Master On/Off Toggle */}
-      <div className="flex items-center justify-between p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-800/80 border border-stone-200/80 dark:border-stone-700/80 shadow-xs">
+      <div className="flex items-center justify-between p-3.5 rounded-2xl bg-stone-100/70 dark:bg-stone-800/40 border border-stone-200/60 dark:border-white/5 shadow-xs backdrop-blur-xs">
         <div className="flex items-center gap-3">
           <div
             className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
               config.enabled
-                ? 'bg-orange-500 text-white shadow-sm shadow-orange-500/30'
+                ? 'bg-[#FF6B00] text-white shadow-sm shadow-orange-500/25'
                 : 'bg-stone-200 dark:bg-stone-700 text-stone-400'
             }`}
           >
-            <Lightbulb className="w-5 h-5" />
+            <Lightbulb className="w-4 h-4" />
           </div>
           <div>
-            <h5 className="text-xs sm:text-sm font-bold">Bật 2 Đèn Sân Khấu</h5>
-            <p className="text-[11px] text-stone-400">
+            <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">
+              Bật 2 Đèn Sân Khấu
+            </h5>
+            <p className="text-xs text-stone-500 dark:text-stone-400">
               {config.enabled ? 'Đèn đang hoạt động rọi bánh xe' : 'Đã tắt hoàn toàn ánh sáng đèn'}
             </p>
           </div>
@@ -71,8 +73,8 @@ export function SpotlightSettingsTab({
         <>
           {/* 2. Style Selector: Rim Grazing vs Stage Sweep vs Center */}
           <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-stone-700 dark:text-stone-300">
-              <Compass className="w-4 h-4 text-[#FF6B00]" />
+            <div className="flex items-center gap-1.5 px-0.5 text-[11px] font-bold tracking-wider text-stone-400 dark:text-stone-500 uppercase">
+              <Compass className="w-3.5 h-3.5 text-[#FF6B00]" />
               <span>Vùng & Kiểu Chiếu Sáng</span>
             </div>
 
@@ -83,23 +85,23 @@ export function SpotlightSettingsTab({
                 onClick={() => onChange({ style: 'rim' as SpotlightStyle })}
                 className={`flex flex-col text-left p-3 rounded-2xl border transition-all cursor-pointer ${
                   config.style === 'rim'
-                    ? 'bg-orange-50/70 dark:bg-orange-950/30 border-orange-300 dark:border-orange-700 ring-1 ring-orange-400/40'
-                    : 'bg-stone-50 dark:bg-stone-800/60 border-stone-200/80 dark:border-stone-700/80 hover:bg-stone-100 dark:hover:bg-stone-800'
+                    ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/40 ring-1 ring-[#FF6B00]/30 shadow-xs'
+                    : 'bg-stone-100/60 dark:bg-stone-800/30 border-stone-200/60 dark:border-white/5 hover:bg-stone-100/90 dark:hover:bg-stone-800/50'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-stone-900 dark:text-white flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-[#FF6B00]" />
                     Chạm Nhẹ Viền Ngoài (Khuyên dùng)
                   </span>
                   {config.style === 'rim' && (
-                    <span className="text-[10px] uppercase font-black px-1.5 py-0.5 rounded-full bg-[#FF6B00] text-white">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FF6B00] text-white">
                       Đang chọn
                     </span>
                   )}
                 </div>
-                <p className="text-[11px] text-stone-500 dark:text-stone-400 mt-1 leading-relaxed">
-                  Đèn chỉ lướt quanh viền ngoài, chạm nhẹ làm bừng sáng khung bánh xe và giữ các ô quà bên trong sáng trong, sắc nét.
+                <p className="text-xs text-stone-500 dark:text-stone-400 mt-1 leading-relaxed">
+                  Đèn chỉ lướt quanh viền ngoài, chạm nhẹ làm bừng sáng khung bánh xe và giữ các ô quà bên trong sáng rõ.
                 </p>
               </button>
 
@@ -109,22 +111,22 @@ export function SpotlightSettingsTab({
                 onClick={() => onChange({ style: 'sweep' as SpotlightStyle })}
                 className={`flex flex-col text-left p-3 rounded-2xl border transition-all cursor-pointer ${
                   config.style === 'sweep'
-                    ? 'bg-orange-50/70 dark:bg-orange-950/30 border-orange-300 dark:border-orange-700 ring-1 ring-orange-400/40'
-                    : 'bg-stone-50 dark:bg-stone-800/60 border-stone-200/80 dark:border-stone-700/80 hover:bg-stone-100 dark:hover:bg-stone-800'
+                    ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/40 ring-1 ring-[#FF6B00]/30 shadow-xs'
+                    : 'bg-stone-100/60 dark:bg-stone-800/30 border-stone-200/60 dark:border-white/5 hover:bg-stone-100/90 dark:hover:bg-stone-800/50'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-stone-900 dark:text-white flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-amber-400" />
                     Quét Toàn Sân Khấu (Stage Sweep)
                   </span>
                   {config.style === 'sweep' && (
-                    <span className="text-[10px] uppercase font-black px-1.5 py-0.5 rounded-full bg-[#FF6B00] text-white">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FF6B00] text-white">
                       Đang chọn
                     </span>
                   )}
                 </div>
-                <p className="text-[11px] text-stone-500 dark:text-stone-400 mt-1 leading-relaxed">
+                <p className="text-xs text-stone-500 dark:text-stone-400 mt-1 leading-relaxed">
                   Đèn quét qua lại góc rộng đan chéo toàn bộ sân khấu và mặt đĩa.
                 </p>
               </button>
@@ -135,22 +137,22 @@ export function SpotlightSettingsTab({
                 onClick={() => onChange({ style: 'center' as SpotlightStyle })}
                 className={`flex flex-col text-left p-3 rounded-2xl border transition-all cursor-pointer ${
                   config.style === 'center'
-                    ? 'bg-orange-50/70 dark:bg-orange-950/30 border-orange-300 dark:border-orange-700 ring-1 ring-orange-400/40'
-                    : 'bg-stone-50 dark:bg-stone-800/60 border-stone-200/80 dark:border-stone-700/80 hover:bg-stone-100 dark:hover:bg-stone-800'
+                    ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/40 ring-1 ring-[#FF6B00]/30 shadow-xs'
+                    : 'bg-stone-100/60 dark:bg-stone-800/30 border-stone-200/60 dark:border-white/5 hover:bg-stone-100/90 dark:hover:bg-stone-800/50'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-stone-900 dark:text-white flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-cyan-400" />
                     Tập Trung Trung Tâm (Center Focus)
                   </span>
                   {config.style === 'center' && (
-                    <span className="text-[10px] uppercase font-black px-1.5 py-0.5 rounded-full bg-[#FF6B00] text-white">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FF6B00] text-white">
                       Đang chọn
                     </span>
                   )}
                 </div>
-                <p className="text-[11px] text-stone-500 dark:text-stone-400 mt-1 leading-relaxed">
+                <p className="text-xs text-stone-500 dark:text-stone-400 mt-1 leading-relaxed">
                   Đèn cố định hướng vào nút QUAY ở tâm bánh xe.
                 </p>
               </button>
@@ -159,8 +161,8 @@ export function SpotlightSettingsTab({
 
           {/* 3. Color Mode & RGB Mode */}
           <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-stone-700 dark:text-stone-300">
-              <Palette className="w-4 h-4 text-[#FF6B00]" />
+            <div className="flex items-center gap-1.5 px-0.5 text-[11px] font-bold tracking-wider text-stone-400 dark:text-stone-500 uppercase">
+              <Palette className="w-3.5 h-3.5 text-[#FF6B00]" />
               <span>Chế Độ Màu Ánh Sáng</span>
             </div>
 
@@ -170,33 +172,32 @@ export function SpotlightSettingsTab({
               onClick={() => onChange({ colorMode: 'rgb' as SpotlightColorMode })}
               className={`p-3 rounded-2xl border flex items-center justify-between transition-all cursor-pointer relative overflow-hidden ${
                 config.colorMode === 'rgb'
-                  ? 'border-violet-400 dark:border-violet-600 ring-2 ring-violet-500/40 shadow-sm'
-                  : 'bg-stone-50 dark:bg-stone-800/60 border-stone-200/80 dark:border-stone-700/80'
+                  ? 'bg-violet-500/10 dark:bg-violet-500/15 border-violet-500/40 ring-1 ring-violet-500/30 shadow-xs'
+                  : 'bg-stone-100/60 dark:bg-stone-800/30 border-stone-200/60 dark:border-white/5 hover:bg-stone-100/90 dark:hover:bg-stone-800/50'
               }`}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 via-green-500/10 via-blue-500/10 to-pink-500/10 pointer-events-none" />
-              <div className="flex items-center gap-2.5 relative z-10">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-pink-500 via-amber-400 to-cyan-400 flex items-center justify-center text-white shadow-xs animate-pulse">
+              <div className="flex items-center gap-3 relative z-10">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-pink-500 via-amber-400 to-cyan-400 flex items-center justify-center text-white shadow-xs">
                   <Sparkles className="w-4 h-4" />
                 </div>
                 <div className="text-left">
-                  <span className="text-xs font-bold text-stone-900 dark:text-white flex items-center gap-1.5">
-                    🌈 Chế độ Cầu Vồng RGB (RGB Spectrum)
+                  <span className="text-xs font-bold text-stone-900 dark:text-stone-100 flex items-center gap-1.5">
+                    Chế độ Cầu Vồng RGB (Spectrum)
                   </span>
-                  <p className="text-[10px] text-stone-400">
-                    Ánh đèn liên tục chuyển đổi dải màu quang phổ tuần hoàn
+                  <p className="text-xs text-stone-500 dark:text-stone-400">
+                    Ánh đèn chuyển dải màu quang phổ tuần hoàn êm dịu
                   </p>
                 </div>
               </div>
               {config.colorMode === 'rgb' && (
-                <span className="relative z-10 text-[10px] uppercase font-black px-2 py-0.5 rounded-full bg-gradient-to-r from-violet-600 to-cyan-500 text-white shadow-xs">
+                <span className="relative z-10 text-[10px] font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-violet-600 to-cyan-500 text-white shadow-xs">
                   Kích hoạt
                 </span>
               )}
             </button>
 
             {/* Presets Grid */}
-            <div className="grid grid-cols-2 gap-2 mt-1">
+            <div className="grid grid-cols-2 gap-2 mt-0.5">
               {COLOR_PRESETS.map((preset) => (
                 <button
                   key={preset.key}
@@ -204,16 +205,16 @@ export function SpotlightSettingsTab({
                   onClick={() => onChange({ colorMode: preset.key })}
                   className={`flex items-center gap-2.5 p-2.5 rounded-2xl border transition-all cursor-pointer text-left ${
                     config.colorMode === preset.key
-                      ? 'bg-orange-50 dark:bg-orange-950/40 border-orange-400 dark:border-orange-600 ring-1 ring-orange-400/50'
-                      : 'bg-stone-50 dark:bg-stone-800/60 border-stone-200/80 dark:border-stone-700/80 hover:bg-stone-100 dark:hover:bg-stone-800'
+                      ? 'bg-orange-500/10 dark:bg-orange-500/15 border-[#FF6B00]/50 ring-1 ring-[#FF6B00]/30 shadow-xs'
+                      : 'bg-stone-100/60 dark:bg-stone-800/30 border-stone-200/60 dark:border-white/5 hover:bg-stone-100/90 dark:hover:bg-stone-800/50'
                   }`}
                 >
                   <span
-                    className="w-5 h-5 rounded-full shrink-0 shadow-xs border border-white/40"
+                    className="w-5 h-5 rounded-full shrink-0 shadow-2xs border border-white/40"
                     style={{ backgroundColor: preset.color }}
                   />
                   <div className="min-w-0">
-                    <p className="text-xs font-bold text-stone-900 dark:text-white truncate">
+                    <p className="text-xs font-semibold text-stone-900 dark:text-stone-100 truncate">
                       {preset.label}
                     </p>
                   </div>
@@ -222,8 +223,8 @@ export function SpotlightSettingsTab({
             </div>
 
             {/* Custom Color Picker Row */}
-            <div className="flex items-center justify-between p-2.5 rounded-2xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200/80 dark:border-stone-700/80 mt-1">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between p-2.5 rounded-2xl bg-stone-100/60 dark:bg-stone-800/30 border border-stone-200/60 dark:border-white/5 mt-0.5">
+              <div className="flex items-center gap-2.5">
                 <label className="relative w-6 h-6 rounded-lg overflow-hidden border border-stone-300 dark:border-stone-600 cursor-pointer shadow-2xs shrink-0">
                   <input
                     type="color"
@@ -241,17 +242,17 @@ export function SpotlightSettingsTab({
                     style={{ backgroundColor: config.customColor || '#FFA04D' }}
                   />
                 </label>
-                <span className="text-xs font-bold text-stone-800 dark:text-stone-200">
+                <span className="text-xs font-semibold text-stone-800 dark:text-stone-200">
                   Mã màu tùy ý (Custom Hex)
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => onChange({ colorMode: 'custom' })}
-                className={`text-[11px] font-bold px-2.5 py-1 rounded-full border transition-all cursor-pointer ${
+                className={`text-xs font-bold px-2.5 py-1 rounded-xl border transition-all cursor-pointer ${
                   config.colorMode === 'custom'
-                    ? 'bg-[#FF6B00] text-white border-transparent'
-                    : 'bg-white dark:bg-stone-700 text-stone-600 dark:text-stone-300 border-stone-200 dark:border-stone-600'
+                    ? 'bg-[#FF6B00] text-white border-transparent shadow-xs'
+                    : 'bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border-stone-200 dark:border-stone-700'
                 }`}
               >
                 {config.customColor.toUpperCase()}
@@ -260,13 +261,13 @@ export function SpotlightSettingsTab({
           </div>
 
           {/* 4. Brightness Slider */}
-          <div className="flex flex-col gap-2 p-3 rounded-2xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200/80 dark:border-stone-700/80">
+          <div className="flex flex-col gap-2 p-3.5 rounded-2xl bg-stone-100/70 dark:bg-stone-800/40 border border-stone-200/60 dark:border-white/5">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-bold flex items-center gap-1.5">
-                <SunMedium className="w-4 h-4 text-[#FF6B00]" />
+              <span className="font-bold text-stone-900 dark:text-stone-100 flex items-center gap-1.5">
+                <SunMedium className="w-3.5 h-3.5 text-[#FF6B00]" />
                 Độ Sáng / Cường Độ Đèn
               </span>
-              <span className="font-extrabold text-[#FF6B00]">
+              <span className="font-bold text-[#FF6B00]">
                 {Math.round(config.brightness * 100)}%
               </span>
             </div>
@@ -279,26 +280,28 @@ export function SpotlightSettingsTab({
               onChange={(e) =>
                 onChange({ brightness: parseFloat(e.target.value) })
               }
-              className="w-full accent-[#FF6B00] cursor-pointer"
+              className="w-full accent-[#FF6B00] cursor-pointer h-1.5 rounded-full bg-stone-200 dark:bg-stone-700"
             />
           </div>
 
-          {/* 5. Natural Atmospheric Effects (Hiệu ứng tự nhiên & Hạt bụi 3D) */}
-          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-800/80 border border-stone-200/80 dark:border-stone-700/80 shadow-xs">
+          {/* 5. Natural Atmospheric Effects (Hạt bụi 3D) */}
+          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-stone-100/70 dark:bg-stone-800/40 border border-stone-200/60 dark:border-white/5 shadow-xs">
             <div className="flex items-center gap-3">
               <div
                 className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
                   config.showDust ?? true
-                    ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/30'
+                    ? 'bg-amber-500/15 text-amber-500 dark:bg-amber-500/20'
                     : 'bg-stone-200 dark:bg-stone-700 text-stone-400'
                 }`}
               >
                 <Sparkles className="w-4 h-4" />
               </div>
               <div>
-                <h5 className="text-xs sm:text-sm font-bold">Hạt Bụi Thể Tích (Light Dust)</h5>
-                <p className="text-[11px] text-stone-400">
-                  Hạt bụi li ti lơ lửng phản xạ ánh sáng tạo chiều sâu 3D chân thực
+                <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">
+                  Hạt Bụi Thể Tích (Light Dust)
+                </h5>
+                <p className="text-xs text-stone-500 dark:text-stone-400">
+                  Hạt bụi lơ lửng phản xạ ánh sáng tạo chiều sâu 3D chân thực
                 </p>
               </div>
             </div>
@@ -320,19 +323,19 @@ export function SpotlightSettingsTab({
             </button>
           </div>
 
-          {/* 6. Grand Theater Curtain Setting Card */}
-          <div className="flex flex-col gap-3 p-3.5 rounded-2xl bg-gradient-to-br from-red-950/20 via-stone-50 to-stone-100 dark:from-red-950/30 dark:via-stone-800/80 dark:to-stone-800 border border-red-200/50 dark:border-red-900/40 shadow-xs">
+          {/* 6. Grand Theater Curtain Setting Card (Dịu mắt, nhất quán) */}
+          <div className="flex flex-col gap-3 p-3.5 rounded-2xl bg-stone-100/70 dark:bg-stone-800/40 border border-stone-200/60 dark:border-white/5 shadow-xs">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#8B0000] to-[#580010] text-amber-300 flex items-center justify-center shadow-xs">
+                <div className="w-9 h-9 rounded-xl bg-orange-500/10 dark:bg-orange-500/15 text-[#FF6B00] flex items-center justify-center shadow-xs">
                   <Film className="w-4 h-4" />
                 </div>
                 <div>
-                  <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-white flex items-center gap-1.5">
+                  <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">
                     Mở Rèm Sân Khấu (Stage Curtain)
                   </h5>
-                  <p className="text-[11px] text-stone-500 dark:text-stone-400">
-                    Hiệu ứng mở rèm nhung đỏ rạp hát hoàng gia khi vào trang
+                  <p className="text-xs text-stone-500 dark:text-stone-400">
+                    Hiệu ứng mở rèm nhung rạp hát hoàng gia khi vào trang
                   </p>
                 </div>
               </div>
@@ -344,7 +347,7 @@ export function SpotlightSettingsTab({
                   aria-checked={curtainEnabled}
                   onClick={onToggleCurtain}
                   className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                    curtainEnabled ? 'bg-[#8B0000]' : 'bg-stone-300 dark:bg-stone-600'
+                    curtainEnabled ? 'bg-[#FF6B00]' : 'bg-stone-300 dark:bg-stone-600'
                   }`}
                 >
                   <span
@@ -356,12 +359,12 @@ export function SpotlightSettingsTab({
               )}
             </div>
 
-            {/* Replay Button */}
+            {/* Replay Button (Soothing Frosted Orange Glass) */}
             {onReplayCurtain && (
               <button
                 type="button"
                 onClick={onReplayCurtain}
-                className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-gradient-to-r from-[#8B0000] to-[#A51D24] text-white text-xs font-bold shadow-xs hover:brightness-110 active:scale-98 transition-all cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-orange-500/10 hover:bg-orange-500/15 text-[#FF6B00] border border-orange-500/20 text-xs font-bold transition-all cursor-pointer active:scale-98"
               >
                 <Play className="w-3.5 h-3.5 fill-current" />
                 <span>Xem Lại Hiệu Ứng Mở Rèm Sân Khấu 🎭</span>

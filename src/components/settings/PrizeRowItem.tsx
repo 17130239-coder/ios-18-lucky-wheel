@@ -22,25 +22,26 @@ export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
     item.color.toLowerCase() === '#ffffff' ? '#1E293B' : '#FFFFFF';
 
   return (
-    <div className="flex flex-col gap-2.5 p-3 rounded-2xl bg-stone-50 dark:bg-stone-800/70 border border-stone-200/80 dark:border-stone-700/80 shadow-xs">
-      {/* Top Row: Icon Badge, Name Inputs, Sector Background Color Picker */}
-      <div className="flex items-center gap-2.5">
-        {/* Visual Icon Badge (Click to open visual picker) */}
-        <button
-          type="button"
-          onClick={() => setIsPickerOpen(true)}
-          className="relative group shrink-0 w-10 h-10 rounded-xl flex items-center justify-center p-1.5 shadow-xs cursor-pointer transition-transform hover:scale-105 active:scale-95"
-          style={{ backgroundColor: item.color, color: iconColor }}
-          title="Bấm để xem và chọn icon trực quan"
-        >
+    <div className="flex items-center gap-3 p-3 rounded-2xl bg-stone-100/70 dark:bg-stone-800/40 border border-stone-200/60 dark:border-white/5 shadow-xs transition-colors hover:bg-stone-100/90 dark:hover:bg-stone-800/60">
+      {/* Visual Icon Button (Click to open visual picker) */}
+      <button
+        type="button"
+        onClick={() => setIsPickerOpen(true)}
+        className="relative group shrink-0 w-11 h-11 rounded-xl flex items-center justify-center p-2 shadow-xs cursor-pointer transition-all hover:scale-105 active:scale-95 border border-black/5 dark:border-white/10"
+        style={{ backgroundColor: item.color, color: iconColor }}
+        title={`Bấm để đổi icon (${iconLabel})`}
+      >
+        <div className="w-5 h-5 flex items-center justify-center">
           {TECH_ICONS[item.icon] || TECH_ICONS.gift}
-          <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#FF6B00] text-white rounded-full flex items-center justify-center shadow-xs">
-            <Sparkles className="w-2.5 h-2.5" />
-          </span>
-        </button>
+        </div>
+        <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#FF6B00] text-white rounded-full flex items-center justify-center shadow-xs opacity-90 group-hover:opacity-100 transition-opacity">
+          <Sparkles className="w-2.5 h-2.5" />
+        </span>
+      </button>
 
-        {/* Line 1 & Line 2 Inputs */}
-        <div className="flex-1 flex gap-1.5 min-w-0">
+      {/* Two-line text inputs */}
+      <div className="flex-1 flex flex-col gap-1 min-w-0">
+        <div className="flex gap-1.5">
           <input
             type="text"
             value={item.line1}
@@ -52,7 +53,7 @@ export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
                 name: `${line1} ${item.line2}`.trim(),
               });
             }}
-            className="w-1/2 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 px-2.5 py-1.5 rounded-xl text-xs font-bold text-stone-800 dark:text-stone-100 focus:outline-none focus:border-[#FF6B00]"
+            className="w-1/2 bg-white/90 dark:bg-stone-900/90 border border-stone-200/70 dark:border-stone-700/60 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-stone-800 dark:text-stone-100 placeholder:text-stone-400 focus:outline-none focus:ring-1.5 focus:ring-[#FF6B00]/70 focus:border-[#FF6B00] transition-all"
           />
           <input
             type="text"
@@ -65,13 +66,30 @@ export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
                 name: `${item.line1} ${line2}`.trim(),
               });
             }}
-            className="w-1/2 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 px-2.5 py-1.5 rounded-xl text-xs font-bold text-stone-800 dark:text-stone-100 focus:outline-none focus:border-[#FF6B00]"
+            className="w-1/2 bg-white/90 dark:bg-stone-900/90 border border-stone-200/70 dark:border-stone-700/60 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-stone-800 dark:text-stone-100 placeholder:text-stone-400 focus:outline-none focus:ring-1.5 focus:ring-[#FF6B00]/70 focus:border-[#FF6B00] transition-all"
           />
         </div>
+        <div className="flex items-center gap-1.5 px-0.5">
+          <button
+            type="button"
+            onClick={() => setIsPickerOpen(true)}
+            className="text-[10px] text-stone-500 dark:text-stone-400 hover:text-[#FF6B00] dark:hover:text-[#FF6B00] transition-colors truncate flex items-center gap-1 cursor-pointer"
+          >
+            <span>Icon:</span>
+            <span className="font-semibold text-stone-700 dark:text-stone-300 underline underline-offset-2">
+              {iconLabel}
+            </span>
+          </button>
+        </div>
+      </div>
 
-        {/* Sector Background Color picker input */}
+      {/* Right Column: Index Badge and Sector Color Picker */}
+      <div className="flex flex-col items-end gap-1 shrink-0">
+        <span className="text-[10px] font-bold text-stone-400 dark:text-stone-500">
+          #{index + 1}
+        </span>
         <label
-          className="relative shrink-0 w-8 h-8 rounded-xl overflow-hidden border border-stone-300 dark:border-stone-600 cursor-pointer shadow-xs"
+          className="relative w-7 h-7 rounded-xl overflow-hidden border border-stone-300 dark:border-stone-600 shadow-2xs cursor-pointer hover:scale-105 active:scale-95 transition-transform"
           title="Chọn màu nền nan quạt"
         >
           <input
@@ -85,25 +103,6 @@ export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
             style={{ backgroundColor: item.color }}
           />
         </label>
-      </div>
-
-      {/* Bottom Row: Visual Icon Selector Pill */}
-      <div className="flex items-center justify-between gap-2 pt-0.5">
-        <button
-          type="button"
-          onClick={() => setIsPickerOpen(true)}
-          className="flex-1 flex items-center justify-between px-3 py-1.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 text-[11px] font-semibold hover:border-[#FF6B00] transition-colors cursor-pointer"
-        >
-          <div className="flex items-center gap-2">
-            <span className="w-4 h-4 text-[#FF6B00] flex items-center justify-center">
-              {TECH_ICONS[item.icon] || TECH_ICONS.gift}
-            </span>
-            <span className="font-bold truncate">{iconLabel}</span>
-          </div>
-          <span className="text-[10px] text-[#FF6B00] font-bold underline">
-            Đổi icon trực quan
-          </span>
-        </button>
       </div>
 
       {/* Visual Icon Picker Modal */}
