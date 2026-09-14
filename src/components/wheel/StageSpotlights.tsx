@@ -80,19 +80,19 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* 1. Ultra-soft Atmospheric Fog Blur (Gentle & dreamy) */}
-          <filter id="cfg-fog-blur" x="-50%" y="-20%" width="200%" height="150%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+          {/* 1. Ultra-soft Atmospheric Fog Blur (Gentle, wide & dreamy dispersion) */}
+          <filter id="cfg-fog-blur" x="-60%" y="-20%" width="220%" height="150%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="20" />
           </filter>
 
           {/* 2. Soft Volumetric Beam Blur */}
-          <filter id="cfg-beam-blur" x="-40%" y="-20%" width="180%" height="150%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="7.5" />
+          <filter id="cfg-beam-blur" x="-50%" y="-20%" width="200%" height="150%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="9.0" />
           </filter>
 
           {/* 3. Soft Core Warmth Blur (No harsh laser edges) */}
-          <filter id="cfg-core-blur" x="-30%" y="-20%" width="160%" height="150%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="4.0" />
+          <filter id="cfg-core-blur" x="-40%" y="-20%" width="180%" height="150%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="5.0" />
           </filter>
 
           {/* 4. Lamp Lens Glow */}
@@ -104,9 +104,9 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
             </feMerge>
           </filter>
 
-          {/* 5. Rim Grazing Soft Glow */}
+          {/* 5. Rim Grazing Soft Glow (Wide subtle aura) */}
           <filter id="cfg-rim-blur" x="-50%" y="-30%" width="200%" height="160%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="14" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
           </filter>
 
           {/* 6. Floating Dust Particles Blur */}
@@ -114,38 +114,38 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
             <feGaussianBlur in="SourceGraphic" stdDeviation="0.7" />
           </filter>
 
-          {/* GRADIENTS: Atmospheric Fog Envelope (Soft & Dissolves by y = 660) */}
+          {/* GRADIENTS: Atmospheric Fog Envelope (Soft, Flared & Dissolves by y = 660) */}
           <linearGradient id="cfg-fog-gradient" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.45" />
             <stop offset="12%" stopColor={primaryColor} stopOpacity="0.22" />
             <stop offset="35%" stopColor={primaryColor} stopOpacity="0.10" />
-            <stop offset="70%" stopColor={secondaryColor} stopOpacity="0.04" />
+            <stop offset="68%" stopColor={secondaryColor} stopOpacity="0.04" />
             <stop offset="100%" stopColor={secondaryColor} stopOpacity="0.0" />
           </linearGradient>
 
-          {/* GRADIENTS: Mid Volumetric Beam Cone */}
+          {/* GRADIENTS: Mid Volumetric Beam Cone (Naturally flared) */}
           <linearGradient id="cfg-beam-gradient" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.65" />
-            <stop offset="15%" stopColor={primaryColor} stopOpacity="0.35" />
-            <stop offset="40%" stopColor={primaryColor} stopOpacity="0.18" />
-            <stop offset="70%" stopColor={secondaryColor} stopOpacity="0.07" />
-            <stop offset="90%" stopColor={secondaryColor} stopOpacity="0.02" />
+            <stop offset="15%" stopColor={primaryColor} stopOpacity="0.32" />
+            <stop offset="40%" stopColor={primaryColor} stopOpacity="0.16" />
+            <stop offset="70%" stopColor={secondaryColor} stopOpacity="0.06" />
+            <stop offset="90%" stopColor={secondaryColor} stopOpacity="0.015" />
             <stop offset="100%" stopColor={secondaryColor} stopOpacity="0.0" />
           </linearGradient>
 
           {/* GRADIENTS: Soft Velvety Inner Core */}
           <linearGradient id="cfg-core-gradient" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.75" />
-            <stop offset="15%" stopColor="#FFFFFF" stopOpacity="0.45" />
-            <stop offset="40%" stopColor={primaryColor} stopOpacity="0.24" />
-            <stop offset="75%" stopColor={secondaryColor} stopOpacity="0.08" />
+            <stop offset="15%" stopColor="#FFFFFF" stopOpacity="0.40" />
+            <stop offset="40%" stopColor={primaryColor} stopOpacity="0.20" />
+            <stop offset="75%" stopColor={secondaryColor} stopOpacity="0.06" />
             <stop offset="100%" stopColor={secondaryColor} stopOpacity="0.0" />
           </linearGradient>
 
           {/* GRADIENTS: Tangential Rim Grazing Spot */}
           <radialGradient id="cfg-rim-graze" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.38" />
-            <stop offset="40%" stopColor={primaryColor} stopOpacity="0.18" />
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.36" />
+            <stop offset="40%" stopColor={primaryColor} stopOpacity="0.16" />
             <stop offset="80%" stopColor={secondaryColor} stopOpacity="0.04" />
             <stop offset="100%" stopColor={secondaryColor} stopOpacity="0.0" />
           </radialGradient>
@@ -173,19 +173,19 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
             strokeLinecap="round"
           />
 
-          {/* Swiveling Group (Lamp Head + Soft Medium Reach Light Beam) */}
+          {/* Swiveling Group (Lamp Head + Soft Flared Light Beam) */}
           <g className={leftAnimClass}>
-            {/* 1. Gentle Atmospheric Fog Envelope (Stops softly at y = 660) */}
+            {/* 1. Gentle Flared Atmospheric Fog Envelope (Tỏa rộng tự nhiên) */}
             <path
-              d="M -10 25 L 10 25 L 62 660 L -62 660 Z"
+              d="M -11 25 Q -32 320 -115 660 L 115 660 Q 32 320 11 25 Z"
               fill="url(#cfg-fog-gradient)"
               filter="url(#cfg-fog-blur)"
               opacity={isSpinning ? 0.65 : isWon ? 0.75 : 0.40}
             />
 
-            {/* 2. Main Soft Volumetric Ray Cone */}
+            {/* 2. Main Soft Flared Volumetric Ray Cone */}
             <path
-              d="M -6 25 L 6 25 L 45 660 L -45 660 Z"
+              d="M -7 25 Q -24 320 -82 660 L 82 660 Q 24 320 7 25 Z"
               fill="url(#cfg-beam-gradient)"
               filter="url(#cfg-beam-blur)"
               opacity={isSpinning ? 0.75 : isWon ? 0.85 : 0.50}
@@ -193,7 +193,7 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
 
             {/* 3. Soft Velvety Core Glow */}
             <path
-              d="M -2.5 25 L 2.5 25 L 18 660 L -18 660 Z"
+              d="M -3 25 Q -12 320 -42 660 L 42 660 Q 12 320 3 25 Z"
               fill="url(#cfg-core-gradient)"
               filter="url(#cfg-core-blur)"
               opacity={isSpinning ? 0.65 : isWon ? 0.75 : 0.45}
@@ -203,21 +203,21 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
             <ellipse
               cx="0"
               cy="440"
-              rx="30"
-              ry="52"
+              rx="38"
+              ry="58"
               fill="url(#cfg-rim-graze)"
               filter="url(#cfg-rim-blur)"
               opacity={isSpinning ? 0.55 : isWon ? 0.70 : 0.35}
             />
 
-            {/* 5. Delicate Floating Stage Dust Motes */}
+            {/* 5. Delicate Floating Stage Dust Motes across the Flared Cone */}
             {showDust && (
               <g className="pointer-events-none">
-                <circle cx="4" cy="130" r="1.3" fill="#FFFFFF" opacity="0.6" className="spotlight-dust-a" filter="url(#cfg-dust-blur)" />
-                <circle cx="-7" cy="220" r="1.6" fill={primaryColor} opacity="0.5" className="spotlight-dust-b" filter="url(#cfg-dust-blur)" />
-                <circle cx="11" cy="320" r="1.2" fill="#FFFFFF" opacity="0.65" className="spotlight-dust-c" filter="url(#cfg-dust-blur)" />
-                <circle cx="-13" cy="430" r="1.8" fill={secondaryColor} opacity="0.45" className="spotlight-dust-a" filter="url(#cfg-dust-blur)" />
-                <circle cx="15" cy="530" r="1.5" fill="#FFFFFF" opacity="0.5" className="spotlight-dust-b" filter="url(#cfg-dust-blur)" />
+                <circle cx="5" cy="130" r="1.3" fill="#FFFFFF" opacity="0.6" className="spotlight-dust-a" filter="url(#cfg-dust-blur)" />
+                <circle cx="-12" cy="220" r="1.6" fill={primaryColor} opacity="0.5" className="spotlight-dust-b" filter="url(#cfg-dust-blur)" />
+                <circle cx="22" cy="320" r="1.2" fill="#FFFFFF" opacity="0.65" className="spotlight-dust-c" filter="url(#cfg-dust-blur)" />
+                <circle cx="-28" cy="430" r="1.8" fill={secondaryColor} opacity="0.45" className="spotlight-dust-a" filter="url(#cfg-dust-blur)" />
+                <circle cx="35" cy="530" r="1.5" fill="#FFFFFF" opacity="0.5" className="spotlight-dust-b" filter="url(#cfg-dust-blur)" />
               </g>
             )}
 
@@ -285,19 +285,19 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
             strokeLinecap="round"
           />
 
-          {/* Swiveling Group (Lamp Head + Soft Medium Reach Light Beam) */}
+          {/* Swiveling Group (Lamp Head + Soft Flared Light Beam) */}
           <g className={rightAnimClass}>
-            {/* 1. Gentle Atmospheric Fog Envelope (Stops softly at y = 660) */}
+            {/* 1. Gentle Flared Atmospheric Fog Envelope (Tỏa rộng tự nhiên) */}
             <path
-              d="M -10 25 L 10 25 L 62 660 L -62 660 Z"
+              d="M -11 25 Q -32 320 -115 660 L 115 660 Q 32 320 11 25 Z"
               fill="url(#cfg-fog-gradient)"
               filter="url(#cfg-fog-blur)"
               opacity={isSpinning ? 0.65 : isWon ? 0.75 : 0.40}
             />
 
-            {/* 2. Main Soft Volumetric Ray Cone */}
+            {/* 2. Main Soft Flared Volumetric Ray Cone */}
             <path
-              d="M -6 25 L 6 25 L 45 660 L -45 660 Z"
+              d="M -7 25 Q -24 320 -82 660 L 82 660 Q 24 320 7 25 Z"
               fill="url(#cfg-beam-gradient)"
               filter="url(#cfg-beam-blur)"
               opacity={isSpinning ? 0.75 : isWon ? 0.85 : 0.50}
@@ -305,7 +305,7 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
 
             {/* 3. Soft Velvety Core Glow */}
             <path
-              d="M -2.5 25 L 2.5 25 L 18 660 L -18 660 Z"
+              d="M -3 25 Q -12 320 -42 660 L 42 660 Q 12 320 3 25 Z"
               fill="url(#cfg-core-gradient)"
               filter="url(#cfg-core-blur)"
               opacity={isSpinning ? 0.65 : isWon ? 0.75 : 0.45}
@@ -315,21 +315,21 @@ export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
             <ellipse
               cx="0"
               cy="440"
-              rx="30"
-              ry="52"
+              rx="38"
+              ry="58"
               fill="url(#cfg-rim-graze)"
               filter="url(#cfg-rim-blur)"
               opacity={isSpinning ? 0.55 : isWon ? 0.70 : 0.35}
             />
 
-            {/* 5. Delicate Floating Stage Dust Motes */}
+            {/* 5. Delicate Floating Stage Dust Motes across the Flared Cone */}
             {showDust && (
               <g className="pointer-events-none">
-                <circle cx="-4" cy="140" r="1.3" fill="#FFFFFF" opacity="0.6" className="spotlight-dust-a" filter="url(#cfg-dust-blur)" />
-                <circle cx="8" cy="230" r="1.6" fill={primaryColor} opacity="0.5" className="spotlight-dust-b" filter="url(#cfg-dust-blur)" />
-                <circle cx="-11" cy="330" r="1.2" fill="#FFFFFF" opacity="0.65" className="spotlight-dust-c" filter="url(#cfg-dust-blur)" />
-                <circle cx="13" cy="440" r="1.8" fill={secondaryColor} opacity="0.45" className="spotlight-dust-a" filter="url(#cfg-dust-blur)" />
-                <circle cx="-14" cy="540" r="1.5" fill="#FFFFFF" opacity="0.5" className="spotlight-dust-b" filter="url(#cfg-dust-blur)" />
+                <circle cx="-5" cy="140" r="1.3" fill="#FFFFFF" opacity="0.6" className="spotlight-dust-a" filter="url(#cfg-dust-blur)" />
+                <circle cx="12" cy="230" r="1.6" fill={primaryColor} opacity="0.5" className="spotlight-dust-b" filter="url(#cfg-dust-blur)" />
+                <circle cx="-22" cy="330" r="1.2" fill="#FFFFFF" opacity="0.65" className="spotlight-dust-c" filter="url(#cfg-dust-blur)" />
+                <circle cx="28" cy="440" r="1.8" fill={secondaryColor} opacity="0.45" className="spotlight-dust-a" filter="url(#cfg-dust-blur)" />
+                <circle cx="-35" cy="540" r="1.5" fill="#FFFFFF" opacity="0.5" className="spotlight-dust-b" filter="url(#cfg-dust-blur)" />
               </g>
             )}
 
