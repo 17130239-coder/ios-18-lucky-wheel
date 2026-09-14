@@ -16,6 +16,7 @@ export function CenterHub({ spinState, prizeCount = 10, onSpin, onResetPrizes }:
   const isEmpty = prizeCount === 0;
 
   const handleClick = () => {
+    if (isSpinning) return;
     if (isEmpty) {
       onResetPrizes?.();
     } else {
@@ -28,12 +29,11 @@ export function CenterHub({ spinState, prizeCount = 10, onSpin, onResetPrizes }:
       <button
         type="button"
         onClick={handleClick}
-        disabled={isSpinning}
         aria-label={isEmpty ? 'Khôi phục danh sách quà' : 'Quay vòng quay may mắn'}
-        className={`group relative w-28 h-28 sm:w-36 sm:h-36 rounded-full p-2 glass-card shadow-[0_15px_35px_rgba(255,107,0,0.4),inset_0_2px_6px_rgba(255,255,255,0.9)] transition-all duration-200 focus:outline-none ring-4 ring-white ${
+        className={`group relative w-28 h-28 sm:w-36 sm:h-36 rounded-full p-2 glass-card shadow-[0_15px_35px_rgba(255,107,0,0.4),inset_0_2px_6px_rgba(255,255,255,0.9)] transition-all duration-200 focus:outline-none ring-4 ring-white cursor-pointer ${
           isSpinning
-            ? 'cursor-not-allowed opacity-95 scale-95'
-            : 'hover:scale-105 active:scale-95 cursor-pointer'
+            ? 'scale-95'
+            : 'hover:scale-105 active:scale-95'
         }`}
       >
         {/* Pulsing Aura */}
