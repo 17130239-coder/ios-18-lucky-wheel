@@ -138,7 +138,7 @@ export function StageCurtain({
 
       {/* 4. Center Spin Button Emblem & Fusion Animation */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center justify-center pointer-events-auto"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 w-28 h-28 sm:w-36 sm:h-36 flex items-center justify-center pointer-events-auto"
         onClick={(e) => {
           e.stopPropagation();
           triggerOpen();
@@ -168,9 +168,9 @@ export function StageCurtain({
           }`}
         />
 
-        {/* Master Spin Button (Identical to CenterHub for 100% Seamless Fusion) */}
+        {/* Master Spin Button (Exact 1:1 match with CenterHub) */}
         <div
-          className={`group relative w-28 h-28 sm:w-36 sm:h-36 rounded-full p-2 glass-card shadow-[0_15px_35px_rgba(255,107,0,0.6),inset_0_2px_6px_rgba(255,255,255,0.9)] ring-4 ring-white cursor-pointer select-none transition-all duration-500 hover:scale-105 active:scale-95 ${
+          className={`group relative w-full h-full rounded-full p-2 glass-card shadow-[0_15px_35px_rgba(255,107,0,0.6),inset_0_2px_6px_rgba(255,255,255,0.9)] ring-4 ring-white cursor-pointer select-none transition-all duration-500 hover:scale-105 active:scale-95 ${
             isOpeningOrOpen ? 'opacity-0 scale-105 pointer-events-none' : 'opacity-100 scale-100'
           }`}
           style={{
@@ -201,9 +201,9 @@ export function StageCurtain({
           </div>
         </div>
 
-        {/* Pulsing Hint Badge */}
+        {/* Pulsing Hint Badge positioned absolutely below button */}
         <div
-          className={`mt-6 px-4 py-1.5 rounded-full bg-black/70 backdrop-blur-md border border-[#FF6B00]/60 text-orange-300 text-xs font-bold tracking-wider flex items-center gap-1.5 shadow-xl transition-all duration-500 pointer-events-none ${
+          className={`absolute top-[calc(100%+20px)] left-1/2 -translate-x-1/2 whitespace-nowrap px-4 py-1.5 rounded-full bg-black/70 backdrop-blur-md border border-[#FF6B00]/60 text-orange-300 text-xs font-bold tracking-wider flex items-center gap-1.5 shadow-xl transition-all duration-500 pointer-events-none ${
             isOpeningOrOpen ? 'opacity-0 scale-75 -translate-y-2' : 'opacity-100 scale-100 translate-y-0 animate-bounce'
           }`}
         >

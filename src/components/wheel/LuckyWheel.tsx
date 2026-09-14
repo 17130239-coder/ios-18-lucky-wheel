@@ -34,7 +34,7 @@ export function LuckyWheel({
   onResetPrizes,
 }: LuckyWheelProps) {
   return (
-    <main className="relative z-10 flex flex-col items-center justify-center w-full h-full p-4">
+    <main className="relative z-10 flex items-center justify-center w-full h-full">
       <div className="relative flex items-center justify-center">
         {/* Dual Stage Spotlights precisely aligned and focused on the Wheel */}
         <StageSpotlights spinState={spinState} config={spotlightConfig} />

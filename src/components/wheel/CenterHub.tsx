@@ -25,7 +25,7 @@ export function CenterHub({ spinState, prizeCount = 10, onSpin, onResetPrizes }:
   };
 
   return (
-    <div className="absolute z-30 flex items-center justify-center pointer-events-auto">
+    <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-auto">
       <button
         type="button"
         onClick={handleClick}

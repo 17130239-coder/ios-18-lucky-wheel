@@ -8,7 +8,7 @@ interface PointerNeedleProps {
 
 export function PointerNeedle({ deflectionAngle }: PointerNeedleProps) {
   return (
-    <div className="absolute -top-6 sm:-top-7 z-40 flex flex-col items-center pointer-events-none drop-shadow-[0_8px_16px_rgba(255,107,0,0.45)]">
+    <div className="absolute -top-6 sm:-top-7 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center pointer-events-none drop-shadow-[0_8px_16px_rgba(255,107,0,0.45)]">
       <div
         className="origin-top will-change-transform"
         style={{
