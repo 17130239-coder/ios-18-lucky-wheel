@@ -112,6 +112,13 @@
 - **Tương Thích Tuyệt Đối Cả 2 Chế Độ Sáng / Tối**: Mỗi khung cảnh vector tự động chuyển đổi bảng màu tương ứng (ví dụ: rừng ban mai êm dịu $\leftrightarrow$ rừng đêm huyền ảo; biển hoàng hôn vàng cam $\leftrightarrow$ biển đêm ánh trăng bạc).
 - **Cơ Chế Zero-Jitter UX**: Tích hợp chọn chủ đề trực quan ngay trong tab **Sân Khấu & Không Gian** của Drawer Cài Đặt với khung radio cố định, chuyển cảnh êm dịu và tự động lưu trạng thái vào `localStorage`.
 
+### 1.10. Hệ Thống Đa Ngôn Ngữ Song Ngữ Chuẩn Quốc Tế (Bilingual i18n & Language Settings)
+- **Hỗ trợ song ngữ toàn diện**: Tiếng Việt (🇻🇳 Mặc định) & Tiếng Anh (🇺🇸 English) trên 100% thành phần giao diện (Header, Bánh xe, Nan quạt, Modal chiến thắng, Lịch sử, Mở rèm, và toàn bộ 3 tab Cài Đặt Sân khấu - Nhạc Chill - Quà tặng).
+- **Bộ chuyển đổi nhanh 1 chạm trên Header**: Nút chuyển ngôn ngữ trực quan trên thanh điều hướng (`VI` / `EN`) kèm biểu tượng `Languages`.
+- **Cấu hình trực quan trong Ngăn Kéo Cài Đặt**: Khối tùy chọn chọn ngôn ngữ hiển thị đặt ngay đầu tab **Sân Khấu** với 2 thẻ cờ quốc gia `AnimatedRadioCheck` chuẩn Zero-Jitter.
+- **Tự động ghi nhớ & Đồng bộ DOM**: Tự động lưu lựa chọn vào `localStorage.getItem('tech_wheel_locale')` và đồng bộ thuộc tính `<html lang="vi">` / `<html lang="en">`.
+- **Kiến trúc Type-Safe Dictionary**: Tự động kiểm tra tính hợp lệ của toàn bộ cây bản dịch tại thời điểm build (Compile-time type checking), loại bỏ hoàn toàn nguy cơ sót khóa bản dịch.
+
 ---
 
 ## 2. Các Cải Tiến Nổi Bật & Tinh Chỉnh UI/UX (Improvements)
@@ -181,6 +188,23 @@
   - Thành phần `<AnimatedRadioCheck />` chuẩn hóa kích thước cố định $20\text{px} \times 20\text{px}$ tuyệt đối, loại trừ hoàn toàn việc ngắt/thêm phần tử DOM làm giật hoặc rung lắc khung hình (**Zero Layout Shift**).
   - Khi một lựa chọn được chọn (ví dụ: Chế độ chiếu sáng Rim / Sweep / Center, Chủ đề cảnh quan vector, Giai điệu BGM), biểu tượng dấu kiểm $\checkmark$ bật nảy đàn hồi theo đường cong lò xo đặc trưng `cubic-bezier(0.34, 1.56, 0.64, 1)` với góc xoay mượt mà từ $-45^\circ$ về $0^\circ$.
   - Khung thẻ sở hữu vòng hào quang phát sáng êm dịu (`ring-1.5 ring-[#FF6B00]/30`) và phản hồi lực nhấn cơ học (`active:scale-[0.985]`), tạo cảm giác xúc giác chân thực như đang thao tác trên thiết bị iOS 18 nguyên bản.
+
+### 2.8. Triệt Tiêu Xung Đột Đồng Thời Các Lớp Phủ (Mutual Exclusivity Overlay Architecture)
+- **Khắc phục triệt để lỗi hiển thị đồng thời 2 popup/drawer**:
+  - *Vấn đề trước đây*: Khi trúng thưởng trong lúc người dùng đang mở Drawer Cài Đặt (hoặc Drawer Lịch Sử), cả Modal Chiến Thắng (`VictoryModal`) và Ngăn Kéo Cài Đặt (`SettingsDrawer`) đều cùng xuất hiện đè lên nhau, gây rối mắt và che khuất thao tác.
+  - *Giải pháp*:
+    - Thiết lập cơ chế **Loại trừ lẫn nhau (Mutual Exclusivity)**: Khi sự kiện chiến thắng kích hoạt, `handleWin` sẽ tự động đóng ngay lập tức tất cả các ngăn kéo cài đặt và lịch sử (`setIsSettingsOpen(false)`, `setIsHistoryOpen(false)`).
+    - Khi bắt đầu một vòng quay mới (`handleSpin`), tất cả drawer/modal đang mở đều được tự động ẩn đi để nhường toàn bộ không gian cho vòng quay.
+    - Khi người dùng chủ động mở Cài Đặt hoặc Lịch Sử từ Header, hệ thống cũng chủ động dọn dẹp các lớp phủ còn lại.
+    - Nâng cấp độ ưu tiên hiển thị `z-index: 60` cho `VictoryModal`, đảm bảo thông điệp chiến thắng luôn ngự trị ở vị trí cao nhất và nổi bật nhất.
+
+### 2.9. Tối Ưu Bố Cục Thẻ Chọn Icon & Khắc Phục Lỗi Cắt Chữ (Icon Card Layout & Text Clamp Fix)
+- **Neo huy hiệu kiểm tra không bị che khuất**:
+  - *Vấn đề trước đây*: Biểu tượng dấu kiểm màu cam đặt ở góc trên của thẻ nhưng bị góc bo squircle của icon đè lên trên một phần, gây ra lỗi hiển thị khuyết tật nửa hình tròn.
+  - *Giải pháp*: Neo trực tiếp dấu kiểm vào khung icon container với `absolute -top-1 -right-1 z-10` kèm viền tròn tương phản `ring-2 ring-white dark:ring-stone-900`, đảm bảo huy hiệu luôn nổi trọn vẹn 100% không bao giờ bị chìm hay che khuất.
+- **Loại bỏ lỗi cắt cụt chữ ("Đi...")**:
+  - *Vấn đề trước đây*: Thuộc tính `truncate` trên màn hình hẹp ép toàn bộ chữ vào 1 hàng duy nhất khiến từ dài như "Điện thoại" bị cắt thành "Đi...".
+  - *Giải pháp*: Chuyển đổi sang `line-clamp-2 leading-tight break-words w-full` kết hợp `min-h-[82px]`, giúp tên biểu tượng xuống hàng tự nhiên, hiển thị tròn vành rõ chữ "Điện thoại" mà vẫn giữ chiều cao hàng lưới đồng đều tuyệt đối.
 
 ---
 
