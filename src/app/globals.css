@@ -63,3 +63,22 @@ body {
 .dark ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
 }
+
+/* Stage Spotlight Keyframe Swivels */
+@keyframes spotlight-swivel-left {
+  0%, 100% {
+    transform: rotate(24deg);
+  }
+  50% {
+    transform: rotate(34deg);
+  }
+}
+
+@keyframes spotlight-swivel-right {
+  0%, 100% {
+    transform: rotate(-24deg);
+  }
+  50% {
+    transform: rotate(-34deg);
+  }
+}

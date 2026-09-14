@@ -6,6 +6,7 @@ import { WheelSvg } from './WheelSvg';
 import { PointerNeedle } from './PointerNeedle';
 import { CenterHub } from './CenterHub';
 import { AmbientGlow } from './AmbientGlow';
+import { StageSpotlights } from './StageSpotlights';
 import { StatusPill } from './StatusPill';
 import { ConfettiCanvas } from '../canvas/ConfettiCanvas';
 
@@ -30,6 +31,9 @@ export function LuckyWheel({
 }: LuckyWheelProps) {
   return (
     <main className="relative z-10 flex flex-col items-center justify-center w-full h-full p-4">
+      {/* Dual Stage Spotlights at the Top Corners */}
+      <StageSpotlights spinState={spinState} />
+
       <div className="relative flex flex-col items-center justify-center">
         {/* Warm Ambient Glow Backlight */}
         <AmbientGlow spinState={spinState} />
