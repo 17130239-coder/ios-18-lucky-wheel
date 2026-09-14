@@ -64,76 +64,131 @@ body {
   background: rgba(255, 255, 255, 0.15);
 }
 
-/* ================= STAGE SPOTLIGHT SWEEP ANIMATIONS ================= */
-/* Left Spotlight: Points inwards toward wheel center (500, 500) at -40.4deg */
-@keyframes spotlight-sweep-left {
+/* ================= STAGE SPOTLIGHT ANIMATIONS ================= */
+/* 1. RGB Spectrum Hue Cycle */
+@keyframes rgb-cycle {
   0% {
-    transform: rotate(-32deg);
+    filter: hue-rotate(0deg);
   }
   100% {
-    transform: rotate(-48deg);
+    filter: hue-rotate(360deg);
   }
 }
 
-/* Right Spotlight: Points inwards toward wheel center (500, 500) at +40.4deg */
-@keyframes spotlight-sweep-right {
+.spotlight-rgb-mode {
+  animation: rgb-cycle 7s linear infinite;
+}
+
+/* 2. Rim Grazing (Chạm nhẹ viền ngoài - Khuyên dùng) */
+@keyframes spotlight-rim-left {
   0% {
-    transform: rotate(32deg);
+    transform: rotate(-16deg);
   }
   100% {
-    transform: rotate(48deg);
+    transform: rotate(-26deg);
   }
+}
+
+@keyframes spotlight-rim-right {
+  0% {
+    transform: rotate(16deg);
+  }
+  100% {
+    transform: rotate(26deg);
+  }
+}
+
+.spotlight-left-rim {
+  transform-origin: 0 0;
+  animation: spotlight-rim-left 4.8s ease-in-out infinite alternate;
+}
+
+.spotlight-right-rim {
+  transform-origin: 0 0;
+  animation: spotlight-rim-right 4.8s ease-in-out infinite alternate;
+  animation-delay: -1.8s;
+}
+
+/* 3. Full Sweep Mode (Quét toàn sân khấu) */
+@keyframes spotlight-sweep-left {
+  0% {
+    transform: rotate(-24deg);
+  }
+  100% {
+    transform: rotate(-44deg);
+  }
+}
+
+@keyframes spotlight-sweep-right {
+  0% {
+    transform: rotate(24deg);
+  }
+  100% {
+    transform: rotate(44deg);
+  }
+}
+
+.spotlight-left-sweep {
+  transform-origin: 0 0;
+  animation: spotlight-sweep-left 4.2s ease-in-out infinite alternate;
+}
+
+.spotlight-right-sweep {
+  transform-origin: 0 0;
+  animation: spotlight-sweep-right 4.2s ease-in-out infinite alternate;
+  animation-delay: -1.5s;
+}
+
+/* 4. Center Fixed Mode */
+.spotlight-left-center {
+  transform-origin: 0 0;
+  transform: rotate(-36deg);
+}
+
+.spotlight-right-center {
+  transform-origin: 0 0;
+  transform: rotate(36deg);
 }
 
 /* Fast energetic sweeping during wheel spin */
-@keyframes spotlight-sweep-left-fast {
+@keyframes spotlight-spin-left {
   0% {
-    transform: rotate(-30deg);
+    transform: rotate(-18deg);
   }
   100% {
-    transform: rotate(-50deg);
+    transform: rotate(-42deg);
   }
 }
 
-@keyframes spotlight-sweep-right-fast {
+@keyframes spotlight-spin-right {
   0% {
-    transform: rotate(30deg);
+    transform: rotate(18deg);
   }
   100% {
-    transform: rotate(50deg);
+    transform: rotate(42deg);
   }
-}
-
-.spotlight-left-idle {
-  transform-origin: 0 0;
-  animation: spotlight-sweep-left 4.5s ease-in-out infinite alternate;
-}
-
-.spotlight-right-idle {
-  transform-origin: 0 0;
-  animation: spotlight-sweep-right 4.5s ease-in-out infinite alternate;
-  animation-delay: -1.6s;
 }
 
 .spotlight-left-spin {
   transform-origin: 0 0;
-  animation: spotlight-sweep-left-fast 1.6s ease-in-out infinite alternate;
+  animation: spotlight-spin-left 1.6s ease-in-out infinite alternate;
 }
 
 .spotlight-right-spin {
   transform-origin: 0 0;
-  animation: spotlight-sweep-right-fast 1.6s ease-in-out infinite alternate;
+  animation: spotlight-spin-right 1.6s ease-in-out infinite alternate;
   animation-delay: -0.6s;
 }
 
+/* Victory lock */
 .spotlight-left-won {
   transform-origin: 0 0;
-  transform: rotate(-40.4deg);
+  transform: rotate(-32deg);
   transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .spotlight-right-won {
   transform-origin: 0 0;
-  transform: rotate(40.4deg);
+  transform: rotate(32deg);
   transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }

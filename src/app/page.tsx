@@ -3,6 +3,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { ThemeMode, PrizeItem } from '@/types/wheel';
 import { usePrizeStore } from '@/hooks/usePrizeStore';
+import { useSpotlightStore } from '@/hooks/useSpotlightStore';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { useConfetti } from '@/hooks/useConfetti';
 import { useLuckyWheel } from '@/hooks/useLuckyWheel';
@@ -53,6 +54,12 @@ export default function LuckyWheelPage() {
     addHistoryItem,
     clearHistory,
   } = usePrizeStore();
+
+  const {
+    spotlightConfig,
+    updateSpotlightConfig,
+    resetSpotlightConfig,
+  } = useSpotlightStore();
 
   const {
     isMuted,
@@ -128,6 +135,7 @@ export default function LuckyWheelPage() {
         needleDeflection={needleDeflection}
         activePrize={activePrize}
         canvasRef={canvasRef}
+        spotlightConfig={spotlightConfig}
         onSpin={spin}
       />
 
@@ -156,10 +164,11 @@ export default function LuckyWheelPage() {
         }}
       />
 
-      {/* Prize Settings Drawer */}
+      {/* Prize & Spotlight Settings Drawer */}
       <SettingsDrawer
         isOpen={isSettingsOpen}
         prizes={prizes}
+        spotlightConfig={spotlightConfig}
         onClose={() => {
           playGlassPop();
           setIsSettingsOpen(false);
@@ -172,6 +181,8 @@ export default function LuckyWheelPage() {
           playClick();
           resetToDefaults();
         }}
+        onUpdateSpotlightConfig={updateSpotlightConfig}
+        onResetSpotlightConfig={resetSpotlightConfig}
       />
     </div>
   );

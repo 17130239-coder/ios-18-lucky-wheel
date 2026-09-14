@@ -1,31 +1,75 @@
 'use client';
 
 import React from 'react';
-import { SpinState } from '@/types/wheel';
+import { SpinState, SpotlightConfig } from '@/types/wheel';
 
 interface StageSpotlightsProps {
   spinState: SpinState;
+  config: SpotlightConfig;
 }
 
-export function StageSpotlights({ spinState }: StageSpotlightsProps) {
+const PRESET_COLORS: Record<string, { primary: string; secondary: string }> = {
+  amber: { primary: '#FFA04D', secondary: '#FF7A00' },
+  violet: { primary: '#A855F7', secondary: '#7053FF' },
+  cyan: { primary: '#38BDF8', secondary: '#00F2FE' },
+  rose: { primary: '#FB7185', secondary: '#F43F5E' },
+};
+
+export function StageSpotlights({ spinState, config }: StageSpotlightsProps) {
+  // If disabled by user in settings, do not render
+  if (!config.enabled) return null;
+
   const isSpinning = spinState === 'spinning';
   const isWon = spinState === 'won';
 
-  // Animation class based on spinState
-  const leftAnimClass = isSpinning
-    ? 'spotlight-left-spin'
-    : isWon
-    ? 'spotlight-left-won'
-    : 'spotlight-left-idle';
+  // Determine active color stops
+  let primaryColor = '#FFA04D';
+  let secondaryColor = '#FF7A00';
 
-  const rightAnimClass = isSpinning
-    ? 'spotlight-right-spin'
-    : isWon
-    ? 'spotlight-right-won'
-    : 'spotlight-right-idle';
+  if (config.colorMode === 'custom' && config.customColor) {
+    primaryColor = config.customColor;
+    secondaryColor = config.customColor;
+  } else if (config.colorMode === 'rgb') {
+    primaryColor = '#FFA04D';
+    secondaryColor = '#7053FF';
+  } else if (PRESET_COLORS[config.colorMode]) {
+    primaryColor = PRESET_COLORS[config.colorMode].primary;
+    secondaryColor = PRESET_COLORS[config.colorMode].secondary;
+  }
+
+  // Determine active animation class
+  let leftAnimClass = 'spotlight-left-rim';
+  let rightAnimClass = 'spotlight-right-rim';
+
+  if (isSpinning) {
+    leftAnimClass = 'spotlight-left-spin';
+    rightAnimClass = 'spotlight-right-spin';
+  } else if (isWon) {
+    leftAnimClass = 'spotlight-left-won';
+    rightAnimClass = 'spotlight-right-won';
+  } else {
+    if (config.style === 'sweep') {
+      leftAnimClass = 'spotlight-left-sweep';
+      rightAnimClass = 'spotlight-right-sweep';
+    } else if (config.style === 'center') {
+      leftAnimClass = 'spotlight-left-center';
+      rightAnimClass = 'spotlight-right-center';
+    } else {
+      leftAnimClass = 'spotlight-left-rim';
+      rightAnimClass = 'spotlight-right-rim';
+    }
+  }
+
+  const isRgbMode = config.colorMode === 'rgb';
+  const brightness = Math.max(0.2, Math.min(1, config.brightness || 0.65));
 
   return (
-    <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-15 overflow-visible">
+    <div
+      className={`absolute inset-0 pointer-events-none flex items-center justify-center z-15 overflow-visible transition-opacity duration-300 ${
+        isRgbMode ? 'spotlight-rgb-mode' : ''
+      }`}
+      style={{ opacity: brightness }}
+    >
       {/* SVG Stage Spotlight Engine - Centered on Wheel at (500, 500) */}
       <svg
         viewBox="0 0 1000 1000"
@@ -34,17 +78,17 @@ export function StageSpotlights({ spinState }: StageSpotlightsProps) {
       >
         <defs>
           {/* Soft blur for beam edges */}
-          <filter id="narrow-beam-blur" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="5" />
+          <filter id="cfg-beam-blur" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="5.5" />
           </filter>
 
           {/* Core beam blur */}
-          <filter id="core-beam-blur" x="-20%" y="-20%" width="140%" height="140%">
+          <filter id="cfg-core-blur" x="-20%" y="-20%" width="140%" height="140%">
             <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" />
           </filter>
 
           {/* Lamp lens glow */}
-          <filter id="lamp-lens-glow" x="-50%" y="-50%" width="200%" height="200%">
+          <filter id="cfg-lens-glow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="glow" />
             <feMerge>
               <feMergeNode in="glow" />
@@ -52,51 +96,31 @@ export function StageSpotlights({ spinState }: StageSpotlightsProps) {
             </feMerge>
           </filter>
 
-          {/* Focal spot blur on wheel */}
-          <filter id="spot-blur" x="-40%" y="-40%" width="180%" height="180%">
+          {/* Focal spot blur on rim */}
+          <filter id="cfg-spot-blur" x="-40%" y="-40%" width="180%" height="180%">
             <feGaussianBlur in="SourceGraphic" stdDeviation="8" />
           </filter>
 
-          {/* ================= LIGHT MODE GRADIENTS ================= */}
-          {/* Narrow Spotlight Beam Gradient (Light mode: Warm Golden Amber) */}
-          <linearGradient id="narrow-beam-light" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.85" />
-            <stop offset="10%" stopColor="#FFAA44" stopOpacity="0.45" />
-            <stop offset="35%" stopColor="#FF7A00" stopOpacity="0.22" />
-            <stop offset="70%" stopColor="#FF6B00" stopOpacity="0.10" />
-            <stop offset="95%" stopColor="#FF6B00" stopOpacity="0.02" />
-            <stop offset="100%" stopColor="#FF6B00" stopOpacity="0" />
+          {/* Dynamic Spotlight Beam Gradient */}
+          <linearGradient id="cfg-beam-gradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
+            <stop offset="10%" stopColor={primaryColor} stopOpacity="0.50" />
+            <stop offset="35%" stopColor={secondaryColor} stopOpacity="0.25" />
+            <stop offset="70%" stopColor={secondaryColor} stopOpacity="0.10" />
+            <stop offset="95%" stopColor={secondaryColor} stopOpacity="0.02" />
+            <stop offset="100%" stopColor={secondaryColor} stopOpacity="0" />
           </linearGradient>
 
-          {/* Focused Circular Spot on Wheel Surface (Light Mode) */}
-          <radialGradient id="focal-spot-light" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.55" />
-            <stop offset="35%" stopColor="#FFA459" stopOpacity="0.30" />
-            <stop offset="75%" stopColor="#FF6B00" stopOpacity="0.08" />
-            <stop offset="100%" stopColor="#FF6B00" stopOpacity="0" />
-          </radialGradient>
-
-          {/* ================= DARK MODE GRADIENTS ================= */}
-          {/* Narrow Spotlight Beam Gradient (Dark mode: Electric Violet / Cyan) */}
-          <linearGradient id="narrow-beam-dark" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.92" />
-            <stop offset="12%" stopColor="#D4FCFF" stopOpacity="0.55" />
-            <stop offset="38%" stopColor="#7053FF" stopOpacity="0.26" />
-            <stop offset="72%" stopColor="#00F2FE" stopOpacity="0.10" />
-            <stop offset="95%" stopColor="#00F2FE" stopOpacity="0.02" />
-            <stop offset="100%" stopColor="#00F2FE" stopOpacity="0" />
-          </linearGradient>
-
-          {/* Focused Circular Spot on Wheel Surface (Dark Mode) */}
-          <radialGradient id="focal-spot-dark" cx="50%" cy="50%" r="50%">
+          {/* Focused Circular Grazing Spot */}
+          <radialGradient id="cfg-focal-spot" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.65" />
-            <stop offset="40%" stopColor="#7053FF" stopOpacity="0.35" />
-            <stop offset="80%" stopColor="#00F2FE" stopOpacity="0.10" />
-            <stop offset="100%" stopColor="#00F2FE" stopOpacity="0" />
+            <stop offset="35%" stopColor={primaryColor} stopOpacity="0.32" />
+            <stop offset="75%" stopColor={secondaryColor} stopOpacity="0.08" />
+            <stop offset="100%" stopColor={secondaryColor} stopOpacity="0" />
           </radialGradient>
 
-          {/* Lamp Hardware Gradients */}
-          <linearGradient id="lamp-housing" x1="0" y1="0" x2="1" y2="1">
+          {/* Lamp Housing Gradient */}
+          <linearGradient id="cfg-lamp-housing" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#4A4E57" />
             <stop offset="50%" stopColor="#2E3138" />
             <stop offset="100%" stopColor="#1B1D22" />
@@ -104,10 +128,10 @@ export function StageSpotlights({ spinState }: StageSpotlightsProps) {
         </defs>
 
         {/* =========================================================================
-            LEFT SPOTLIGHT ASSEMBLY (Positioned at 160, 100, Sweeps Back-and-Forth)
+            LEFT SPOTLIGHT ASSEMBLY (Positioned at 160, 100)
             ========================================================================= */}
         <g transform="translate(160, 100)">
-          {/* Static Mounting Rod & Bracket from Ceiling */}
+          {/* Static Ceiling Mounting Hardware */}
           <rect x="-2.5" y="-55" width="5" height="38" fill="#3D414A" rx="1.5" />
           <circle cx="0" cy="-17" r="6" fill="#25282F" stroke="#525763" strokeWidth="1.5" />
           <path
@@ -121,70 +145,40 @@ export function StageSpotlights({ spinState }: StageSpotlightsProps) {
           {/* Swiveling Group (Lamp Head + Narrow Focused Beam) */}
           <g className={leftAnimClass}>
             {/* 1. Narrow Focused Light Beam Cone */}
-            {/* Outer Soft Haze (Light Mode) */}
+            {/* Outer Soft Haze */}
             <path
-              d="M -7 20 L 7 20 L 60 530 L -60 530 Z"
-              fill="url(#narrow-beam-light)"
-              filter="url(#narrow-beam-blur)"
-              className="dark:hidden"
+              d="M -7 20 L 7 20 L 52 500 L -52 500 Z"
+              fill="url(#cfg-beam-gradient)"
+              filter="url(#cfg-beam-blur)"
               opacity={isSpinning ? '0.85' : isWon ? '1.0' : '0.65'}
             />
-            {/* Inner Core Beam (Light Mode) */}
+            {/* Inner Core Beam */}
             <path
-              d="M -4 20 L 4 20 L 35 530 L -35 530 Z"
-              fill="url(#narrow-beam-light)"
-              filter="url(#core-beam-blur)"
-              className="dark:hidden"
+              d="M -4 20 L 4 20 L 30 500 L -30 500 Z"
+              fill="url(#cfg-beam-gradient)"
+              filter="url(#cfg-core-blur)"
               opacity={isSpinning ? '0.95' : isWon ? '1.0' : '0.75'}
             />
 
-            {/* Dark Mode Beams */}
-            <path
-              d="M -7 20 L 7 20 L 60 530 L -60 530 Z"
-              fill="url(#narrow-beam-dark)"
-              filter="url(#narrow-beam-blur)"
-              className="hidden dark:block"
-              opacity={isSpinning ? '0.85' : isWon ? '1.0' : '0.65'}
-            />
-            <path
-              d="M -4 20 L 4 20 L 35 530 L -35 530 Z"
-              fill="url(#narrow-beam-dark)"
-              filter="url(#core-beam-blur)"
-              className="hidden dark:block"
-              opacity={isSpinning ? '0.95' : isWon ? '1.0' : '0.75'}
-            />
-
-            {/* 2. Small Focused Light Spot on the Wheel (At target y = 530) */}
+            {/* 2. Small Grazing Light Spot on Wheel Rim (At target y = 500) */}
             <ellipse
               cx="0"
-              cy="530"
-              rx="62"
-              ry="30"
-              fill="url(#focal-spot-light)"
-              filter="url(#spot-blur)"
-              className="dark:hidden"
-              opacity={isSpinning ? '0.90' : isWon ? '1.0' : '0.70'}
-            />
-            <ellipse
-              cx="0"
-              cy="530"
-              rx="62"
-              ry="30"
-              fill="url(#focal-spot-dark)"
-              filter="url(#spot-blur)"
-              className="hidden dark:block"
+              cy="500"
+              rx="55"
+              ry="26"
+              fill="url(#cfg-focal-spot)"
+              filter="url(#cfg-spot-blur)"
               opacity={isSpinning ? '0.90' : isWon ? '1.0' : '0.70'}
             />
 
             {/* 3. Physical Lamp Projector Head */}
-            {/* Lamp Cylinder */}
             <rect
               x="-14"
               y="-12"
               width="28"
               height="32"
               rx="4"
-              fill="url(#lamp-housing)"
+              fill="url(#cfg-lamp-housing)"
               stroke="rgba(255,255,255,0.25)"
               strokeWidth="1"
             />
@@ -208,30 +202,28 @@ export function StageSpotlights({ spinState }: StageSpotlightsProps) {
               rx="12"
               ry="3.5"
               fill="#FFFFFF"
-              stroke="#FFA04D"
+              stroke={primaryColor}
               strokeWidth="1.2"
-              className="dark:stroke-[#00F2FE]"
             />
             {/* High-intensity White Bulb Emitter */}
-            <ellipse cx="0" cy="25" rx="7" ry="2" fill="#FFFFFF" filter="url(#lamp-lens-glow)" />
+            <ellipse cx="0" cy="25" rx="7" ry="2" fill="#FFFFFF" filter="url(#cfg-lens-glow)" />
             {/* Lens flare aura */}
             <circle
               cx="0"
               cy="25"
               r="12"
-              fill="#FFA04D"
-              className="dark:fill-[#7053FF]"
-              opacity="0.45"
-              filter="url(#lamp-lens-glow)"
+              fill={primaryColor}
+              opacity="0.5"
+              filter="url(#cfg-lens-glow)"
             />
           </g>
         </g>
 
         {/* =========================================================================
-            RIGHT SPOTLIGHT ASSEMBLY (Positioned at 840, 100, Sweeps Back-and-Forth)
+            RIGHT SPOTLIGHT ASSEMBLY (Positioned at 840, 100)
             ========================================================================= */}
         <g transform="translate(840, 100)">
-          {/* Static Mounting Rod & Bracket from Ceiling */}
+          {/* Static Ceiling Mounting Hardware */}
           <rect x="-2.5" y="-55" width="5" height="38" fill="#3D414A" rx="1.5" />
           <circle cx="0" cy="-17" r="6" fill="#25282F" stroke="#525763" strokeWidth="1.5" />
           <path
@@ -245,70 +237,40 @@ export function StageSpotlights({ spinState }: StageSpotlightsProps) {
           {/* Swiveling Group (Lamp Head + Narrow Focused Beam) */}
           <g className={rightAnimClass}>
             {/* 1. Narrow Focused Light Beam Cone */}
-            {/* Outer Soft Haze (Light Mode) */}
+            {/* Outer Soft Haze */}
             <path
-              d="M -7 20 L 7 20 L 60 530 L -60 530 Z"
-              fill="url(#narrow-beam-light)"
-              filter="url(#narrow-beam-blur)"
-              className="dark:hidden"
+              d="M -7 20 L 7 20 L 52 500 L -52 500 Z"
+              fill="url(#cfg-beam-gradient)"
+              filter="url(#cfg-beam-blur)"
               opacity={isSpinning ? '0.85' : isWon ? '1.0' : '0.65'}
             />
-            {/* Inner Core Beam (Light Mode) */}
+            {/* Inner Core Beam */}
             <path
-              d="M -4 20 L 4 20 L 35 530 L -35 530 Z"
-              fill="url(#narrow-beam-light)"
-              filter="url(#core-beam-blur)"
-              className="dark:hidden"
+              d="M -4 20 L 4 20 L 30 500 L -30 500 Z"
+              fill="url(#cfg-beam-gradient)"
+              filter="url(#cfg-core-blur)"
               opacity={isSpinning ? '0.95' : isWon ? '1.0' : '0.75'}
             />
 
-            {/* Dark Mode Beams */}
-            <path
-              d="M -7 20 L 7 20 L 60 530 L -60 530 Z"
-              fill="url(#narrow-beam-dark)"
-              filter="url(#narrow-beam-blur)"
-              className="hidden dark:block"
-              opacity={isSpinning ? '0.85' : isWon ? '1.0' : '0.65'}
-            />
-            <path
-              d="M -4 20 L 4 20 L 35 530 L -35 530 Z"
-              fill="url(#narrow-beam-dark)"
-              filter="url(#core-beam-blur)"
-              className="hidden dark:block"
-              opacity={isSpinning ? '0.95' : isWon ? '1.0' : '0.75'}
-            />
-
-            {/* 2. Small Focused Light Spot on the Wheel (At target y = 530) */}
+            {/* 2. Small Grazing Light Spot on Wheel Rim (At target y = 500) */}
             <ellipse
               cx="0"
-              cy="530"
-              rx="62"
-              ry="30"
-              fill="url(#focal-spot-light)"
-              filter="url(#spot-blur)"
-              className="dark:hidden"
-              opacity={isSpinning ? '0.90' : isWon ? '1.0' : '0.70'}
-            />
-            <ellipse
-              cx="0"
-              cy="530"
-              rx="62"
-              ry="30"
-              fill="url(#focal-spot-dark)"
-              filter="url(#spot-blur)"
-              className="hidden dark:block"
+              cy="500"
+              rx="55"
+              ry="26"
+              fill="url(#cfg-focal-spot)"
+              filter="url(#cfg-spot-blur)"
               opacity={isSpinning ? '0.90' : isWon ? '1.0' : '0.70'}
             />
 
             {/* 3. Physical Lamp Projector Head */}
-            {/* Lamp Cylinder */}
             <rect
               x="-14"
               y="-12"
               width="28"
               height="32"
               rx="4"
-              fill="url(#lamp-housing)"
+              fill="url(#cfg-lamp-housing)"
               stroke="rgba(255,255,255,0.25)"
               strokeWidth="1"
             />
@@ -332,21 +294,19 @@ export function StageSpotlights({ spinState }: StageSpotlightsProps) {
               rx="12"
               ry="3.5"
               fill="#FFFFFF"
-              stroke="#FFA04D"
+              stroke={primaryColor}
               strokeWidth="1.2"
-              className="dark:stroke-[#00F2FE]"
             />
             {/* High-intensity White Bulb Emitter */}
-            <ellipse cx="0" cy="25" rx="7" ry="2" fill="#FFFFFF" filter="url(#lamp-lens-glow)" />
+            <ellipse cx="0" cy="25" rx="7" ry="2" fill="#FFFFFF" filter="url(#cfg-lens-glow)" />
             {/* Lens flare aura */}
             <circle
               cx="0"
               cy="25"
               r="12"
-              fill="#FFA04D"
-              className="dark:fill-[#00F2FE]"
-              opacity="0.45"
-              filter="url(#lamp-lens-glow)"
+              fill={primaryColor}
+              opacity="0.5"
+              filter="url(#cfg-lens-glow)"
             />
           </g>
         </g>

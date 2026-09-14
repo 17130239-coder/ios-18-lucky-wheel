@@ -39,3 +39,15 @@ export interface SpinHistoryItem {
 export type ThemeMode = 'light' | 'dark';
 
 export type SpinState = 'idle' | 'spinning' | 'won';
+
+export type SpotlightColorMode = 'amber' | 'violet' | 'cyan' | 'rose' | 'rgb' | 'custom';
+
+export type SpotlightStyle = 'rim' | 'sweep' | 'center';
+
+export interface SpotlightConfig {
+  enabled: boolean;
+  colorMode: SpotlightColorMode;
+  customColor: string;
+  style: SpotlightStyle;
+  brightness: number; // 0.2 to 1.0
+}

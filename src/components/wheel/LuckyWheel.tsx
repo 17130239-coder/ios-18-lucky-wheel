@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { PrizeItem, SpinState } from '@/types/wheel';
+import { PrizeItem, SpinState, SpotlightConfig } from '@/types/wheel';
 import { WheelSvg } from './WheelSvg';
 import { PointerNeedle } from './PointerNeedle';
 import { CenterHub } from './CenterHub';
@@ -17,6 +17,7 @@ interface LuckyWheelProps {
   needleDeflection: number;
   activePrize: PrizeItem | null;
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
+  spotlightConfig: SpotlightConfig;
   onSpin: () => void;
 }
 
@@ -27,13 +28,14 @@ export function LuckyWheel({
   needleDeflection,
   activePrize,
   canvasRef,
+  spotlightConfig,
   onSpin,
 }: LuckyWheelProps) {
   return (
     <main className="relative z-10 flex flex-col items-center justify-center w-full h-full p-4">
       <div className="relative flex flex-col items-center justify-center">
         {/* Dual Stage Spotlights precisely aligned and focused on the Wheel */}
-        <StageSpotlights spinState={spinState} />
+        <StageSpotlights spinState={spinState} config={spotlightConfig} />
 
         {/* Warm Ambient Glow Backlight */}
         <AmbientGlow spinState={spinState} />
