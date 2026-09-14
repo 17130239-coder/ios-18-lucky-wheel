@@ -17,6 +17,9 @@ interface SettingsDrawerProps {
   onReset: () => void;
   onUpdateSpotlightConfig: (updated: Partial<SpotlightConfig>) => void;
   onResetSpotlightConfig: () => void;
+  curtainEnabled?: boolean;
+  onToggleCurtain?: () => void;
+  onReplayCurtain?: () => void;
 }
 
 type SettingsTab = 'prizes' | 'spotlight';
@@ -31,6 +34,9 @@ function SettingsDrawerContent({
   onReset,
   onUpdateSpotlightConfig,
   onResetSpotlightConfig,
+  curtainEnabled,
+  onToggleCurtain,
+  onReplayCurtain,
 }: Omit<SettingsDrawerProps, 'isOpen'>) {
   const [activeTab, setActiveTab] = useState<SettingsTab>('spotlight');
   const [draftPrizes, setDraftPrizes] = useState<PrizeItem[]>(() =>
@@ -136,6 +142,9 @@ function SettingsDrawerContent({
               config={spotlightConfig}
               onChange={onUpdateSpotlightConfig}
               onReset={onResetSpotlightConfig}
+              curtainEnabled={curtainEnabled}
+              onToggleCurtain={onToggleCurtain}
+              onReplayCurtain={onReplayCurtain}
             />
           ) : (
             <div className="flex flex-col gap-3">

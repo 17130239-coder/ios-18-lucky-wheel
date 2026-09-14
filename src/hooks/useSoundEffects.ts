@@ -49,6 +49,10 @@ export function useSoundEffects() {
     soundManager.playGlassPop();
   }, []);
 
+  const playCurtainOpening = useCallback(() => {
+    soundManager.playCurtainOpening();
+  }, []);
+
   return {
     isMuted,
     toggleMute,
@@ -57,5 +61,6 @@ export function useSoundEffects() {
     playWinFanfare,
     playClick,
     playGlassPop,
+    playCurtainOpening,
   };
 }

@@ -2,12 +2,15 @@
 
 import React from 'react';
 import { SpotlightConfig, SpotlightColorMode, SpotlightStyle } from '@/types/wheel';
-import { Sparkles, SunMedium, Lightbulb, Palette, Compass } from 'lucide-react';
+import { Sparkles, SunMedium, Lightbulb, Palette, Compass, Film, Play } from 'lucide-react';
 
 interface SpotlightSettingsTabProps {
   config: SpotlightConfig;
   onChange: (updated: Partial<SpotlightConfig>) => void;
   onReset: () => void;
+  curtainEnabled?: boolean;
+  onToggleCurtain?: () => void;
+  onReplayCurtain?: () => void;
 }
 
 const COLOR_PRESETS: { key: SpotlightColorMode; label: string; color: string; desc: string }[] = [
@@ -20,6 +23,9 @@ const COLOR_PRESETS: { key: SpotlightColorMode; label: string; color: string; de
 export function SpotlightSettingsTab({
   config,
   onChange,
+  curtainEnabled = true,
+  onToggleCurtain,
+  onReplayCurtain,
 }: SpotlightSettingsTabProps) {
   return (
     <div className="flex flex-col gap-5 text-stone-800 dark:text-stone-100">
@@ -312,6 +318,55 @@ export function SpotlightSettingsTab({
                 }`}
               />
             </button>
+          </div>
+
+          {/* 6. Grand Theater Curtain Setting Card */}
+          <div className="flex flex-col gap-3 p-3.5 rounded-2xl bg-gradient-to-br from-red-950/20 via-stone-50 to-stone-100 dark:from-red-950/30 dark:via-stone-800/80 dark:to-stone-800 border border-red-200/50 dark:border-red-900/40 shadow-xs">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#8B0000] to-[#580010] text-amber-300 flex items-center justify-center shadow-xs">
+                  <Film className="w-4 h-4" />
+                </div>
+                <div>
+                  <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-white flex items-center gap-1.5">
+                    Mở Rèm Sân Khấu (Stage Curtain)
+                  </h5>
+                  <p className="text-[11px] text-stone-500 dark:text-stone-400">
+                    Hiệu ứng mở rèm nhung đỏ rạp hát hoàng gia khi vào trang
+                  </p>
+                </div>
+              </div>
+
+              {onToggleCurtain && (
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={curtainEnabled}
+                  onClick={onToggleCurtain}
+                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                    curtainEnabled ? 'bg-[#8B0000]' : 'bg-stone-300 dark:bg-stone-600'
+                  }`}
+                >
+                  <span
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                      curtainEnabled ? 'translate-x-5' : 'translate-x-0'
+                    }`}
+                  />
+                </button>
+              )}
+            </div>
+
+            {/* Replay Button */}
+            {onReplayCurtain && (
+              <button
+                type="button"
+                onClick={onReplayCurtain}
+                className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-gradient-to-r from-[#8B0000] to-[#A51D24] text-white text-xs font-bold shadow-xs hover:brightness-110 active:scale-98 transition-all cursor-pointer"
+              >
+                <Play className="w-3.5 h-3.5 fill-current" />
+                <span>Xem Lại Hiệu Ứng Mở Rèm Sân Khấu 🎭</span>
+              </button>
+            )}
           </div>
         </>
       )}

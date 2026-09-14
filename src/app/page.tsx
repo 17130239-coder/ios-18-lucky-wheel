@@ -12,6 +12,7 @@ import { LuckyWheel } from '@/components/wheel/LuckyWheel';
 import { VictoryModal } from '@/components/modals/VictoryModal';
 import { HistoryDrawer } from '@/components/modals/HistoryDrawer';
 import { SettingsDrawer } from '@/components/settings/SettingsDrawer';
+import { StageCurtain } from '@/components/stage/StageCurtain';
 
 export default function LuckyWheelPage() {
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -24,9 +25,38 @@ export default function LuckyWheelPage() {
     return 'light';
   });
 
+  const [curtainEnabled, setCurtainEnabled] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('tech_wheel_curtain_enabled');
+      if (saved !== null) {
+        return saved === 'true';
+      }
+    }
+    return true;
+  });
+
+  const [curtainKey, setCurtainKey] = useState<number>(1);
+
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isVictoryOpen, setIsVictoryOpen] = useState(false);
+
+  const toggleCurtain = useCallback(() => {
+    setCurtainEnabled((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem('tech_wheel_curtain_enabled', String(next));
+      } catch {
+        // Ignore
+      }
+      return next;
+    });
+  }, []);
+
+  const replayCurtain = useCallback(() => {
+    setIsSettingsOpen(false);
+    setCurtainKey((k) => k + 1);
+  }, []);
 
   // Sync dark class on document when theme state changes
   useEffect(() => {
@@ -72,6 +102,7 @@ export default function LuckyWheelPage() {
     playWinFanfare,
     playClick,
     playGlassPop,
+    playCurtainOpening,
   } = useSoundEffects();
 
   const { canvasRef, spawnConfetti } = useConfetti();
@@ -124,6 +155,13 @@ export default function LuckyWheelPage() {
 
   return (
     <div className="relative h-screen w-screen overflow-hidden flex flex-col items-center justify-center">
+      {/* Grand Stage Curtain Opening Entrance */}
+      <StageCurtain
+        key={curtainKey}
+        enabled={curtainEnabled}
+        playCurtainSound={playCurtainOpening}
+      />
+
       {/* Top Floating Glass Header */}
       <Header
         prizeCount={prizes.length}
@@ -206,6 +244,9 @@ export default function LuckyWheelPage() {
         }}
         onUpdateSpotlightConfig={updateSpotlightConfig}
         onResetSpotlightConfig={resetSpotlightConfig}
+        curtainEnabled={curtainEnabled}
+        onToggleCurtain={toggleCurtain}
+        onReplayCurtain={replayCurtain}
       />
     </div>
   );

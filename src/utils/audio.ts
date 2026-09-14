@@ -392,6 +392,66 @@ class SoundSynthesizer {
       // Ignore
     }
   }
+
+  /**
+   * 6. Grand Theater Curtain Opening Sound Effect
+   * Synthesizes silky velvet fabric movement whoosh + enchanting celesta chime arpeggio
+   */
+  public playCurtainOpening() {
+    if (this.isMuted) return;
+    const ctx = this.getContext();
+    if (!ctx) return;
+
+    try {
+      const now = ctx.currentTime;
+
+      // Layer 1: Silky Velvet Fabric Swish (Filtered noise sweep)
+      const noise = ctx.createBufferSource();
+      noise.buffer = this.getNoiseBuffer(ctx);
+      noise.loop = true;
+
+      const noiseFilter = ctx.createBiquadFilter();
+      noiseFilter.type = 'lowpass';
+      noiseFilter.frequency.setValueAtTime(320, now);
+      noiseFilter.frequency.exponentialRampToValueAtTime(1400, now + 0.6);
+      noiseFilter.frequency.exponentialRampToValueAtTime(250, now + 1.8);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.001, now);
+      noiseGain.gain.linearRampToValueAtTime(0.065, now + 0.5);
+      noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.9);
+
+      noise.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseGain.connect(ctx.destination);
+
+      noise.start(now);
+      noise.stop(now + 2.0);
+
+      // Layer 2: Enchanting Theatrical Overture Chime Arpeggio (C5, E5, G5, C6)
+      const chimeNotes = [523.25, 659.25, 783.99, 1046.5];
+      chimeNotes.forEach((freq, i) => {
+        const noteTime = now + 0.25 + i * 0.18;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, noteTime);
+
+        gain.gain.setValueAtTime(0.0001, noteTime);
+        gain.gain.linearRampToValueAtTime(0.035, noteTime + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.0001, noteTime + 0.9);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(noteTime);
+        osc.stop(noteTime + 1.0);
+      });
+    } catch {
+      // Ignore
+    }
+  }
 }
 
 export const soundManager = new SoundSynthesizer();
