@@ -7,6 +7,7 @@ import { useSpotlightStore } from '@/hooks/useSpotlightStore';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { useConfetti } from '@/hooks/useConfetti';
 import { useLuckyWheel } from '@/hooks/useLuckyWheel';
+import { useBgm } from '@/hooks/useBgm';
 import { Header } from '@/components/header/Header';
 import { LuckyWheel } from '@/components/wheel/LuckyWheel';
 import { VictoryModal } from '@/components/modals/VictoryModal';
@@ -133,6 +134,21 @@ export default function LuckyWheelPage() {
     onSpawnConfetti: spawnConfetti,
   });
 
+  const isSpinning = spinState === 'spinning';
+
+  // Procedural Chill Background Music Engine
+  const {
+    bgmEnabled,
+    bgmStyle,
+    bgmVolume,
+    autoDuck,
+    isPlaying: isBgmPlaying,
+    toggleBgm,
+    setBgmStyle,
+    setBgmVolume,
+    setAutoDuck,
+  } = useBgm(isMuted, isSpinning);
+
   const handleCloseVictoryModal = useCallback(() => {
     playGlassPop();
     setIsVictoryOpen(false);
@@ -178,6 +194,9 @@ export default function LuckyWheelPage() {
           playGlassPop();
           setIsHistoryOpen(true);
         }}
+        bgmEnabled={bgmEnabled}
+        isBgmPlaying={isBgmPlaying}
+        onToggleBgm={toggleBgm}
       />
 
       {/* Main Wheel Arena */}
@@ -247,6 +266,15 @@ export default function LuckyWheelPage() {
         curtainEnabled={curtainEnabled}
         onToggleCurtain={toggleCurtain}
         onReplayCurtain={replayCurtain}
+        bgmEnabled={bgmEnabled}
+        bgmStyle={bgmStyle}
+        bgmVolume={bgmVolume}
+        autoDuck={autoDuck}
+        isBgmPlaying={isBgmPlaying}
+        onToggleBgm={toggleBgm}
+        onSelectBgmStyle={setBgmStyle}
+        onChangeBgmVolume={setBgmVolume}
+        onToggleAutoDuck={() => setAutoDuck(!autoDuck)}
       />
     </div>
   );

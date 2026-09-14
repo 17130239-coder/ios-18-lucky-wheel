@@ -43,7 +43,17 @@
   - **Hiệu ứng mở màn rạp hát (Curtain Overture)**: Âm thanh quét vải lụa trầm ấm kết hợp tiếng chuông khánh vang vọng.
   - **Âm thanh thủy tinh (Glass Pop)**: Phản hồi khi đóng/mở popup và drawer.
 
-### 1.4. Màn Mở Rèm Sân Khấu Hoàng Gia & Hiệu Ứng Logo Nhập Lại (Grand Stage Curtain Entrance)
+### 1.4. Động Cơ Nhạc Nền Chill Chill Tự Sinh (Procedural Chill BGM Engine)
+- **100% Thuần Web Audio API**: Không tải file MP3 ngoài, không tốn băng thông, chạy mượt mà offline và không giới hạn thời lượng phát.
+- **3 Phong Cách Giai Điệu Thư Giãn Tuyệt Đối**:
+  1. ☕ **Lo-Fi Cafe (64 BPM)**: Hợp âm Rhodes Electric Piano ngọt ngào, tiếng đĩa than vinyl nổ tí tách ấm áp, âm trầm sub-bass analog êm ru.
+  2. ✨ **Dreamy Ambient (52 BPM)**: Không gian bồng bềnh lơ lửng, hợp âm Lydian thiền định cùng các giọt chuông sao rơi thánh thót.
+  3. 🎷 **Night Lounge (68 BPM)**: Hợp âm Jazz hoàng hôn sang trọng, tiếng bass mộc dìu dặt thư thái.
+- **Tính năng Studio-Grade Auto-Ducking**: Tự động hạ âm lượng BGM 65% trong suốt thời gian bánh xe quay để tiếng gõ kim giòn tan nổi bật, sau đó êm dịu tăng trở lại khi dừng quay.
+- **Nút Bật/Tắt Nhanh trên Header**: Nút nốt nhạc phát sáng kèm hiệu ứng sóng nhạc equalizer động khi đang phát.
+- **Tab Cài Đặt Âm Nhạc Riêng Biệt**: Cho phép chỉnh âm lượng (5% - 100%), đổi phong cách nhạc và bật/tắt Auto-Ducking với thiết kế Zero-Jitter chuẩn iOS 18.
+
+### 1.5. Màn Mở Rèm Sân Khấu Hoàng Gia & Hiệu Ứng Logo Nhập Lại (Grand Stage Curtain Entrance)
 - **Rèm nhung 2 cánh dệt 3D**: Gam màu đỏ ruby hoàng gia kết hợp các nếp gấp đổ bóng thể tích sâu và chân thực.
 - **Diềm yếm uốn lượn (Scalloped Pelmet)**: Viền mép trên sân khấu lượn sóng cánh cung đính chuông/tua rua cam ấm áp.
 - **Logo trên rèm chính là Nút Quay**:

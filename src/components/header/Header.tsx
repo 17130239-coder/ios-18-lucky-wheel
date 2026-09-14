@@ -9,6 +9,7 @@ import {
   History,
   Sun,
   Moon,
+  Music,
 } from 'lucide-react';
 import { ThemeMode } from '@/types/wheel';
 
@@ -21,6 +22,9 @@ interface HeaderProps {
   onToggleTheme: () => void;
   onOpenSettings: () => void;
   onOpenHistory: () => void;
+  bgmEnabled?: boolean;
+  isBgmPlaying?: boolean;
+  onToggleBgm?: () => void;
 }
 
 export function Header({
@@ -32,6 +36,9 @@ export function Header({
   onToggleTheme,
   onOpenSettings,
   onOpenHistory,
+  bgmEnabled = false,
+  isBgmPlaying = false,
+  onToggleBgm,
 }: HeaderProps) {
   return (
     <header className="fixed top-5 inset-x-0 z-40 flex items-center justify-between px-4 sm:px-8 md:px-12 pointer-events-none">
@@ -69,7 +76,7 @@ export function Header({
           onClick={onToggleMute}
           aria-label={isMuted ? 'Bật âm thanh' : 'Tắt âm thanh'}
           title={isMuted ? 'Bật âm thanh' : 'Tắt âm thanh'}
-          className="flex items-center justify-center w-9 h-9 rounded-full glass-card hover:bg-white dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 border border-white/90 dark:border-white/10 shadow-[0_8px_20px_rgba(0,0,0,0.04)] ring-1 ring-white/60 dark:ring-white/5 transition-all duration-200 active:scale-95 cursor-pointer"
+          className="flex items-center justify-center w-9 h-9 rounded-full glass-card hover:bg-white dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 border border-white/90 dark:border-white/10 shadow-[0_8px_20px_rgba(0,0,0,0.04)] ring-1 ring-white/60 dark:ring-white/5 transition-colors duration-150 active:scale-95 cursor-pointer"
         >
           {isMuted ? (
             <VolumeX className="w-4 h-4 text-rose-500" />
@@ -77,6 +84,29 @@ export function Header({
             <Volume2 className="w-4 h-4 text-[#FF6B00]" />
           )}
         </button>
+
+        {/* Chill Background Music Quick Toggle */}
+        {onToggleBgm && (
+          <button
+            type="button"
+            onClick={onToggleBgm}
+            aria-label={bgmEnabled ? 'Tắt nhạc nền chill' : 'Bật nhạc nền chill'}
+            title={bgmEnabled ? 'Nhạc nền Chill: Đang bật (Bấm để tắt)' : 'Bật nhạc nền Chill thư giãn'}
+            className={`relative flex items-center justify-center w-9 h-9 rounded-full glass-card border transition-colors duration-150 active:scale-95 cursor-pointer ${
+              bgmEnabled
+                ? 'text-[#FF6B00] border-[#FF6B00]/40 ring-1 ring-[#FF6B00]/30 shadow-[0_8px_20px_rgba(255,107,0,0.12)] bg-orange-500/10'
+                : 'hover:bg-white dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 border-white/90 dark:border-white/10 ring-1 ring-white/60 dark:ring-white/5'
+            }`}
+          >
+            <Music className={`w-4 h-4 ${bgmEnabled && isBgmPlaying ? 'animate-bounce' : ''}`} style={{ animationDuration: '2s' }} />
+            {bgmEnabled && isBgmPlaying && (
+              <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF6B00] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF6B00]" />
+              </span>
+            )}
+          </button>
+        )}
 
         {/* Theme Switcher */}
         <button

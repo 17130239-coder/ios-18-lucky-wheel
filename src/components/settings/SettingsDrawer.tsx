@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { SlidersHorizontal, X, RotateCcw, Check, Lightbulb, Sparkles } from 'lucide-react';
+import { SlidersHorizontal, X, RotateCcw, Check, Lightbulb, Sparkles, Music } from 'lucide-react';
 import { PrizeItem, SpotlightConfig } from '@/types/wheel';
+import { BgmStyle } from '@/utils/bgm';
 import { PrizeRowItem } from './PrizeRowItem';
 import { SpotlightSettingsTab } from './SpotlightSettingsTab';
+import { AudioSettingsTab } from './AudioSettingsTab';
 
 interface SettingsDrawerProps {
   isOpen: boolean;
@@ -20,9 +22,18 @@ interface SettingsDrawerProps {
   curtainEnabled?: boolean;
   onToggleCurtain?: () => void;
   onReplayCurtain?: () => void;
+  bgmEnabled?: boolean;
+  bgmStyle?: BgmStyle;
+  bgmVolume?: number;
+  autoDuck?: boolean;
+  isBgmPlaying?: boolean;
+  onToggleBgm?: () => void;
+  onSelectBgmStyle?: (style: BgmStyle) => void;
+  onChangeBgmVolume?: (vol: number) => void;
+  onToggleAutoDuck?: () => void;
 }
 
-type SettingsTab = 'prizes' | 'spotlight';
+type SettingsTab = 'spotlight' | 'audio' | 'prizes';
 
 function SettingsDrawerContent({
   prizes,
@@ -37,6 +48,15 @@ function SettingsDrawerContent({
   curtainEnabled,
   onToggleCurtain,
   onReplayCurtain,
+  bgmEnabled = false,
+  bgmStyle = 'lofi',
+  bgmVolume = 0.35,
+  autoDuck = true,
+  isBgmPlaying = false,
+  onToggleBgm,
+  onSelectBgmStyle,
+  onChangeBgmVolume,
+  onToggleAutoDuck,
 }: Omit<SettingsDrawerProps, 'isOpen'>) {
   const [activeTab, setActiveTab] = useState<SettingsTab>('spotlight');
   const [draftPrizes, setDraftPrizes] = useState<PrizeItem[]>(() =>
@@ -83,11 +103,17 @@ function SettingsDrawerContent({
             </div>
             <div>
               <h4 className="text-sm font-bold text-stone-900 dark:text-stone-100">
-                {activeTab === 'prizes' ? 'Tùy Chỉnh Phần Quà' : 'Cài Đặt Đèn Sân Khấu'}
+                {activeTab === 'prizes'
+                  ? 'Tùy Chỉnh Phần Quà'
+                  : activeTab === 'audio'
+                  ? 'Nhạc Nền Chill & Âm Thanh'
+                  : 'Cài Đặt Đèn Sân Khấu'}
               </h4>
               <p className="text-xs text-stone-500 dark:text-stone-400">
                 {activeTab === 'prizes'
                   ? 'Chỉnh sửa tên danh mục, icon & màu sắc'
+                  : activeTab === 'audio'
+                  ? 'Giai điệu lo-fi, ambient, jazz & âm lượng'
                   : 'Bật/tắt, góc chiếu viền bánh xe & màu RGB'}
               </p>
             </div>
@@ -102,20 +128,20 @@ function SettingsDrawerContent({
           </button>
         </div>
 
-        {/* iOS Segmented Navigation Bar */}
+        {/* iOS 3-Segment Navigation Bar */}
         <div className="px-4 sm:px-5 pt-3 pb-2.5 bg-white/50 dark:bg-stone-900/50 border-b border-stone-200/40 dark:border-white/5 shrink-0">
           <div className="flex p-1 bg-stone-100 dark:bg-stone-800/80 rounded-2xl border border-stone-200/50 dark:border-white/5">
             <button
               type="button"
               onClick={() => setActiveTab('spotlight')}
-              className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold transition-colors duration-150 flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-semibold transition-colors duration-150 flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeTab === 'spotlight'
                   ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-white shadow-xs'
                   : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
               }`}
             >
               <Lightbulb className="w-3.5 h-3.5 text-[#FF6B00]" />
-              <span>Đèn Sân Khấu</span>
+              <span>Đèn</span>
               {spotlightConfig.enabled && (
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-xs shadow-emerald-500/50" />
               )}
@@ -123,14 +149,30 @@ function SettingsDrawerContent({
 
             <button
               type="button"
+              onClick={() => setActiveTab('audio')}
+              className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-semibold transition-colors duration-150 flex items-center justify-center gap-1.5 cursor-pointer ${
+                activeTab === 'audio'
+                  ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-white shadow-xs'
+                  : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+              }`}
+            >
+              <Music className="w-3.5 h-3.5 text-[#FF6B00]" />
+              <span>Nhạc Chill</span>
+              {bgmEnabled && (
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B00] shadow-xs shadow-orange-500/50" />
+              )}
+            </button>
+
+            <button
+              type="button"
               onClick={() => setActiveTab('prizes')}
-              className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold transition-colors duration-150 flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-semibold transition-colors duration-150 flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeTab === 'prizes'
                   ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-white shadow-xs'
                   : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
               }`}
             >
-              <span>🎁 Phần Quà ({draftPrizes.length})</span>
+              <span>Quà ({draftPrizes.length})</span>
             </button>
           </div>
         </div>
@@ -145,6 +187,18 @@ function SettingsDrawerContent({
               curtainEnabled={curtainEnabled}
               onToggleCurtain={onToggleCurtain}
               onReplayCurtain={onReplayCurtain}
+            />
+          ) : activeTab === 'audio' ? (
+            <AudioSettingsTab
+              bgmEnabled={bgmEnabled}
+              bgmStyle={bgmStyle}
+              bgmVolume={bgmVolume}
+              autoDuck={autoDuck}
+              isPlaying={isBgmPlaying}
+              onToggleBgm={onToggleBgm ?? (() => {})}
+              onSelectStyle={onSelectBgmStyle ?? (() => {})}
+              onChangeVolume={onChangeBgmVolume ?? (() => {})}
+              onToggleAutoDuck={onToggleAutoDuck ?? (() => {})}
             />
           ) : (
             <div className="flex flex-col gap-3">
@@ -239,6 +293,25 @@ function SettingsDrawerContent({
               >
                 <Check className="w-3.5 h-3.5" />
                 <span>Lưu & Áp Dụng</span>
+              </button>
+            </>
+          ) : activeTab === 'audio' ? (
+            <>
+              <button
+                type="button"
+                onClick={() => onChangeBgmVolume?.(0.35)}
+                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200/70 dark:border-stone-700/60 text-stone-700 dark:text-stone-300 text-xs font-semibold hover:bg-stone-200/80 dark:hover:bg-stone-700/80 active:opacity-85 transition-colors duration-150 cursor-pointer"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Âm Lượng 35%</span>
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] text-white text-xs font-bold shadow-sm shadow-orange-500/25 active:opacity-85 transition-colors duration-150 cursor-pointer"
+              >
+                <Check className="w-3.5 h-3.5" />
+                <span>Hoàn Tất</span>
               </button>
             </>
           ) : (
