@@ -22,6 +22,14 @@ export const WheelSvg = React.memo(function WheelSvg({
   const count = prizes.length;
   const sliceAngle = 360 / count;
 
+  // Proportional sizing based on prize count (adapts seamlessly from 2 to 16+ slices)
+  const badgeRadius = count <= 6 ? 26 : count <= 10 ? 24 : count <= 13 ? 21 : 18.5;
+  const badgeInnerRadius = badgeRadius - 2.5;
+  const iconFrameOffset = count <= 10 ? 11 : count <= 13 ? 10 : 9;
+  const iconScale = count <= 10 ? 1 : count <= 13 ? 0.9 : 0.82;
+  const textFontSize = count <= 6 ? 12.5 : count <= 10 ? 11 : count <= 13 ? 10 : 9;
+  const textYOffset = count <= 10 ? 14 : 12;
+
   // Precompute decorative rim bulbs
   const rimBulbs = useMemo(() => {
     const bulbs = [];
@@ -157,7 +165,7 @@ export const WheelSvg = React.memo(function WheelSvg({
                   <circle
                     cx={cx}
                     cy={badgeY + 2}
-                    r={24}
+                    r={badgeRadius}
                     fill="rgba(0,0,0,0.18)"
                     pointerEvents="none"
                   />
@@ -165,7 +173,7 @@ export const WheelSvg = React.memo(function WheelSvg({
                   <circle
                     cx={cx}
                     cy={badgeY}
-                    r={24}
+                    r={badgeRadius}
                     fill="#FFFFFF"
                     stroke={item.color}
                     strokeWidth="2.5"
@@ -173,15 +181,15 @@ export const WheelSvg = React.memo(function WheelSvg({
                   <circle
                     cx={cx}
                     cy={badgeY}
-                    r={21.5}
+                    r={badgeInnerRadius}
                     fill="none"
                     stroke="rgba(0,0,0,0.08)"
                     strokeWidth="1"
                   />
 
-                  {/* SVG Icon centered in 22x22 frame */}
+                  {/* SVG Icon centered in dynamic frame */}
                   <g
-                    transform={`translate(${cx - 11}, ${badgeY - 11})`}
+                    transform={`translate(${cx - iconFrameOffset * iconScale}, ${badgeY - iconFrameOffset * iconScale}) scale(${iconScale})`}
                     style={{ color: iconColor }}
                     stroke={iconColor}
                   >
@@ -195,14 +203,14 @@ export const WheelSvg = React.memo(function WheelSvg({
                     textAnchor="middle"
                     fill="rgba(0,0,0,0.45)"
                     className="font-sans select-none pointer-events-none"
-                    fontSize="11"
+                    fontSize={textFontSize}
                     fontWeight="700"
                     letterSpacing="0.3"
                   >
                     <tspan x={cx} dy="-2">
                       {item.line1}
                     </tspan>
-                    <tspan x={cx} dy="14" fontWeight="800">
+                    <tspan x={cx} dy={textYOffset} fontWeight="800">
                       {item.line2}
                     </tspan>
                   </text>
@@ -213,14 +221,14 @@ export const WheelSvg = React.memo(function WheelSvg({
                     textAnchor="middle"
                     fill="#FFFFFF"
                     className="font-sans select-none"
-                    fontSize="11"
+                    fontSize={textFontSize}
                     fontWeight="700"
                     letterSpacing="0.3"
                   >
                     <tspan x={cx} dy="-2">
                       {item.line1}
                     </tspan>
-                    <tspan x={cx} dy="14" fontWeight="800">
+                    <tspan x={cx} dy={textYOffset} fontWeight="800">
                       {item.line2}
                     </tspan>
                   </text>

@@ -4,16 +4,18 @@ import React, { useState } from 'react';
 import { PrizeItem } from '@/types/wheel';
 import { TECH_ICONS, ICON_METADATA } from '@/constants/techIcons';
 import { IconPickerModal } from './IconPickerModal';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Trash2 } from 'lucide-react';
 import { useLanguage } from '@/i18n/LanguageContext';
 
 interface PrizeRowItemProps {
   item: PrizeItem;
   index: number;
   onChange: (index: number, updated: Partial<PrizeItem>) => void;
+  onDelete?: (index: number) => void;
+  canDelete?: boolean;
 }
 
-export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
+export function PrizeRowItem({ item, index, onChange, onDelete, canDelete }: PrizeRowItemProps) {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const { t } = useLanguage();
 
@@ -85,11 +87,24 @@ export function PrizeRowItem({ item, index, onChange }: PrizeRowItemProps) {
         </div>
       </div>
 
-      {/* Right Column: Index Badge and Sector Color Picker */}
-      <div className="flex flex-col items-end gap-1 shrink-0">
-        <span className="text-[10px] font-bold text-stone-400 dark:text-stone-500">
-          #{index + 1}
-        </span>
+      {/* Right Column: Index Badge, Delete Action and Sector Color Picker */}
+      <div className="flex flex-col items-end gap-1.5 shrink-0">
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px] font-bold text-stone-400 dark:text-stone-500">
+            #{index + 1}
+          </span>
+          {canDelete && onDelete && (
+            <button
+              type="button"
+              onClick={() => onDelete(index)}
+              title={t.settings.prizes.deletePrizeTooltip}
+              aria-label={t.settings.prizes.deletePrizeTooltip}
+              className="w-4 h-4 rounded flex items-center justify-center text-stone-400 hover:text-rose-500 hover:bg-rose-500/10 dark:hover:text-rose-400 dark:hover:bg-rose-500/15 transition-all duration-150 cursor-pointer active:scale-90"
+            >
+              <Trash2 className="w-3 h-3" />
+            </button>
+          )}
+        </div>
         <label
           className="relative w-7 h-7 rounded-xl overflow-hidden border border-stone-300 dark:border-stone-600 shadow-2xs cursor-pointer transition-opacity duration-150 hover:opacity-90 active:opacity-80"
           title={t.settings.prizes.changeColorTooltip}

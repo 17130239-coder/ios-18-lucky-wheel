@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { SlidersHorizontal, X, RotateCcw, Check, Lightbulb, Sparkles, Music } from 'lucide-react';
+import { SlidersHorizontal, X, RotateCcw, Check, Lightbulb, Sparkles, Music, Plus, Minus, Layers } from 'lucide-react';
 import { PrizeItem, SpotlightConfig, BackgroundTheme } from '@/types/wheel';
 import { BgmStyle } from '@/utils/bgm';
+import { createNewPrize } from '@/constants/defaultPrizes';
 import { PrizeRowItem } from './PrizeRowItem';
 import { SpotlightSettingsTab } from './SpotlightSettingsTab';
 import { AudioSettingsTab } from './AudioSettingsTab';
@@ -38,6 +39,10 @@ interface SettingsDrawerProps {
 
 type SettingsTab = 'spotlight' | 'audio' | 'prizes';
 
+const MIN_PRIZES = 2;
+const MAX_PRIZES = 16;
+const PRESET_COUNTS = [4, 6, 8, 10, 12, 16];
+
 function SettingsDrawerContent({
   prizes,
   spotlightConfig,
@@ -48,14 +53,14 @@ function SettingsDrawerContent({
   onReset,
   onUpdateSpotlightConfig,
   onResetSpotlightConfig,
-  curtainEnabled,
+  curtainEnabled = true,
   onToggleCurtain,
   onReplayCurtain,
   bgTheme = 'default',
   onSelectBgTheme,
   bgmEnabled = false,
   bgmStyle = 'lofi',
-  bgmVolume = 0.35,
+  bgmVolume = 0.6,
   autoDuck = true,
   isBgmPlaying = false,
   onToggleBgm,
@@ -77,6 +82,39 @@ function SettingsDrawerContent({
       next[index] = { ...next[index], ...updated };
       return next;
     });
+  };
+
+  const handleSetPrizeCount = (targetCount: number) => {
+    const clamped = Math.max(MIN_PRIZES, Math.min(MAX_PRIZES, targetCount));
+    setDraftPrizes((prev) => {
+      if (clamped === prev.length) return prev;
+      if (clamped < prev.length) {
+        return prev.slice(0, clamped);
+      }
+      const next = [...prev];
+      for (let i = prev.length; i < clamped; i++) {
+        next.push(createNewPrize(i));
+      }
+      return next;
+    });
+  };
+
+  const handleAddPrize = () => {
+    if (draftPrizes.length >= MAX_PRIZES) return;
+    setDraftPrizes((prev) => [...prev, createNewPrize(prev.length)]);
+  };
+
+  const handleDeletePrize = (index: number) => {
+    if (draftPrizes.length <= MIN_PRIZES) return;
+    setDraftPrizes((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleRestoreDefaultDraft = () => {
+    const cloned = [];
+    for (let i = 0; i < 10; i++) {
+      cloned.push(createNewPrize(i));
+    }
+    setDraftPrizes(cloned);
   };
 
   const handleSavePrizes = () => {
@@ -222,6 +260,80 @@ function SettingsDrawerContent({
               />
             ) : (
             <div className="flex flex-col gap-3">
+              {/* Prize Quantity Setting Card */}
+              <div className="flex flex-col gap-2.5 p-3.5 rounded-2xl bg-stone-100/70 dark:bg-stone-800/40 border border-stone-200/60 dark:border-white/5 shadow-xs">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-orange-500/10 dark:bg-orange-500/15 border border-[#FF6B00]/20 flex items-center justify-center text-[#FF6B00] shrink-0">
+                      <Layers className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h5 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">
+                        {t.settings.prizes.quantityTitle}
+                      </h5>
+                      <p className="text-xs text-stone-500 dark:text-stone-400">
+                        {t.settings.prizes.quantityDesc}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Stepper: [-] [count] [+] */}
+                  <div className="flex items-center gap-1 bg-stone-200/60 dark:bg-stone-700/50 p-1 rounded-xl shrink-0">
+                    <button
+                      type="button"
+                      disabled={draftPrizes.length <= MIN_PRIZES}
+                      onClick={() => handleSetPrizeCount(draftPrizes.length - 1)}
+                      title={t.settings.prizes.minPrizesReached}
+                      aria-label={t.settings.prizes.minPrizesReached}
+                      className="w-7 h-7 rounded-lg bg-white dark:bg-stone-800 flex items-center justify-center text-stone-700 dark:text-stone-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-stone-100 dark:hover:bg-stone-700 active:scale-95 transition-all cursor-pointer shadow-2xs"
+                    >
+                      <Minus className="w-3.5 h-3.5" />
+                    </button>
+
+                    <span className="w-8 text-center text-xs font-extrabold text-[#FF6B00] tabular-nums">
+                      {draftPrizes.length}
+                    </span>
+
+                    <button
+                      type="button"
+                      disabled={draftPrizes.length >= MAX_PRIZES}
+                      onClick={() => handleSetPrizeCount(draftPrizes.length + 1)}
+                      title={t.settings.prizes.maxPrizesReached}
+                      aria-label={t.settings.prizes.maxPrizesReached}
+                      className="w-7 h-7 rounded-lg bg-white dark:bg-stone-800 flex items-center justify-center text-stone-700 dark:text-stone-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-stone-100 dark:hover:bg-stone-700 active:scale-95 transition-all cursor-pointer shadow-2xs"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Preset Chips: 4, 6, 8, 10, 12, 16 */}
+                <div className="flex items-center gap-1.5 pt-1 border-t border-stone-200/40 dark:border-white/5">
+                  <span className="text-[10px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-wider shrink-0">
+                    {t.settings.prizes.presetLabel}:
+                  </span>
+                  <div className="grid grid-cols-6 gap-1.5 flex-1">
+                    {PRESET_COUNTS.map((num) => {
+                      const isCurrent = draftPrizes.length === num;
+                      return (
+                        <button
+                          key={num}
+                          type="button"
+                          onClick={() => handleSetPrizeCount(num)}
+                          className={`py-1 rounded-lg text-xs font-bold transition-all duration-150 cursor-pointer text-center ${
+                            isCurrent
+                              ? 'bg-[#FF6B00] text-white shadow-xs scale-[1.02]'
+                              : 'bg-white/90 dark:bg-stone-800/70 text-stone-600 dark:text-stone-300 border border-stone-200/60 dark:border-white/5 hover:bg-white dark:hover:bg-stone-700'
+                          }`}
+                        >
+                          {num}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
               {/* Auto-eliminate won prize toggle card */}
               <div className="flex items-center justify-between p-3.5 rounded-2xl bg-stone-100/70 dark:bg-stone-800/40 border border-stone-200/60 dark:border-white/5 shadow-xs">
                 <div className="flex items-center gap-3">
@@ -267,10 +379,10 @@ function SettingsDrawerContent({
                 <span className="text-[11px] font-bold tracking-wider text-stone-400 dark:text-stone-500 uppercase">
                   {t.settings.prizes.listHeading} ({draftPrizes.length})
                 </span>
-                {draftPrizes.length < 10 && (
+                {draftPrizes.length !== 10 && (
                   <button
                     type="button"
-                    onClick={handleResetPrizes}
+                    onClick={handleRestoreDefaultDraft}
                     className="text-xs font-semibold text-[#FF6B00] hover:underline cursor-pointer flex items-center gap-1 transition-colors duration-150"
                   >
                     <RotateCcw className="w-3 h-3" />
@@ -287,9 +399,23 @@ function SettingsDrawerContent({
                     item={item}
                     index={index}
                     onChange={handleRowChange}
+                    canDelete={draftPrizes.length > MIN_PRIZES}
+                    onDelete={handleDeletePrize}
                   />
                 ))}
               </div>
+
+              {/* Add Prize Button (if < MAX_PRIZES) */}
+              {draftPrizes.length < MAX_PRIZES && (
+                <button
+                  type="button"
+                  onClick={handleAddPrize}
+                  className="flex items-center justify-center gap-2 p-3 rounded-2xl border border-dashed border-[#FF6B00]/40 hover:border-[#FF6B00] bg-orange-500/5 hover:bg-orange-500/10 text-[#FF6B00] text-xs font-bold transition-all duration-150 cursor-pointer active:scale-[0.99]"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>{t.settings.prizes.addPrizeBtn}</span>
+                </button>
+              )}
             </div>
           )}
           </div>

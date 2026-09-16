@@ -92,3 +92,101 @@ export const DEFAULT_PRIZES: PrizeItem[] = [
     weight: 1,
   },
 ];
+
+export const EXTENDED_PRIZE_POOL: PrizeItem[] = [
+  ...DEFAULT_PRIZES,
+  {
+    id: 'prize-11',
+    line1: 'Màn Hình 4K',
+    line2: 'Studio 27"',
+    name: 'Màn Hình Studio 4K',
+    color: '#EC4899',
+    icon: 'monitor',
+    weight: 1,
+  },
+  {
+    id: 'prize-12',
+    line1: 'Flycam Mini',
+    line2: 'DJI 4K HDR',
+    name: 'Flycam DJI 4K',
+    color: '#14B8A6',
+    icon: 'camera',
+    weight: 1,
+  },
+  {
+    id: 'prize-13',
+    line1: 'Kính VR 3D',
+    line2: 'Vision Pro',
+    name: 'Kính Apple Vision Pro',
+    color: '#A855F7',
+    icon: 'glasses',
+    weight: 1,
+  },
+  {
+    id: 'prize-14',
+    line1: 'Loa Thông Minh',
+    line2: 'HomePod Mini',
+    name: 'Loa HomePod Mini',
+    color: '#F43F5E',
+    icon: 'speaker',
+    weight: 1,
+  },
+  {
+    id: 'prize-15',
+    line1: 'Sạc Dự Phòng',
+    line2: 'MagSafe 20k',
+    name: 'Sạc Dự Phòng MagSafe',
+    color: '#3B82F6',
+    icon: 'battery',
+    weight: 1,
+  },
+  {
+    id: 'prize-16',
+    line1: 'Thẻ Quà Tặng',
+    line2: 'Apple Store',
+    name: 'Thẻ Quà Tặng Apple',
+    color: '#F97316',
+    icon: 'gift',
+    weight: 1,
+  },
+];
+
+const VIBRANT_COLOR_PALETTE = [
+  '#FF6B00',
+  '#1E293B',
+  '#0EA5E9',
+  '#10B981',
+  '#8B5CF6',
+  '#F59E0B',
+  '#EF4444',
+  '#059669',
+  '#6366F1',
+  '#D946EF',
+  '#EC4899',
+  '#14B8A6',
+  '#A855F7',
+  '#F43F5E',
+  '#3B82F6',
+  '#F97316',
+];
+
+export function createNewPrize(index: number): PrizeItem {
+  if (index < EXTENDED_PRIZE_POOL.length) {
+    const template = EXTENDED_PRIZE_POOL[index];
+    return {
+      ...template,
+      id: `prize-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+    };
+  }
+
+  const color = VIBRANT_COLOR_PALETTE[index % VIBRANT_COLOR_PALETTE.length];
+  return {
+    id: `prize-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+    line1: `Phần Quà`,
+    line2: `#${index + 1}`,
+    name: `Phần Quà #${index + 1}`,
+    color,
+    icon: 'gift',
+    weight: 1,
+  };
+}
