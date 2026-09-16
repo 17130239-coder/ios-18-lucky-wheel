@@ -212,6 +212,17 @@
   - *Vấn đề trước đây*: Thuộc tính `truncate` trên màn hình hẹp ép toàn bộ chữ vào 1 hàng duy nhất khiến từ dài như "Điện thoại" bị cắt thành "Đi...".
   - *Giải pháp*: Chuyển đổi sang `line-clamp-2 leading-tight break-words w-full` kết hợp `min-h-[82px]`, giúp tên biểu tượng xuống hàng tự nhiên, hiển thị tròn vành rõ chữ "Điện thoại" mà vẫn giữ chiều cao hàng lưới đồng đều tuyệt đối.
 
+### 2.10. Cơ Chế Chống Tràn Chữ Nan Quạt Thông Minh (Adaptive Wheel Text Auto-Fit & Overflow Guard)
+- **Tự động đo đạc bề rộng hình học của nan quạt (Geometric Chord Width Measurement)**:
+  - Dựa trên góc nan quạt $\theta = 360^\circ / \text{count}$ và bán kính đặt chữ $R = 145\text{px}$, hệ thống tính toán chính xác độ rộng khả dụng: $\text{rawChordWidth} = 2 \times R \times \sin(\theta / 2)$.
+  - Trừ đi 10px khoảng đệm an toàn (5px mỗi bên) cách ly khỏi đường viền nan quạt màu trắng.
+- **Tự động tính cỡ chữ co giãn theo độ dài (Per-line Dynamic Font Sizing)**:
+  - Hàm `getAdaptiveTextProps` tính toán ước lượng độ rộng của chuỗi ký tự theo hệ số sans-serif ($0.58 \times \text{fontSize}$).
+  - Nếu chữ vượt quá độ rộng nan quạt, cỡ chữ tự động được hạ mượt mà từ $11\text{px} \rightarrow 7.0\text{px}$ để chữ vừa khít trong ô.
+  - Khoảng cách dòng (`lineSpacing`) tự động điều chỉnh tỷ lệ theo cỡ chữ thực tế, tránh việc chữ bị dãn khoảng cách thừa khi thu nhỏ.
+- **Lớp bảo vệ nén ký tự vector SVG (`textLength` & `lengthAdjust="spacingAndGlyphs"`)**:
+  - Đối với các từ đặc biệt dài (hoặc khi người dùng nhập chuỗi dài ở chế độ 14-16 ô quà), SVG tự động kích hoạt nén khoảng cách và bề ngang ký tự để **triệt tiêu 100% nguy cơ chữ tràn sang các ô quà lân cận**.
+
 ---
 
 ## 3. Quy Tắc & Nguyên Tắc Thiết Kế (Rules & Guidelines)

@@ -11,6 +11,45 @@ interface WheelSvgProps {
   wheelGroupRef?: React.RefObject<SVGGElement | null>;
 }
 
+/**
+ * Calculates adaptive font size and SVG textLength compression
+ * to guarantee that text never overflows outside its slice wedge boundary.
+ */
+function getAdaptiveTextProps(
+  text: string,
+  baseFontSize: number,
+  maxWidth: number,
+  minFontSize: number = 7.0
+): { fontSize: number; textLength?: number } {
+  if (!text) return { fontSize: baseFontSize };
+
+  // Average width factor for bold sans-serif characters (including Vietnamese accented characters)
+  const charWidthRatio = 0.58;
+  const estimatedWidth = text.length * baseFontSize * charWidthRatio;
+
+  if (estimatedWidth <= maxWidth) {
+    return { fontSize: baseFontSize };
+  }
+
+  // Scale down font size smoothly to fit
+  const scaledFontSize = Math.max(
+    minFontSize,
+    Math.min(baseFontSize, Number((maxWidth / (text.length * charWidthRatio)).toFixed(1)))
+  );
+
+  const finalEstimatedWidth = text.length * scaledFontSize * charWidthRatio;
+
+  // If even at minFontSize it would overflow maxWidth, apply SVG textLength compression
+  if (finalEstimatedWidth > maxWidth) {
+    return {
+      fontSize: scaledFontSize,
+      textLength: maxWidth,
+    };
+  }
+
+  return { fontSize: scaledFontSize };
+}
+
 export const WheelSvg = React.memo(function WheelSvg({
   prizes,
   rotation = 0,
@@ -28,7 +67,6 @@ export const WheelSvg = React.memo(function WheelSvg({
   const iconFrameOffset = count <= 10 ? 11 : count <= 13 ? 10 : 9;
   const iconScale = count <= 10 ? 1 : count <= 13 ? 0.9 : 0.82;
   const textFontSize = count <= 6 ? 12.5 : count <= 10 ? 11 : count <= 13 ? 10 : 9;
-  const textYOffset = count <= 10 ? 14 : 12;
 
   // Precompute decorative rim bulbs
   const rimBulbs = useMemo(() => {
@@ -146,6 +184,18 @@ export const WheelSvg = React.memo(function WheelSvg({
             const badgeY = cy - 205; // 95
             const textY = cy - 145; // 155
 
+            // Compute exact available chord width at text radius with safety margin from sector boundary
+            const textRadius = cy - textY; // 145
+            const rawChordWidth =
+              count > 2
+                ? 2 * textRadius * Math.sin(((sliceAngle / 2) * Math.PI) / 180)
+                : 280;
+            const maxTextWidth = Math.max(34, Math.floor(rawChordWidth - 10));
+
+            const fit1 = getAdaptiveTextProps(item.line1, textFontSize, maxTextWidth);
+            const fit2 = getAdaptiveTextProps(item.line2, textFontSize, maxTextWidth);
+            const lineSpacing = Math.max(10, Math.round(Math.max(fit1.fontSize, fit2.fontSize) * 1.25));
+
             const iconColor =
               item.color.toLowerCase() === '#ffffff' ? '#1E293B' : item.color;
 
@@ -203,16 +253,28 @@ export const WheelSvg = React.memo(function WheelSvg({
                     textAnchor="middle"
                     fill="rgba(0,0,0,0.45)"
                     className="font-sans select-none pointer-events-none"
-                    fontSize={textFontSize}
-                    fontWeight="700"
-                    letterSpacing="0.3"
+                    letterSpacing="0.2"
                   >
-                    <tspan x={cx} dy="-2">
+                    <tspan
+                      x={cx}
+                      dy={item.line2 ? "-2" : "3"}
+                      fontSize={fit1.fontSize}
+                      fontWeight="700"
+                      {...(fit1.textLength ? { textLength: fit1.textLength, lengthAdjust: "spacingAndGlyphs" } : {})}
+                    >
                       {item.line1}
                     </tspan>
-                    <tspan x={cx} dy={textYOffset} fontWeight="800">
-                      {item.line2}
-                    </tspan>
+                    {item.line2 && (
+                      <tspan
+                        x={cx}
+                        dy={lineSpacing}
+                        fontSize={fit2.fontSize}
+                        fontWeight="800"
+                        {...(fit2.textLength ? { textLength: fit2.textLength, lengthAdjust: "spacingAndGlyphs" } : {})}
+                      >
+                        {item.line2}
+                      </tspan>
+                    )}
                   </text>
                   {/* 2-line clean typography */}
                   <text
@@ -221,16 +283,28 @@ export const WheelSvg = React.memo(function WheelSvg({
                     textAnchor="middle"
                     fill="#FFFFFF"
                     className="font-sans select-none"
-                    fontSize={textFontSize}
-                    fontWeight="700"
-                    letterSpacing="0.3"
+                    letterSpacing="0.2"
                   >
-                    <tspan x={cx} dy="-2">
+                    <tspan
+                      x={cx}
+                      dy={item.line2 ? "-2" : "3"}
+                      fontSize={fit1.fontSize}
+                      fontWeight="700"
+                      {...(fit1.textLength ? { textLength: fit1.textLength, lengthAdjust: "spacingAndGlyphs" } : {})}
+                    >
                       {item.line1}
                     </tspan>
-                    <tspan x={cx} dy={textYOffset} fontWeight="800">
-                      {item.line2}
-                    </tspan>
+                    {item.line2 && (
+                      <tspan
+                        x={cx}
+                        dy={lineSpacing}
+                        fontSize={fit2.fontSize}
+                        fontWeight="800"
+                        {...(fit2.textLength ? { textLength: fit2.textLength, lengthAdjust: "spacingAndGlyphs" } : {})}
+                      >
+                        {item.line2}
+                      </tspan>
+                    )}
                   </text>
                 </g>
 
