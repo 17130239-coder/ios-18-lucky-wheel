@@ -84,8 +84,14 @@
 - **Điều chỉnh cường độ**: Thanh trượt độ sáng từ 20% đến 100%.
 - **Hạt bụi thể tích 3D (Light Dust)**: 45 hạt bụi lơ lửng ngẫu nhiên phản xạ ánh đèn tạo chiều sâu không gian nhà hát.
 
-### 1.6. Tùy Biến Quà Tặng & Bảng Chọn Biểu Tượng (Prize Management & Icon Picker)
-- **Chỉnh sửa toàn diện 10 phần thưởng**: Tùy chỉnh tên dòng 1, tên dòng 2, màu sắc nan quạt và icon đại diện.
+### 1.6. Tùy Biến Quà Tặng & Thiết Lập Số Lượng Quà (Prize Quantity & Management)
+- **Tùy chỉnh số lượng phần quà linh hoạt (2 đến 16 ô quà)**:
+  - **Thẻ cấu hình chuyên biệt**: Đặt ngay đầu tab **Quà (Prizes)** trong Settings Drawer.
+  - **Bộ điều khiển Stepper trực quan**: Nút `[-]` và `[+]` kèm số lượng quà hiển thị nổi bật với màu cam `#FF6B00`, tự động khóa khi đạt giới hạn (tối thiểu 2 quà, tối đa 16 quà).
+  - **Dãy phím tắt chọn nhanh (Preset Chips)**: Các mức thông dụng `4`, `6`, `8`, `10`, `12`, `16` cho phép chuyển đổi số lượng quà tức thì với hiệu ứng active pill.
+  - **Xóa & Thêm từng phần quà tự do**: Từng dòng quà trang bị nút xóa thùng rác `Trash2` (khi > 2 quà) và nút `+ Thêm Phần Quà Mới` viền nét đứt (khi < 16 quà).
+  - **Thích ứng tỷ lệ đồ họa vector tự động**: Tự động tính toán góc nan quạt $\text{sliceAngle} = 360^\circ / \text{count}$, tự động co giãn bán kính huy hiệu (`badgeRadius`: 26px $\rightarrow$ 18.5px) và kích thước chữ (`textFontSize`: 12.5px $\rightarrow$ 9px) theo số lượng quà, đảm bảo không bao giờ bị đè chữ/icon.
+- **Chỉnh sửa toàn diện từng phần thưởng**: Tùy chỉnh tên dòng 1, tên dòng 2, màu sắc nan quạt và icon đại diện.
 - **Bảng chọn biểu tượng trực quan (Icon Picker Modal)**:
   - Hơn 100+ biểu tượng Lucide vector phong phú.
   - Phân loại khoa học theo 4 nhóm: Tất cả, ⚡ Công nghệ, 🏆 Giải thưởng, 🚗 Đời sống.
